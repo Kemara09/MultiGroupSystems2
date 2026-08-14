@@ -119,6 +119,11 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Contact!.jpg" />
+    <Content Include="Images\Contact2.jpg" />
+    <Content Include="Images\Contact3.jpg" />
+    <Content Include="Images\contact4.jpg" />
+    <Content Include="Images\contact5.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
