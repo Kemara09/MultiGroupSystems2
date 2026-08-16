@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MultiGroupSystemsTester._Default" %>
 
-<asp:Content ID="TitleContentPage" ContentPlaceHolderID="TitleContent" runat="server">MultigroupSystems - Home</asp:Content>
+<asp:Content ID="TitleContentPage" ContentPlaceHolderID="TitleContent" runat="server">Multigroup Inc. - Home</asp:Content>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -91,7 +91,7 @@
 </div>
     <section class="hero-section text-white text-center">
         <div class="container py-5">
-            <h1 class="display-4 fw-bold">Welcome to MultigroupSystems</h1>
+            <h1 class="display-4 fw-bold">Welcome to Multigroup Inc.</h1>
             <p class="lead">Streamlined order management, built for reliability and speed.</p>
             <a href="~/Products.aspx" runat="server" class="btn btn-lg btn-primary mt-3">Shop Now</a>
         </div>
@@ -100,10 +100,12 @@
     <section class="container py-5">
         <div class="row text-center">
             <div class="col-md-4 mb-4">
-                <div class="feature-card p-4 h-100">
-                    <h4>Order Tracking</h4>
-                    <p>Real-time visibility into every order, from placement to delivery.</p>
-                </div>
+                <a href="~/TrackDelivery.aspx" runat="server" class="text-decoration-none">
+                    <div class="feature-card p-4 h-100 feature-card-link">
+                        <h4>Order Tracking</h4>
+                        <p>Real-time visibility into every order, from placement to delivery.</p>
+                    </div>
+                </a>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="feature-card p-4 h-100">

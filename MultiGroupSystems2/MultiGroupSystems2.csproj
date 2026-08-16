@@ -126,6 +126,7 @@
     <Content Include="About.aspx" />
     <Content Include="Account\CustomerLogin.aspx" />
     <Content Include="Account\Login.aspx" />
+    <Content Include="MyAccount.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Cart.aspx" />
     <Content Include="Checkout.aspx" />
@@ -156,6 +157,8 @@
     <Content Include="Images\contact4.jpg" />
     <Content Include="Images\contact5.jpg" />
     <Content Include="Images\homePage.mp4" />
+    <Content Include="MyOrders.aspx" />
+    <Content Include="PrivacyPolicy.aspx" />
     <Content Include="Products.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -235,6 +238,13 @@
     <Compile Include="Account\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MyAccount.aspx.cs">
+      <DependentUpon>MyAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyAccount.aspx.designer.cs">
+      <DependentUpon>MyAccount.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Account\Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -284,6 +294,20 @@
     </Compile>
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\InvoiceReportRow.cs" />
+    <Compile Include="MyOrders.aspx.cs">
+      <DependentUpon>MyOrders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyOrders.aspx.designer.cs">
+      <DependentUpon>MyOrders.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PrivacyPolicy.aspx.cs">
+      <DependentUpon>PrivacyPolicy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PrivacyPolicy.aspx.designer.cs">
+      <DependentUpon>PrivacyPolicy.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Products.aspx.cs">
       <DependentUpon>Products.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

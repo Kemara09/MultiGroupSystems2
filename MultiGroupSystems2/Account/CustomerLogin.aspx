@@ -11,7 +11,15 @@
             <label class="form-label">Password</label>
             <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
         </div>
+        <div class="mb-3 form-check">
+            <asp:CheckBox ID="chkRememberMe" runat="server" CssClass="form-check-input" />
+            <label class="form-check-label">Remember me</label>
+        </div>
+        <div class="mb-3">
+            <div class="g-recaptcha" data-sitekey="<%= System.Configuration.ConfigurationManager.AppSettings["RecaptchaSiteKey"] %>"></div>
+        </div>
         <asp:Button ID="btnLogin" runat="server" Text="Log In" CssClass="btn btn-navy" OnClick="btnLogin_Click" />
         <p class="mt-3"><a href="Register.aspx" runat="server">Don't have an account? Register</a></p>
     </div></div>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </asp:Content>
