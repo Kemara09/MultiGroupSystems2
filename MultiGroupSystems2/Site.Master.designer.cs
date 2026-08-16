@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MultiGroupSystems2
+namespace MultiGroupSystemsTester
 {
 
 
@@ -15,13 +15,58 @@ namespace MultiGroupSystems2
     {
 
         /// <summary>
-        /// HeadContent control.
+        /// TitleContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder TitleContent;
+
+        /// <summary>
+        /// form1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+
+        /// <summary>
+        /// lnkCartCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkCartCount;
+
+        /// <summary>
+        /// lnkCustomerAuth control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkCustomerAuth;
+
+        /// <summary>
+        /// lnkRegister control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkRegister;
+
+        /// <summary>
+        /// btnCustomerLogout control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCustomerLogout;
 
         /// <summary>
         /// MainContent control.

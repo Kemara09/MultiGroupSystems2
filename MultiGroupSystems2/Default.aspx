@@ -1,4 +1,6 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MultiGroupSystems2._Default" %>
+﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MultiGroupSystemsTester._Default" %>
+
+<asp:Content ID="TitleContentPage" ContentPlaceHolderID="TitleContent" runat="server">MultigroupSystems - Home</asp:Content>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -87,5 +89,43 @@
     </div>
 
 </div>
+    <section class="hero-section text-white text-center">
+        <div class="container py-5">
+            <h1 class="display-4 fw-bold">Welcome to MultigroupSystems</h1>
+            <p class="lead">Streamlined order management, built for reliability and speed.</p>
+            <a href="~/Products.aspx" runat="server" class="btn btn-lg btn-primary mt-3">Shop Now</a>
+        </div>
+    </section>
+
+    <section class="container py-5">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card p-4 h-100">
+                    <h4>Order Tracking</h4>
+                    <p>Real-time visibility into every order, from placement to delivery.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card p-4 h-100">
+                    <h4>Secure Access</h4>
+                    <p>Role-based logins keep customer and company data protected.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card p-4 h-100">
+                    <h4>Reliable Reporting</h4>
+                    <p>Business intelligence built directly on live system data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section text-center py-5">
+        <div class="container">
+            <h2>Ready to see it in action?</h2>
+            <p class="mb-4">Contact us to learn how MultigroupSystems can support your operations.</p>
+            <a href="~/Contact.aspx" runat="server" class="btn btn-outline-primary btn-lg">Contact Us</a>
+        </div>
+    </section>
 
 </asp:Content>
