@@ -114,12 +114,13 @@
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="feature-card p-4 h-100">
-                    <h4>Reliable Reporting</h4>
-                    <p>Business intelligence built directly on live system data.</p>
-                </div>
-            </div>
+    <a href="~/Reports.aspx" runat="server" class="text-decoration-none">
+        <div class="feature-card p-4 h-100 feature-card-link">
+            <h4>Reliable Reporting</h4>
+            <p>Business intelligence built directly on live system data.</p>
         </div>
+    </a>
+</div>
     </section>
 
     <section class="cta-section text-center py-5">

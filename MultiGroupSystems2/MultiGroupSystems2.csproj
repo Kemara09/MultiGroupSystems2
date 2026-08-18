@@ -160,6 +160,8 @@
     <Content Include="MyOrders.aspx" />
     <Content Include="PrivacyPolicy.aspx" />
     <Content Include="Products.aspx" />
+    <Content Include="Reports.aspx" />
+    <Content Include="Reports.css" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -316,6 +318,13 @@
       <DependentUpon>Products.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\SmsService.cs" />
