@@ -1,0 +1,121 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminMaster.master.cs" Inherits="MultiGroupSystemsTester.Admin.AdminMaster" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Admin - MultiGroup Inc.</title>
+    <link href="AdminShell.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">W</div>
+                <div class="logo-text">
+                    <h2>MultiGroup Inc.</h2>
+                    <span>ADMIN PORTAL</span>
+                </div>
+            </div>
+
+            <div class="menu-title">MAIN MENU</div>
+
+            <nav class="navigation">
+                <a href="~/Admin/Dashboard.aspx" runat="server" id="navDashboard" class="nav-item">
+                    <span class="nav-icon">⌂</span><span>Dashboard</span>
+                </a>
+                <a href="~/Admin/AddProduct.aspx" runat="server" id="navProducts" class="nav-item">
+                    <span class="nav-icon">▣</span><span>Products</span>
+                </a>
+                <a href="~/Admin/OrderLogistics.aspx" runat="server" id="navOrders" class="nav-item">
+                    <span class="nav-icon">🚚</span><span>Order Logistics</span>
+                </a>
+                <a href="~/Admin/AddSupplier.aspx" runat="server" id="navSuppliers" class="nav-item">
+                    <span class="nav-icon">▤</span><span>Suppliers</span>
+                </a>
+                <a href="~/Admin/StaffDataCapture.aspx" runat="server" id="navStaff" class="nav-item">
+                    <span class="nav-icon">♙</span><span>Staff</span>
+                </a>
+                <a href="~/Admin/Reports.aspx" runat="server" id="navReports" class="nav-item">
+                    <span class="nav-icon">▤</span><span>Reports</span>
+                </a>
+
+                <div class="menu-title settings-title">SYSTEM</div>
+
+                <asp:LinkButton ID="btnAdminLogout" runat="server" CssClass="nav-item" OnClick="btnAdminLogout_Click">
+                    <span class="nav-icon">↪</span><span>Log Out</span>
+                </asp:LinkButton>
+            </nav>
+
+            <div class="sidebar-bottom">
+               
+    <div class="user-small">
+
+
+    <div class="user-avatar">
+        <asp:Label ID="lblSidebarInitials" runat="server"></asp:Label>
+    </div>
+
+    <div>
+        <strong>
+            <asp:Label ID="lblSidebarFullName" runat="server"></asp:Label>
+        </strong>
+
+        <small>
+            <asp:Label ID="lblSidebarRole" runat="server"></asp:Label>
+        </small>
+    </div>
+
+</div>
+
+
+</div>
+
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="top-header">
+                <div class="breadcrumb">
+                    <a href="~/Admin/Dashboard.aspx" runat="server" style="text-decoration:none; color:inherit;">Dashboard</a>
+                    <span class="arrow">›</span>
+                    <strong><asp:ContentPlaceHolder ID="BreadcrumbContent" runat="server"></asp:ContentPlaceHolder></strong>
+                </div>
+
+                <div class="header-right">
+                    <div class="notification">
+                        🔔
+                        <span class="notification-dot"></span>
+                    </div>
+                        <div class="profile">
+    <div class="profile-avatar">
+        <asp:Label ID="lblProfileInitials" runat="server" />
+    </div>
+    <div class="profile-info">
+        <strong><asp:Label ID="lblAdminFullName" runat="server" /></strong>
+        <span><asp:Label ID="lblAdminRole" runat="server" /></span>
+    </div>
+    <span class="profile-arrow"></span>
+</div>
+
+
+            </header>
+
+            <div class="admin-page-body">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+            </div>
+
+            <footer class="footer">
+                <span>MultiGroup Inc. Admin</span>
+                <span>Multi Group Systems • Group Project • 2026</span>
+            </footer>
+
+        </main>
+
+    </form>
+</body>
+</html>

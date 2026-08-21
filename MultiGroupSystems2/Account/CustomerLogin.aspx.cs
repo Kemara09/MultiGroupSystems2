@@ -63,7 +63,15 @@ namespace MultiGroupSystemsTester.Account
                                 Response.Cookies.Add(clearCookie);
                             }
 
-                            Response.Redirect("~/Default.aspx");
+                            string returnUrl = Request.QueryString["ReturnUrl"];
+                            if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("~/") && !returnUrl.Contains("//"))
+                            {
+                                Response.Redirect(returnUrl);
+                            }
+                            else
+                            {
+                                Response.Redirect("~/Default.aspx");
+                            }
                         }
                         else
                         {

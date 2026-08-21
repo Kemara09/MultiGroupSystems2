@@ -4,18 +4,27 @@ using System.Data.SqlClient;
 using System.Web.UI;
 using WebGrease.Activities;
 
-namespace MultiGroupSystems2
+namespace MultiGroupSystemsTester
 {
     public partial class TrackDelivery : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack && !string.IsNullOrEmpty(Request.QueryString["orderId"]))
+            {
+                txtOrderId.Text = Request.QueryString["orderId"];
+                TrackOrder(txtOrderId.Text.Trim());
+            }
         }
 
         protected void btnTrack_Click(object sender, EventArgs e)
         {
+            TrackOrder(txtOrderId.Text.Trim());
+        }
+
+        private void TrackOrder(string orderIdInput)
+        {
             lblError.Text = "";
-            string orderIdInput = txtOrderId.Text.Trim();
 
             if (string.IsNullOrEmpty(orderIdInput) || !int.TryParse(orderIdInput, out int orderId))
             {

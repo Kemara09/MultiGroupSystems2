@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MultiGroupSystemsTester
+namespace MultiGroupSystemsTester.Admin
 {
 
 
-    public partial class Reports
+    public partial class AddSupplier
     {
     }
 }

@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebGrease.Activities;
 
 namespace MultiGroupSystemsTester
 {
@@ -32,9 +33,9 @@ namespace MultiGroupSystemsTester
                     gvProducts.DataBind();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblMessage.Text = "Products could not be loaded right now.";
+                lblMessage.Text = "Products could not be loaded right now. DEBUG: " + ex.Message;
                 lblMessage.Visible = true;
             }
         }
@@ -43,8 +44,9 @@ namespace MultiGroupSystemsTester
         {
             if (e.CommandName != "AddToCart") return;
 
-            int rowIndex = Convert.ToInt32(e.CommandArgument);
-            GridViewRow row = gvProducts.Rows[rowIndex];
+            Button btn = (Button)e.CommandSource;
+            GridViewRow row = (GridViewRow)btn.NamingContainer;
+            int rowIndex = row.RowIndex;
 
             int productId = Convert.ToInt32(gvProducts.DataKeys[rowIndex]["ProductID"]);
             string productName = gvProducts.DataKeys[rowIndex]["ProductName"].ToString();
@@ -72,7 +74,7 @@ namespace MultiGroupSystemsTester
             lblCartMsg.Visible = true;
             BindProducts();
         }
-        
+
         protected void gvProducts_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType != DataControlRowType.DataRow) return;

@@ -27,13 +27,13 @@ public class InvoiceDownload : IHttpHandler
         {
             conn.Open();
 
-           string custQuery = @"
-    SELECT o.OrderID, o.OrderDate, o.OrderStatus, o.TotalAmount,
-           c.FirstName, c.LastName, c.EmailAddress, c.PhoneNumber,
-           c.StreetNumber, c.StreetName, c.Suburb, c.City, c.Province, c.PostalCode
-    FROM [Order] o
-    JOIN Customer c ON c.CustomerID = o.CustomerID
-    WHERE o.OrderID = @OrderID";
+            string custQuery = @"
+                SELECT o.OrderID, o.OrderDate, o.OrderStatus, o.TotalAmount,
+                       c.FirstName, c.LastName, c.EmailAddress, c.PhoneNumber,
+                       c.StreetNumber, c.StreetName, c.Suburb, c.City, c.Province, c.PostalCode
+                FROM [Order] o
+                JOIN Customer c ON c.CustomerID = o.CustomerID
+                WHERE o.OrderID = @OrderID";
 
             string custName, custEmail, custPhone, custAddress, orderStatus, orderDate;
 
@@ -52,7 +52,7 @@ public class InvoiceDownload : IHttpHandler
                     custName = r["FirstName"] + " " + r["LastName"];
                     custEmail = r["EmailAddress"].ToString();
                     custPhone = r["PhoneNumber"].ToString();
-                   custAddress = $"{r["StreetNumber"]} {r["StreetName"]}, {r["Suburb"]}, {r["City"]}, {r["Province"]}, {r["PostalCode"]}";
+                    custAddress = $"{r["StreetNumber"]} {r["StreetName"]}, {r["Suburb"]}, {r["City"]}, {r["Province"]}, {r["PostalCode"]}";
                     orderStatus = r["OrderStatus"].ToString();
                     orderDate = Convert.ToDateTime(r["OrderDate"]).ToString("dd MMMM yyyy");
                 }
@@ -63,7 +63,7 @@ public class InvoiceDownload : IHttpHandler
                 FROM Order_Line ol
                 JOIN Inventory p ON p.ProductID = ol.ProductID
                 WHERE ol.OrderID = @OrderID";
-    
+
             decimal subtotalSum = 0;
             int lineNum = 1;
 

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Track Delivery" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TrackDelivery.aspx.cs" Inherits="MultiGroupSystems2.TrackDelivery" %>
+﻿<%@ Page Title="Track Delivery" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TrackDelivery.aspx.cs" Inherits="MultiGroupSystemsTester.TrackDelivery" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <!-- Leaflet Map CSS -->

@@ -13,6 +13,7 @@ namespace MultiGroupSystemsTester
             if (!IsPostBack) BindCart();
         }
 
+       
         private void BindCart()
         {
             List<CartItem> cart = Session["Cart"] as List<CartItem> ?? new List<CartItem>();
@@ -32,6 +33,16 @@ namespace MultiGroupSystemsTester
             gvCart.DataSource = cart;
             gvCart.DataBind();
             lblTotal.Text = cart.Sum(c => c.Subtotal).ToString("C");
+
+            // Route checkout link based on login state
+            if (Session["CustomerID"] == null)
+            {
+                lnkCheckout.NavigateUrl = "~/Account/CustomerLogin.aspx?ReturnUrl=" + Server.UrlEncode("~/Checkout.aspx");
+            }
+            else
+            {
+                lnkCheckout.NavigateUrl = "~/Checkout.aspx";
+            }
         }
 
         protected void gvCart_RowCommand(object sender, GridViewCommandEventArgs e)

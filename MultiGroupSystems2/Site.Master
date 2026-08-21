@@ -44,7 +44,6 @@
                         <li class="nav-item"><a class="nav-link" href="~/Products.aspx" runat="server">Shop</a></li>
                         <li class="nav-item"><a class="nav-link" id="lnkCartCount" runat="server" href="~/Cart.aspx">Cart</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/TrackDelivery.aspx" runat="server">Track Delivery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="~/Admin/Reports.aspx" runat="server">Reports</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/MyOrders.aspx" runat="server">My Orders</a></li>
                     <li class="nav-item"><a class="nav-link" href="~/MyAccount.aspx" runat="server">My Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/About.aspx" runat="server">About Us</a></li>
@@ -61,9 +60,23 @@
                           <li class="nav-item">
                           <asp:LinkButton ID="btnCustomerLogout" runat="server" CssClass="nav-link" OnClick="btnCustomerLogout_Click">Log Out</asp:LinkButton>
                           </li>
-                          <li class="nav-item">
-                          <a class="nav-link" href="~/Account/Login.aspx" runat="server">Staff Login</a>
-                          </li>
+                         <li class="nav-item">
+    <a class="nav-link" id="lnkStaffLogin" runat="server" href="~/Account/Login.aspx">Staff Login</a>
+</li>
+<li class="nav-item dropdown" id="liStaffMenu" runat="server" visible="false">
+    <a class="nav-link dropdown-toggle" href="#" id="ddlStaffMenu" role="button" data-bs-toggle="dropdown">
+        Staff Menu
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="ddlStaffMenu">
+    <li><a class="dropdown-item" href="~/Admin/AddProduct.aspx" runat="server">Add Product</a></li>
+    <li><a class="dropdown-item" href="~/Admin/AddSupplier.aspx" runat="server">Add Supplier</a></li>
+    <li><a class="dropdown-item" href="~/Admin/OrderLogistics.aspx" runat="server">Order Logistics</a></li>
+    <li><a class="dropdown-item" href="~/Admin/Reports.aspx" runat="server">Reports</a></li>
+    <li><a class="dropdown-item" href="~/Admin/StaffDataCapture.aspx" runat="server">Staff Data Capture</a></li>
+    <li><hr class="dropdown-divider" /></li>
+    <li><asp:LinkButton ID="btnStaffLogout" runat="server" CssClass="dropdown-item" OnClick="btnStaffLogout_Click">Staff Log Out</asp:LinkButton></li>
+</ul>
+</li>
                     </ul>
                 </div>
             

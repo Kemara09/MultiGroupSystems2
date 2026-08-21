@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="MultiGroupSystems2.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="MultiGroupSystemsTester.Global" Language="C#" %>

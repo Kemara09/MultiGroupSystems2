@@ -4,11 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MultiGroupSystemsTester.Admin;
 
-namespace MultiGroupSystemsTester
+namespace MultiGroupSystemsTester.Admin
 {
-    public partial class Reports : AdminPage
+    public partial class StaffDataCapture : AdminPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

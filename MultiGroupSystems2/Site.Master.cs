@@ -14,6 +14,7 @@ namespace MultiGroupSystemsTester
         {
             UpdateCartCount();
             UpdateCustomerAuthDisplay();
+            UpdateStaffAuthDisplay();
         }
 
         protected void btnLogout_Click(object sender, EventArgs e)
@@ -43,6 +44,37 @@ namespace MultiGroupSystemsTester
         {
             Session["CustomerID"] = null;
             Session["CustomerName"] = null;
+            Response.Redirect("~/Default.aspx");
+        }
+
+        private void UpdateStaffAuthDisplay()
+        {
+            bool isStaffLoggedIn = false;
+
+            HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                try
+                {
+                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                    if (ticket != null && !ticket.Expired && ticket.UserData == "Staff")
+                    {
+                        isStaffLoggedIn = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    // malformed/tampered cookie — treat as not logged in
+                }
+            }
+
+            lnkStaffLogin.Visible = !isStaffLoggedIn;
+            liStaffMenu.Visible = isStaffLoggedIn;
+        }
+
+        protected void btnStaffLogout_Click(object sender, EventArgs e)
+        {
+            FormsAuthentication.SignOut();
             Response.Redirect("~/Default.aspx");
         }
     }

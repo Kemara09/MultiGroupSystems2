@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MultiGroupSystems2
+namespace MultiGroupSystemsTester
 {
 
 

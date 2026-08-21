@@ -12,9 +12,19 @@ namespace MultiGroupSystemsTester
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack && Session["CustomerID"] != null)
-                PrefillFromCustomer();
+            if (Session["CustomerID"] == null)
+            {
+                Response.Redirect("~/Account/CustomerLogin.aspx?ReturnUrl=" + Server.UrlEncode("~/Checkout.aspx"));
+                return;
+            }
+
+            if (!IsPostBack)
+            {
+                if (!IsPostBack && Session["CustomerID"] != null)
+                    PrefillFromCustomer();
+            }
         }
+
 
         private void PrefillFromCustomer()
         {
@@ -87,39 +97,13 @@ namespace MultiGroupSystemsTester
                     try
                     {
                         int customerId;
-                        const string findCustomer = "SELECT CustomerID FROM Customer WHERE EmailAddress = @Email";
-                        using (SqlCommand cmdFind = new SqlCommand(findCustomer, conn, tx))
-                        {
-                            cmdFind.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
-                            object result = cmdFind.ExecuteScalar();
-                            if (result != null)
-                            {
-                                customerId = Convert.ToInt32(result);
-                            }
-                            else
-                            {
-                                const string insertCustomer = @"
-                                    INSERT INTO [dbo].[Customer]
-                                        (FirstName, LastName, PhoneNumber, EmailAddress, StreetNumber, StreetName, Suburb, City, Province, PostalCode)
-                                    VALUES
-                                        (@FirstName, @LastName, @PhoneNumber, @EmailAddress, @StreetNumber, @StreetName, @Suburb, @City, @Province, @PostalCode);
-                                    SELECT SCOPE_IDENTITY();";
-                                using (SqlCommand cmdCust = new SqlCommand(insertCustomer, conn, tx))
-                                {
-                                    cmdCust.Parameters.AddWithValue("@FirstName", txtFirstName.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@LastName", txtLastName.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@PhoneNumber", txtPhone.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@EmailAddress", txtEmail.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@StreetNumber", txtStreetNumber.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@StreetName", txtStreetName.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@Suburb", txtSuburb.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@City", txtCity.Text.Trim());
-                                    cmdCust.Parameters.AddWithValue("@Province", ddlProvince.SelectedValue);
-                                    cmdCust.Parameters.AddWithValue("@PostalCode", txtPostalCode.Text.Trim());
-                                    customerId = Convert.ToInt32(cmdCust.ExecuteScalar());
-                                }
-                            }
-                        }
+
+                        
+                            customerId = Convert.ToInt32(Session["CustomerID"]);
+                        
+                        
+                        
+                            
 
                         decimal totalAmount = cart.Sum(c => c.Subtotal);
                         int orderId;
@@ -165,7 +149,7 @@ namespace MultiGroupSystemsTester
                         tx.Commit();
                         Session["Cart"] = null;
 
-                        // Build invoice rows from the data already on this page
+                        
                         var invoiceRows = new List<MultiGroupSystemsTester.Models.InvoiceReportRow>();
                         decimal subtotalSum = cart.Sum(c => c.Subtotal);
                         decimal vatSum = subtotalSum * 0.15m;
