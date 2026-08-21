@@ -32,8 +32,7 @@ namespace MultiGroupSystemsTester
             lnkCheckout.Visible = true;
             gvCart.DataSource = cart;
             gvCart.DataBind();
-            lblTotal.Text = cart.Sum(c => c.Subtotal).ToString("C");
-
+            lblTotal.Text = "R " + cart.Sum(c => c.Subtotal).ToString("N2");
             // Route checkout link based on login state
             if (Session["CustomerID"] == null)
             {

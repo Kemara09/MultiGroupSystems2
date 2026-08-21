@@ -17,7 +17,7 @@
     </ItemTemplate>
 </asp:TemplateField>
             <asp:BoundField DataField="Category" HeaderText="Category" />
-            <asp:BoundField DataField="Price" HeaderText="Price" DataFormatString="{0:N2}" />
+            <asp:BoundField DataField="Price" HeaderText="Price" DataFormatString="R {0:N2}" />           
             <asp:TemplateField HeaderText="Order">
                 <ItemTemplate>
                     <div class="d-flex gap-2 align-items-center">
