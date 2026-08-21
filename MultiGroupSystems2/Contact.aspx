@@ -87,6 +87,123 @@
             border-radius: 12px;
             height: 100%;
         }
+
+
+        .popup-trigger {
+            color: #0284c7;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .popup-trigger:hover {
+            color: #0369a1;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #111827;
+        }
+
+        .modal-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .form-control-custom:focus {
+            border-color: #0284c7;
+        }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #1d4ed8;
+        }
+
+        .error-text {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 3px;
+            display: block;
+        }
+
+
+
     </style>
 
 
@@ -148,7 +265,8 @@
                 
                 <div class="col-12 mb-2">
                     <h2 class="display-6 fw-bold text-dark mb-1">Get In Touch</h2>
-                    <p class="text-secondary fs-5">Have a question or request? Reach out to our team directly.</p>
+                   <p class="text-secondary fs-5"> Have a question or request? <a href="javascript:void(0);" class="popup-trigger" onclick="openModal()">Click here</a> to send us a direct inquiry.
+                   </p>
                 </div>
 
                 
@@ -184,4 +302,60 @@
             </div>
         </div>
     </div>
+
+   <asp:Panel ID="pnlModal" runat="server" CssClass="modal-overlay" style="display: none;">
+        <div class="modal-card">
+           <button type="button" class="modal-close" onclick="closeModal()">&times;</button>
+            <h2>Need help with your request?</h2>
+            
+            
+                <div class="form-group">
+                <label>First Name</label>
+                <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control-custom" placeholder="Enter your first name"></asp:TextBox>
+            </div>
+
+            <div class="form-group">
+                <label>Surname</label>
+                <asp:TextBox ID="txtSurname" runat="server" CssClass="form-control-custom" placeholder="Enter your surname"></asp:TextBox>
+            </div>
+
+            <div class="form-group">
+                <label>Email <span style="color:red;">*</span></label>
+                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control-custom" TextMode="Email" placeholder="Enter your email address"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail" 
+                    ErrorMessage="Email is required." CssClass="error-text" Display="Dynamic" ValidationGroup="ContactGroup" />
+            </div>
+
+            <div class="form-group">
+                <label>Message / Request <span style="color:red;">*</span></label>
+                <asp:TextBox ID="txtMessage" runat="server" CssClass="form-control-custom" TextMode="MultiLine" placeholder="Type your message here..."></asp:TextBox>
+                <asp:RequiredFieldValidator ID="rfvMessage" runat="server" ControlToValidate="txtMessage" 
+                    ErrorMessage="Message is required." CssClass="error-text" Display="Dynamic" ValidationGroup="ContactGroup" />
+            </div>
+
+            <asp:Button ID="btnSubmit" runat="server" Text="SUBMIT" CssClass="btn-submit" 
+                ValidationGroup="ContactGroup" OnClick="btnSubmit_Click" />
+
+            <asp:Label ID="lblStatus" runat="server" CssClass="d-block text-success mt-2 text-center font-weight-bold" />
+
+        </div>
+    </asp:Panel>
+
+
+    <script>
+    function openModal() {
+        document.getElementById('<%= pnlModal.ClientID %>').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('<%= pnlModal.ClientID %>').style.display = 'none';
+    }
+    </script>
+
+
+
+
+
+
+
 </asp:Content>
