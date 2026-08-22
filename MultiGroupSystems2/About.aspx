@@ -2,33 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
    
-
-
-    <style>
-       
-        .body-content {
-            max-width: 100% !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            margin: 0 !important;
-            width: 100% !important;
-        }
-
-        
-        .about-section {
-            background-color: #ADDFFF;
-            color: #1e293b;
-            min-height: calc(100vh - 120px);
-            width: 100%;
-        }
-
-        .about-section p {
-            color: #0f172a !important; 
-        }
-
-
-        
-    </style>
+    <div class ="about-page">
 
     <div class="about-section pt-4 pb-5">
         

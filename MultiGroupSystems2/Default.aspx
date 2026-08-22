@@ -4,60 +4,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-   <style>
-    
-    .body-content {
-        max-width: 100% !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-    }
-
-    
-    .hero-video-section {
-        position: relative;
-        width: 100%;
-        height: 85vh;
-        min-height: 550px;
-        overflow: hidden;
-        background-color: #0f172a;
-        color: #ffffff;
-        display: flex;
-        align-items: center;
-    }
-
-    .bg-video {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transform: translate(-50%, -50%);
-        z-index: 1;
-    }
-
-   
-    .video-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.65) 50%, rgba(15, 23, 42, 0.4) 100%);
-        z-index: 2;
-    }
-
-    
-    .hero-content {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-    }
-</style>
-
-
+  <div class="home-page">
 <div class="hero-video-section">
     
     
@@ -121,6 +68,7 @@
     </div>
 </a>
 </div>
+</div>
     </section>
 
     <section class="cta-section text-center py-5">
@@ -130,5 +78,6 @@
             <a href="~/Contact.aspx" runat="server" class="btn btn-outline-primary btn-lg">Contact Us</a>
         </div>
     </section>
+      </div>
 
 </asp:Content>
