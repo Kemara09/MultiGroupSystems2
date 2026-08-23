@@ -260,7 +260,9 @@
     <Content Include="Images\Contact3.jpg" />
     <Content Include="Images\contact4.jpg" />
     <Content Include="Images\contact5.jpg" />
-    <Content Include="Images\homePage.mp4" />
+    <Content Include="Images\homePage.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MyOrders.aspx" />
     <Content Include="PrivacyPolicy.aspx" />
     <Content Include="Products.aspx" />
