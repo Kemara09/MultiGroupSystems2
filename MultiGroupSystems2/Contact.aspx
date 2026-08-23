@@ -89,7 +89,7 @@
                     <div class="info-card p-4">
                         <h4 class="fw-bold text-dark mb-3">Regional Offices</h4>
 
-                        <p class="mb-2"><strong>Johannesburgh:</strong> +27 11 467 1590</p>
+                        <p class="mb-2"><strong>Johannesburg:</strong> +27 11 467 1590</p>
                         <p class="mb-2"><strong>Maputo, Mozambique:</strong> +258 20 608 160</p>
                         <p class="mb-2"><strong>Mbabane, Kingdom of Eswatini:</strong> +268 2404 7556 </p>
                     </div>

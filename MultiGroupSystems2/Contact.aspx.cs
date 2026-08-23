@@ -47,6 +47,7 @@ namespace MultiGroupSystems2
                         {
                             lblStatus.CssClass = "d-block text-danger mt-2 text-center font-weight-bold";
                             lblStatus.Text = "An error occurred. Please try again later.";
+                            System.Diagnostics.Debug.WriteLine(ex.Message);
                         }
                     }
                 }

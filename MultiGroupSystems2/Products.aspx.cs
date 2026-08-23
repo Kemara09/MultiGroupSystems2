@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using WebGrease.Activities;
 
 namespace MultiGroupSystemsTester
 {
@@ -14,18 +14,74 @@ namespace MultiGroupSystemsTester
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack) BindProducts();
+            if (!IsPostBack)
+            {
+                BindCategories();
+                BindProducts();
+            }
         }
 
-        private void BindProducts()
+        private void BindCategories()
         {
             string connStr = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
-            const string query = "SELECT ProductID, ProductName, Category, UnitPrice AS Price, Description, QuantityInStock FROM Inventory ORDER BY ProductName";
+            const string query = "SELECT DISTINCT Category FROM Inventory WHERE Category IS NOT NULL ORDER BY Category";
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ddlCategory.Items.Add(new ListItem(reader["Category"].ToString(), reader["Category"].ToString()));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Categories could not be loaded right now. DEBUG: " + ex.Message;
+                lblMessage.Visible = true;
+            }
+        }
+
+        private void BindProducts(string searchTerm = "", string category = "")
+        {
+            string connStr = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
+
+            string query = "SELECT ProductID, ProductName, Category, UnitPrice AS Price, Description, QuantityInStock " +
+                            "FROM Inventory WHERE 1=1 ";
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query += "AND (ProductName LIKE @Search OR Category LIKE @Search) ";
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                query += "AND Category = @Category ";
+            }
+
+            query += "ORDER BY ProductName";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connStr))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    if (!string.IsNullOrWhiteSpace(searchTerm))
+                    {
+                        cmd.Parameters.AddWithValue("@Search", "%" + searchTerm.Trim() + "%");
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(category))
+                    {
+                        cmd.Parameters.AddWithValue("@Category", category);
+                    }
+
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
@@ -38,6 +94,23 @@ namespace MultiGroupSystemsTester
                 lblMessage.Text = "Products could not be loaded right now. DEBUG: " + ex.Message;
                 lblMessage.Visible = true;
             }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            BindProducts(txtSearch.Text, ddlCategory.SelectedValue);
+        }
+
+        protected void btnClearSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = "";
+            ddlCategory.SelectedIndex = 0;
+            BindProducts();
+        }
+
+        protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindProducts(txtSearch.Text, ddlCategory.SelectedValue);
         }
 
         protected void gvProducts_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -57,7 +130,7 @@ namespace MultiGroupSystemsTester
             {
                 lblMessage.Text = "Please enter a valid quantity.";
                 lblMessage.Visible = true;
-                BindProducts();
+                BindProducts(txtSearch.Text, ddlCategory.SelectedValue);
                 return;
             }
 
@@ -72,34 +145,13 @@ namespace MultiGroupSystemsTester
 
             lblCartMsg.Text = $"Added {qty} x {productName} to your cart.";
             lblCartMsg.Visible = true;
-            BindProducts();
+            BindProducts(txtSearch.Text, ddlCategory.SelectedValue);
         }
 
-        protected void gvProducts_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected string SafeText(object value)
         {
-            if (e.Row.RowType != DataControlRowType.DataRow) return;
-
-            DataRowView drv = (DataRowView)e.Row.DataItem;
-            string description = drv["Description"] == DBNull.Value ? "No description available." : drv["Description"].ToString();
-            string stock = drv["QuantityInStock"] == DBNull.Value ? "0" : drv["QuantityInStock"].ToString();
-
-            GridViewRow detailRow = new GridViewRow(e.Row.RowIndex, e.Row.RowIndex, DataControlRowType.DataRow, DataControlRowState.Normal);
-            detailRow.ID = "detailsRow" + e.Row.RowIndex;
-            detailRow.Attributes["style"] = "display:none;";
-
-            TableCell cell = new TableCell();
-            cell.ColumnSpan = 4;
-            cell.Controls.Add(new LiteralControl(
-                $"<div class='p-3 bg-light border-start border-3 border-teal'>" +
-                $"<p class='mb-1'><strong>Description:</strong> {System.Web.HttpUtility.HtmlEncode(description)}</p>" +
-                $"<p class='mb-0'><strong>In stock:</strong> {stock} units</p>" +
-                $"</div>"
-            ));
-            detailRow.Cells.Add(cell);
-
-            int parentIndex = e.Row.Parent.Controls.IndexOf(e.Row);
-            e.Row.Parent.Controls.AddAt(parentIndex + 1, detailRow);
+            if (value == null || value == DBNull.Value) return "N/A";
+            return HttpUtility.HtmlEncode(value.ToString());
         }
     }
-
 }

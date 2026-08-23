@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.UI;
-using WebGrease.Activities;
 
 namespace MultiGroupSystemsTester
 {

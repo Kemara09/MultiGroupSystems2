@@ -31,7 +31,9 @@
     </style>
 </head>
 <body>
+    
     <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server" />
         <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" href="~/Default.aspx" runat="server">Multigroup Inc.</a>
@@ -50,6 +52,7 @@
                         <li class="nav-item"><a class="nav-link" href="~/Contact.aspx" runat="server">Contact</a></li>
                     
                     </ul>
+                    </div> 
                     <ul class="navbar-nav">
                           <li class="nav-item">
                           <asp:HyperLink ID="lnkCustomerAuth" runat="server" CssClass="nav-link" NavigateUrl="~/Account/CustomerLogin.aspx">Log In</asp:HyperLink>
