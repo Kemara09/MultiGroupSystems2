@@ -27,20 +27,16 @@ namespace MultiGroupSystemsTester
 
             if (string.IsNullOrEmpty(orderIdInput) || !int.TryParse(orderIdInput, out int orderId))
             {
-                lblError.Text = "Please enter a valid numeric Order ID.";
+                lblError.Text = "Please enter a valid Order ID.";
                 return;
             }
 
             string connectionString = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
 
-            // Join Order and Customer tables to build the full address string and retrieve DeliveryStatus
-            string query = @"
-        SELECT 
-            o.DeliveryStatus, 
+            // inner join oder and customer 
+            string query = @" SELECT o.DeliveryStatus, 
             ISNULL(c.StreetNumber, '') + ' ' + ISNULL(c.StreetName, '') + ', ' + ISNULL(c.Suburb, '') + ', ' + ISNULL(c.City, '') + ', ' + ISNULL(c.Province, '') AS FullAddress
-        FROM [Order] o
-        INNER JOIN Customer c ON o.CustomerID = c.CustomerID
-        WHERE o.OrderID = @OrderID";
+             FROM [Order] o INNER JOIN Customer c ON o.CustomerID = c.CustomerID WHERE o.OrderID = @OrderID";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

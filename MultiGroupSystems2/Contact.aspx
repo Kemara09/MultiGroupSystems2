@@ -120,6 +120,9 @@
                 <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control-custom" TextMode="Email" placeholder="Enter your email address"></asp:TextBox>
                 <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail" 
                     ErrorMessage="Email is required." CssClass="error-text" Display="Dynamic" ValidationGroup="ContactGroup" />
+
+                <asp:RegularExpressionValidator ID="revEmail" runat="server" ControlToValidate="txtEmail"  ErrorMessage="Please enter a valid email address (must include '@' and a '.')." 
+        ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" CssClass="error-text" Display="Dynamic" ValidationGroup="ContactGroup" />
             </div>
 
             <div class="form-group">

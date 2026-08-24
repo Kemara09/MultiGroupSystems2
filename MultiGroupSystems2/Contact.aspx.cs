@@ -29,7 +29,7 @@ namespace MultiGroupSystems2
                         cmd.Parameters.AddWithValue("@Surname", string.IsNullOrEmpty(txtSurname.Text) ? (object)DBNull.Value : txtSurname.Text.Trim());
                         cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
                         cmd.Parameters.AddWithValue("@Message", txtMessage.Text.Trim());
-                        cmd.Parameters.AddWithValue("@StaffID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@StaffID", DBNull.Value);   // manager will assign a staff to deal with it
 
                         try
                         {
