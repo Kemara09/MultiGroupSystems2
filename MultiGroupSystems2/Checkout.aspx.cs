@@ -14,14 +14,19 @@ namespace MultiGroupSystemsTester
         {
             if (Session["CustomerID"] == null)
             {
-                Response.Redirect("~/Account/CustomerLogin.aspx?ReturnUrl=" + Server.UrlEncode("~/Checkout.aspx"));
+                Response.Redirect(
+                    "~/Account/CustomerLogin.aspx?ReturnUrl=" +
+                    Server.UrlEncode("~/Checkout.aspx")
+                );
+
                 return;
             }
 
             if (!IsPostBack)
             {
-                if (!IsPostBack && Session["CustomerID"] != null)
-                    PrefillFromCustomer();
+                PrefillFromCustomer();
+                LoadCheckoutSummary();
+                UpdateAddressDisplay();
             }
         }
 
@@ -61,6 +66,52 @@ namespace MultiGroupSystemsTester
             }
         }
 
+        private void LoadCheckoutSummary()
+        {
+            List<CartItem> cart = Session["Cart"] as List<CartItem>;
+
+            if (cart == null || cart.Count == 0)
+            {
+                lblItemCount.Text = "0";
+                lblSubtotal.Text = "0.00";
+                lblVAT.Text = "0.00";
+                lblGrandTotal.Text = "0.00";
+
+                rptOrderItems.DataSource = null;
+                rptOrderItems.DataBind();
+
+                return;
+            }
+
+            decimal subtotal = cart.Sum(c => c.Subtotal);
+            decimal vat = subtotal * 0.15m;
+            decimal grandTotal = subtotal + vat;
+
+            int itemCount = cart.Sum(c => c.Quantity);
+
+            lblItemCount.Text = itemCount.ToString();
+            lblSubtotal.Text = subtotal.ToString("N2");
+            lblVAT.Text = vat.ToString("N2");
+            lblGrandTotal.Text = grandTotal.ToString("N2");
+
+            rptOrderItems.DataSource = cart;
+            rptOrderItems.DataBind();
+        }
+
+        private void UpdateAddressDisplay()
+        {
+            lblAddressName.Text =
+                $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}";
+
+            lblAddress.Text =
+                $"{txtStreetNumber.Text.Trim()} {txtStreetName.Text.Trim()}<br />" +
+                $"{txtSuburb.Text.Trim()}<br />" +
+                $"{txtCity.Text.Trim()}, {ddlProvince.SelectedValue}<br />" +
+                $"{txtPostalCode.Text.Trim()}";
+
+            lblAddressPhone.Text = txtPhone.Text.Trim();
+        }
+
         protected void ddlPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
             pnlCardDetails.Visible = ddlPaymentMethod.SelectedValue == "Card";
@@ -69,6 +120,29 @@ namespace MultiGroupSystemsTester
 
         protected void btnPlaceOrder_Click(object sender, EventArgs e)
         {
+            string streetAddress = txtStreetAddress.Text.Trim();
+
+            string streetNumber = "";
+            string streetName = "";
+
+            string[] addressParts = streetAddress.Split(
+                new[] { ' ' },
+                2,
+                StringSplitOptions.RemoveEmptyEntries
+            );
+
+            if (addressParts.Length > 0)
+            {
+                streetNumber = addressParts[0];
+            }
+
+            if (addressParts.Length > 1)
+            {
+                streetName = addressParts[1];
+            }
+
+            txtStreetNumber.Text = streetNumber;
+            txtStreetName.Text = streetName;
             if (!Page.IsValid) return;
 
             List<CartItem> cart = Session["Cart"] as List<CartItem>;

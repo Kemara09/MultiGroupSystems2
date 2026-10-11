@@ -13,26 +13,26 @@ namespace MultiGroupSystemsTester
             if (!IsPostBack) BindCart();
         }
 
-       
         private void BindCart()
         {
             List<CartItem> cart = Session["Cart"] as List<CartItem> ?? new List<CartItem>();
 
             if (cart.Count == 0)
             {
-                lnkCheckout.Visible = false;
+                cartRow.Visible = false;
                 lblEmpty.Visible = true;
-                gvCart.DataSource = null;
-                gvCart.DataBind();
+                rptCart.DataSource = null;
+                rptCart.DataBind();
                 lblTotal.Text = (0m).ToString("C");
                 return;
             }
 
             lblEmpty.Visible = false;
-            lnkCheckout.Visible = true;
-            gvCart.DataSource = cart;
-            gvCart.DataBind();
+            cartRow.Visible = true;
+            rptCart.DataSource = cart;
+            rptCart.DataBind();
             lblTotal.Text = "R " + cart.Sum(c => c.Subtotal).ToString("N2");
+
             // Route checkout link based on login state
             if (Session["CustomerID"] == null)
             {
@@ -44,7 +44,7 @@ namespace MultiGroupSystemsTester
             }
         }
 
-        protected void gvCart_RowCommand(object sender, GridViewCommandEventArgs e)
+        protected void rptCart_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);
             List<CartItem> cart = Session["Cart"] as List<CartItem> ?? new List<CartItem>();

@@ -16,7 +16,7 @@ namespace MultiGroupSystemsTester.Account
                 HttpCookie rememberedUser = Request.Cookies["RememberedUsername"];
                 if (rememberedUser != null && !string.IsNullOrEmpty(rememberedUser.Value))
                 {
-                    txtUsername.Text = rememberedUser.Value;
+                    txtEmailAddress.Text = rememberedUser.Value;
                     chkRememberMe.Checked = true;
                 }
             }
@@ -33,50 +33,65 @@ namespace MultiGroupSystemsTester.Account
             }
 
             string connStr = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
-            const string query = "SELECT CustomerID, FirstName FROM Customer WHERE Username = @Username AND Password = @Password";
+            const string query = "SELECT CustomerID, FirstName, Password FROM Customer WHERE EmailAddress = @EmailAddress";
 
             try
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@Username", txtUsername.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Password", txtPassword.Text.Trim());
+                    cmd.Parameters.AddWithValue("@EmailAddress", txtEmailAddress.Text.Trim());
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
-                        {
-                            Session["CustomerID"] = Convert.ToInt32(reader["CustomerID"]);
-                            Session["CustomerName"] = reader["FirstName"].ToString();
-
-                            if (chkRememberMe.Checked)
-                            {
-                                HttpCookie rememberCookie = new HttpCookie("RememberedUsername", txtUsername.Text.Trim());
-                                rememberCookie.Expires = DateTime.Now.AddDays(30);
-                                Response.Cookies.Add(rememberCookie);
-                            }
-                            else
-                            {
-                                HttpCookie clearCookie = new HttpCookie("RememberedUsername", "");
-                                clearCookie.Expires = DateTime.Now.AddDays(-1);
-                                Response.Cookies.Add(clearCookie);
-                            }
-
-                            string returnUrl = Request.QueryString["ReturnUrl"];
-                            if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("~/") && !returnUrl.Contains("//"))
-                            {
-                                Response.Redirect(returnUrl);
-                            }
-                            else
-                            {
-                                Response.Redirect("~/Default.aspx");
-                            }
-                        }
-                        else
+                        if (!reader.Read())
                         {
                             lblError.Text = "Incorrect username or password.";
                             lblError.Visible = true;
+                            return;
+                        }
+
+                        object storedPasswordObj = reader["Password"];
+                        string storedHash = storedPasswordObj == DBNull.Value ? null : storedPasswordObj.ToString();
+
+                        if (string.IsNullOrEmpty(storedHash))
+                        {
+                            lblError.Text = "This account hasn't been activated yet. Please activate your account first.";
+                            lblError.Visible = true;
+                            return;
+                        }
+
+                        if (!PasswordHasher.VerifyPassword(txtPassword.Text.Trim(), storedHash))
+                        {
+                            lblError.Text = "Incorrect username or password.";
+                            lblError.Visible = true;
+                            return;
+                        }
+
+                        Session["CustomerID"] = Convert.ToInt32(reader["CustomerID"]);
+                        Session["CustomerName"] = reader["FirstName"].ToString();
+
+                        if (chkRememberMe.Checked)
+                        {
+                            HttpCookie rememberCookie = new HttpCookie("RememberedUsername", txtEmailAddress.Text.Trim());
+                            rememberCookie.Expires = DateTime.Now.AddDays(30);
+                            Response.Cookies.Add(rememberCookie);
+                        }
+                        else
+                        {
+                            HttpCookie clearCookie = new HttpCookie("RememberedUsername", "");
+                            clearCookie.Expires = DateTime.Now.AddDays(-1);
+                            Response.Cookies.Add(clearCookie);
+                        }
+
+                        string returnUrl = Request.QueryString["ReturnUrl"];
+                        if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("~/") && !returnUrl.Contains("//"))
+                        {
+                            Response.Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            Response.Redirect("~/Default.aspx");
                         }
                     }
                 }

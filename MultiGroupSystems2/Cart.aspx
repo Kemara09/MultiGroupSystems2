@@ -1,38 +1,86 @@
 ﻿<%@ Page Title="Your Cart" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Cart.aspx.cs" Inherits="MultiGroupSystemsTester.Cart" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>Your Cart</h1>
+    <h1 class="mb-4">Shopping Cart</h1>
     <asp:Label ID="lblEmpty" runat="server" CssClass="text-muted" Visible="false" Text="Your cart is empty."></asp:Label>
 
-    <asp:GridView ID="gvCart" runat="server" CssClass="table align-middle" AutoGenerateColumns="false"
-        OnRowCommand="gvCart_RowCommand">
-        <Columns>
-            <asp:BoundField DataField="ProductName" HeaderText="Product" />
-            <asp:TemplateField HeaderText="Qty">
+    <div class="row" runat="server" id="cartRow">
+        <div class="col-lg-8">
+            <asp:Repeater ID="rptCart" runat="server" OnItemCommand="rptCart_ItemCommand">
                 <ItemTemplate>
-                    <div class="d-flex align-items-center gap-2">
-                        <asp:Button runat="server" CommandName="Decrease" CommandArgument='<%# Container.DataItemIndex %>'
-                            Text="-" CssClass="btn btn-outline-secondary btn-sm" />
-                        <span style="min-width:24px; text-align:center; display:inline-block;">
-                            <%# Eval("Quantity") %>
-                        </span>
-                        <asp:Button runat="server" CommandName="Increase" CommandArgument='<%# Container.DataItemIndex %>'
-                            Text="+" CssClass="btn btn-outline-secondary btn-sm" />
+                    <div class="cart-item-card mb-3 p-3">
+                        <div class="row align-items-center g-3">
+                            <div class="col-auto">
+                                <div class="cart-item-thumb">
+                                    <%# Eval("ProductName").ToString().Substring(0, 1).ToUpper() %>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="fw-semibold"><%# Eval("ProductName") %></div>
+                                <div class="text-muted small">Unit Price: R <%# Eval("UnitPrice", "{0:N2}") %></div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center gap-2">
+                                    <asp:Button runat="server" CommandName="Decrease" CommandArgument='<%# Container.ItemIndex %>'
+                                        Text="-" CssClass="btn btn-outline-secondary btn-sm" />
+                                    <span class="qty-value"><%# Eval("Quantity") %></span>
+                                    <asp:Button runat="server" CommandName="Increase" CommandArgument='<%# Container.ItemIndex %>'
+                                        Text="+" CssClass="btn btn-outline-secondary btn-sm" />
+                                </div>
+                            </div>
+                            <div class="col-auto text-end" style="min-width:100px;">
+                                <div class="fw-semibold">R <%# Eval("Subtotal", "{0:N2}") %></div>
+                            </div>
+                            <div class="col-auto">
+                                <asp:Button runat="server" CommandName="Remove" CommandArgument='<%# Container.ItemIndex %>'
+                                    Text="Remove" CssClass="btn btn-outline-secondary btn-sm" />
+                            </div>
+                        </div>
                     </div>
                 </ItemTemplate>
-            </asp:TemplateField>
-            <asp:BoundField DataField="UnitPrice" HeaderText="Unit Price" DataFormatString="{0:C}" />
-            <asp:BoundField DataField="Subtotal" HeaderText="Subtotal" DataFormatString="{0:C}" />
-            <asp:TemplateField>
-                <ItemTemplate>
-                    <asp:Button runat="server" CommandName="Remove" CommandArgument='<%# Container.DataItemIndex %>'
-                        Text="Remove" CssClass="btn btn-outline-secondary btn-sm" />
-                </ItemTemplate>
-            </asp:TemplateField>
-        </Columns>
-    </asp:GridView>
+            </asp:Repeater>
 
-    <p class="fs-5 mt-3">Total: <strong><asp:Label ID="lblTotal" runat="server" /></strong></p>
+            <a href="Products.aspx" runat="server" class="btn btn-outline-secondary mt-2">Continue shopping</a>
+        </div>
 
-    <a href="Products.aspx" runat="server" class="btn btn-outline-secondary">Continue shopping</a>
-    <asp:HyperLink ID="lnkCheckout" runat="server" NavigateUrl="~/Checkout.aspx" CssClass="btn btn-teal">Proceed to checkout</asp:HyperLink>
+        <div class="col-lg-4">
+            <div class="cart-summary-card p-4">
+                <h5 class="mb-3">Cart Summary</h5>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Total</span>
+                    <strong><asp:Label ID="lblTotal" runat="server" /></strong>
+                </div>
+                <asp:HyperLink ID="lnkCheckout" runat="server" NavigateUrl="~/Checkout.aspx" CssClass="btn btn-teal w-100">Proceed to Checkout</asp:HyperLink>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .cart-item-card {
+            background: #ffffff;
+            border: 1px solid #E3E1DA;
+            border-radius: 8px;
+        }
+        .cart-item-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 6px;
+            background: #0F6E56;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        .qty-value {
+            min-width: 24px;
+            text-align: center;
+            display: inline-block;
+        }
+        .cart-summary-card {
+            background: #ffffff;
+            border: 1px solid #E3E1DA;
+            border-radius: 8px;
+        }
+    </style>
 </asp:Content>
