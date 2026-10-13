@@ -27,7 +27,14 @@
 
                     <div class="mb-3">
                         <label for="txtPassword" class="form-label">New Password</label>
-                        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password" />
+                        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password" data-pw-checklist="pwChecklist" />
+                        <ul id="pwChecklist" class="list-unstyled small mb-0 mt-2">
+                            <li data-rule="length">At least 8 characters</li>
+                            <li data-rule="upper">An uppercase letter (A-Z)</li>
+                            <li data-rule="lower">A lowercase letter (a-z)</li>
+                            <li data-rule="number">A number (0-9)</li>
+                            <li data-rule="special">A special character (for example ! @ # $ %)</li>
+                        </ul>
                     </div>
                     <div class="mb-3">
                         <label for="txtConfirmPassword" class="form-label">Confirm Password</label>
@@ -44,4 +51,6 @@
             </div>
         </div>
     </div>
+
+    <script src="<%= ResolveUrl("~/Scripts/password-rules.js") %>"></script>
 </asp:Content>

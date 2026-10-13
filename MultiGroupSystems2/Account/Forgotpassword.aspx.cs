@@ -24,7 +24,7 @@ namespace MultiGroupSystemsTester.Account
                 string firstName;
                 if (PasswordResetService.CreateRequest(email, out token, out firstName))
                 {
-                    string link = GetBaseUrl() + ResolveUrl("~/Account/ResetPassword.aspx") + "?token=" + token;
+                    string link = GetBaseUrl() + ResolveUrl("~/Account/ResetPassword.aspx") + "?token=" + token;     
                     EmailService.SendPasswordResetEmail(email, firstName, link);
                 }
             }

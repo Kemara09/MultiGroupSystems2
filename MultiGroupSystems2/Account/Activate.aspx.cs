@@ -86,9 +86,10 @@ namespace MultiGroupSystemsTester.Account
             string password = txtPassword.Text;
             string confirmPassword = txtConfirmPassword.Text;
 
-            if (string.IsNullOrEmpty(password) || password.Length < 8)
+            string policyError;
+            if (!PasswordPolicy.Validate(password, out policyError))
             {
-                lblPasswordError.Text = "Password must be at least 8 characters long.";
+                lblPasswordError.Text = policyError;
                 return;
             }
 
@@ -104,8 +105,7 @@ namespace MultiGroupSystemsTester.Account
             using (var conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                // The Password IS NULL / '' guard prevents a race where the account
-                // gets activated twice between step 1 and step 2.
+              
                 const string query = @"UPDATE Customer 
                                         SET Password = @Password 
                                         WHERE CustomerID = @CustomerID 

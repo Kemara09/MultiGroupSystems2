@@ -50,7 +50,6 @@
        runat="server" href="~/Cart.aspx">Cart</a>
 </li>
 
-                         <li class="nav-item"> <a class="nav-link" href="~/Wishlist.aspx" runat="server"> &#9829; Wishlist </a></li>
                         <li class="nav-item"><a class="nav-link" href="~/TrackDelivery.aspx" runat="server">Track Delivery</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/MyOrders.aspx" runat="server">My Orders</a></li>
                     <li class="nav-item"><a class="nav-link" href="~/MyAccount.aspx" runat="server">My Account</a></li>
@@ -63,6 +62,7 @@
                           <li class="nav-item">
                           <asp:HyperLink ID="lnkCustomerAuth" runat="server" CssClass="nav-link" NavigateUrl="~/Account/CustomerLogin.aspx">Log In</asp:HyperLink>
                           </li>
+                         <li class="nav-item"> <a class="nav-link" href="~/Wishlist.aspx" runat="server"> &#9829; Wishlist </a></li>
                           <li class="nav-item">
                           <asp:HyperLink ID="lnkRegister" runat="server" CssClass="nav-link" NavigateUrl="~/Account/Register.aspx">Register</asp:HyperLink>
                           </li>

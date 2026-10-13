@@ -14,5 +14,6 @@
             <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPassword" CssClass="text-danger" Display="Dynamic" ErrorMessage="Required." />
         </div>
         <asp:Button ID="btnLogin" runat="server" Text="Log In" CssClass="btn btn-navy" OnClick="btnLogin_Click" />
+        <p class="text-muted small mt-3 mb-0">Forgot your password? Please contact a manager to have it reset.</p>
     </div></div>
 </asp:Content>
