@@ -115,6 +115,13 @@ namespace MultiGroupSystemsTester
 
         protected void gvProducts_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+
+            if (e.CommandName == "AddToWishlist")
+            {
+                AddProductToWishlist(e);
+                return;
+            }
+
             if (e.CommandName != "AddToCart") return;
 
             Button btn = (Button)e.CommandSource;
@@ -147,7 +154,77 @@ namespace MultiGroupSystemsTester
             lblCartMsg.Visible = true;
             BindProducts(txtSearch.Text, ddlCategory.SelectedValue);
         }
+        private void AddProductToWishlist(GridViewCommandEventArgs e)
+        {
+            // Make sure the customer is logged in
+            if (Session["CustomerID"] == null)
+            {
+                Response.Redirect(
+                    "~/Account/CustomerLogin.aspx?ReturnUrl=" +
+                    Server.UrlEncode("~/Products.aspx"),
+                    false
+                );
 
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+            // Identify which product was clicked
+            Button btn = (Button)e.CommandSource;
+            GridViewRow row = (GridViewRow)btn.NamingContainer;
+
+            int productId = Convert.ToInt32(
+                gvProducts.DataKeys[row.RowIndex]["ProductID"]
+            );
+
+            int customerId = Convert.ToInt32(Session["CustomerID"]);
+
+            string connStr = ConfigurationManager
+                .ConnectionStrings["GroupWst14ConnectionString"]
+                .ConnectionString;
+
+            // Save only if this customer has not already saved it
+            string query = @"
+        INSERT INTO Wishlist (CustomerID, ProductID)
+        SELECT @CustomerID, @ProductID
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM Wishlist
+            WHERE CustomerID = @CustomerID
+              AND ProductID = @ProductID
+        )";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connStr))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.Add("@CustomerID", SqlDbType.Int)
+                        .Value = customerId;
+
+                    cmd.Parameters.Add("@ProductID", SqlDbType.Int)
+                        .Value = productId;
+
+                    conn.Open();
+
+                    int rowsAdded = cmd.ExecuteNonQuery();
+
+                    lblCartMsg.Text = rowsAdded > 0
+                        ? "Product added to your wishlist!"
+                        : "This product is already in your wishlist.";
+
+                    lblCartMsg.Visible = true;
+                    lblMessage.Visible = false;
+                }
+            }
+            catch (SqlException)
+            {
+                lblMessage.Text = "Could not save this product to your wishlist.";
+                lblMessage.Visible = true;
+                lblCartMsg.Visible = false;
+            }
+        }
         protected string SafeText(object value)
         {
             if (value == null || value == DBNull.Value) return "N/A";

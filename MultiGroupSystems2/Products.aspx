@@ -1,5 +1,44 @@
 ﻿<%@ Page Title="Products" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Products.aspx.cs" Inherits="MultiGroupSystemsTester.Products" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    
+<style>
+    /* Back to Top Button */
+    #backToTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+
+        background-color: #4a4a4a;
+        color: white;
+        border: none;
+        border-radius: 50%;
+
+        width: 70px;
+        height: 70px;
+
+        cursor: pointer;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        align-items: center;
+        justify-content: center;
+    }
+
+    #backToTopBtn:hover {
+        background-color: #333333;
+    }
+
+    /* Upward arrow */
+    .upArrow {
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        border-top: 5px solid white;
+        border-left: 5px solid white;
+        transform: rotate(45deg);
+        margin-top: 9px;
+    }
+</style>
 
     <h1>Our Products</h1>
 
@@ -62,18 +101,73 @@
                     </asp:TemplateField>
                     <asp:BoundField DataField="Category" HeaderText="Category" />
                     <asp:BoundField DataField="Price" HeaderText="Price" DataFormatString="R {0:N2}" />
-                    <asp:TemplateField HeaderText="Order">
-                        <ItemTemplate>
-                            <div class="d-flex gap-2 align-items-center">
-                                <asp:TextBox ID="txtQty" runat="server" CssClass="form-control form-control-sm" style="width:70px" Text="1" />
-                                <asp:Button ID="btnAddToCart" runat="server" CommandName="AddToCart"
-                                    CommandArgument='<%# Container.DataItemIndex %>' Text="Add to cart" CssClass="btn btn-teal btn-sm" />
-                            </div>
-                        </ItemTemplate>
-                    </asp:TemplateField>
+               
+<asp:TemplateField HeaderText="Order">
+    <ItemTemplate>
+        <div class="d-flex gap-2 align-items-center">
+
+            <asp:TextBox ID="txtQty" runat="server"
+                CssClass="form-control form-control-sm"
+                style="width:70px" Text="1" />
+
+            <asp:Button ID="btnAddToCart" runat="server"
+                CommandName="AddToCart"
+                CommandArgument='<%# Container.DataItemIndex %>'
+                Text="Add to cart"
+                CssClass="btn btn-teal btn-sm" />
+
+            <asp:Button ID="btnWishlist" runat="server"
+                CommandName="AddToWishlist"
+                CommandArgument='<%# Container.DataItemIndex %>'
+                Text="&#9829; Wishlist"
+                CssClass="btn btn-outline-danger btn-sm"
+                CausesValidation="false" />
+
+        </div>
+    </ItemTemplate>
+</asp:TemplateField>
+
                 </Columns>
             </asp:GridView>
         </ContentTemplate>
     </asp:UpdatePanel>
+     <!-- Back to Top Button -->
+    <button type="button" id="backToTopBtn"
+            title="Back to Top"
+            aria-label="Back to top">
+        <span class="upArrow"></span>
+    </button>
+    <script>
+    // Get the Back to Top button
+    var backToTopBtn = document.getElementById("backToTopBtn");
+
+    // Check how far down the page the user has scrolled
+    window.addEventListener("scroll", function () {
+
+        // Get the total height of the webpage
+        var pageHeight = document.documentElement.scrollHeight;
+
+        // Get the height of the visible screen
+        var screenHeight = window.innerHeight;
+
+        // Calculate the halfway scrolling point
+        var halfwayPoint = (pageHeight - screenHeight) / 2;
+
+        // Show the button when halfway down
+        if (window.scrollY >= halfwayPoint && halfwayPoint > 0) {
+            backToTopBtn.style.display = "flex";
+        } else {
+            backToTopBtn.style.display = "none";
+        }
+    });
+
+
+    backToTopBtn.addEventListener("click", function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+</script>
 
 </asp:Content>
