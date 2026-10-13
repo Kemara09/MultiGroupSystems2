@@ -231,6 +231,7 @@
     <Content Include="Admin\OrderLogistics.css" />
     <Content Include="Admin\StaffDataCapture.aspx" />
     <Content Include="Admin\StaffDataCapture.css" />
+    <Content Include="Account\Forgotpassword.aspx" />
     <Content Include="Global.asax" />
     <Content Include="MyAccount.aspx" />
     <Content Include="Account\Register.aspx" />
@@ -402,6 +403,13 @@
     <Compile Include="Admin\StaffDataCapture.aspx.designer.cs">
       <DependentUpon>StaffDataCapture.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Account\Forgotpassword.aspx.cs">
+      <DependentUpon>Forgotpassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\Forgotpassword.aspx.designer.cs">
+      <DependentUpon>Forgotpassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -490,6 +498,7 @@
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\PasswordHasher.cs" />
+    <Compile Include="Services\PasswordResetService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

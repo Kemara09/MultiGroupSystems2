@@ -61,7 +61,7 @@ namespace MultiGroupSystemsTester.Account
                             return;
                         }
 
-                        if (!PasswordHasher.VerifyPassword(txtPassword.Text.Trim(), storedHash))
+                        if (!PasswordHasher.VerifyPassword(txtPassword.Text, storedHash))
                         {
                             lblError.Text = "Incorrect username or password.";
                             lblError.Visible = true;

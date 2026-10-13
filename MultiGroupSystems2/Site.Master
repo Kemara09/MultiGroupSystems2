@@ -97,6 +97,48 @@
         </footer>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <style>
+    .pw-wrap { position: relative; display: block; width: fit-content; max-width: 100%; }
+    .pw-wrap input { padding-right: 4.5rem; }
+    .pw-toggle {
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #0C447C;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+    }
+    .pw-toggle:hover { color: #093762; }
+</style>
+<script>
+    (function () {
+        document.querySelectorAll('input[type="password"]').forEach(function (input) {
+            var wrap = document.createElement('div');
+            wrap.className = 'pw-wrap';
+            input.parentNode.insertBefore(wrap, input);
+            wrap.appendChild(input);
+
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pw-toggle';
+            btn.textContent = 'Show';
+            btn.setAttribute('aria-label', 'Show password');
+            btn.addEventListener('click', function () {
+                var reveal = input.type === 'password';
+                input.type = reveal ? 'text' : 'password';
+                btn.textContent = reveal ? 'Hide' : 'Show';
+                btn.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
+            });
+            wrap.appendChild(btn);
+        });
+    })();
+</script>
+
         <div id="cookieConsentBanner" class="alert alert-dark d-none" style="position:fixed; bottom:0; left:0; right:0; z-index:1050; border-radius:0; margin-bottom:0;">
             <div class="container d-flex justify-content-between align-items-center flex-wrap">
                <span class="me-3">We use cookies to improve your experience on this site (e.g. to remember your login). By continuing to browse, you agree to our use of cookies. <a href="~/PrivacyPolicy.aspx" runat="server" class="text-light text-decoration-underline">Learn more</a></span>

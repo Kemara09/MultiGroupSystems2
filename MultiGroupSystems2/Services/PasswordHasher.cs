@@ -23,21 +23,53 @@ namespace MultiGroupSystemsTester
       
         public static bool VerifyPassword(string password, string storedHash)
         {
-            if (string.IsNullOrEmpty(storedHash)) return false;
 
-            string[] parts = storedHash.Split('.');
-            if (parts.Length != 3) return false;
-
-            int iterations = int.Parse(parts[0]);
-            byte[] salt = Convert.FromBase64String(parts[1]);
-            byte[] hash = Convert.FromBase64String(parts[2]);
-
-            using (var rfc = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA256))
+            if (string.IsNullOrEmpty(password) ||
+                string.IsNullOrWhiteSpace(storedHash))
             {
-                byte[] testHash = rfc.GetBytes(hash.Length);
-                return SlowEquals(hash, testHash);
+                return false;
+            }
+
+            try
+            {
+                string[] parts = storedHash.Split('.');
+
+                if (parts.Length != 3)
+                    return false;
+
+                int iterations;
+
+                if (!int.TryParse(parts[0], out iterations) ||
+                    iterations < 10000 ||
+                    iterations > 10000000)
+                {
+                    return false;
+                }
+
+                byte[] salt = Convert.FromBase64String(parts[1]);
+                byte[] hash = Convert.FromBase64String(parts[2]);
+
+                if (salt.Length != SaltSize || hash.Length != HashSize)
+                    return false;
+
+                using (var rfc = new Rfc2898DeriveBytes(
+                    password, salt, iterations, HashAlgorithmName.SHA256))
+                {
+                    byte[] testHash = rfc.GetBytes(hash.Length);
+                    return SlowEquals(hash, testHash);
+                }
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            catch (ArgumentException)
+            {
+                return false;
             }
         }
+
+        
 
         
         private static bool SlowEquals(byte[] a, byte[] b)
