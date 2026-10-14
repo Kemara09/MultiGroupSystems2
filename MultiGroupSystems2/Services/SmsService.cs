@@ -3,6 +3,8 @@ using System.Configuration;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System;
+using System.Text.RegularExpressions;
 
 namespace MultiGroupSystemsTester.Services
 {
@@ -25,7 +27,12 @@ namespace MultiGroupSystemsTester.Services
 
         private static async Task<bool> SendSmsAsync(string toPhoneNumber, string message)
         {
-            string apiKey = ConfigurationManager.AppSettings["TextBeeApiKey"];
+            toPhoneNumber =
+        NormalizeSouthAfricanPhoneNumber(toPhoneNumber);
+
+            string apiKey =
+                ConfigurationManager.AppSettings["TextBeeApiKey"];
+           
             var payload = new StringBuilder();
             payload.Append("{");
             payload.Append($"\"recipients\":[\"{Escape(toPhoneNumber)}\"],");
@@ -58,5 +65,60 @@ namespace MultiGroupSystemsTester.Services
                 .Replace("\n", "\\n")
                 .Replace("\r", "");
         }
+    
+    
+private static string NormalizeSouthAfricanPhoneNumber(
+    string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                throw new ArgumentException(
+                    "A phone number is required.");
+            }
+
+            
+            string number = Regex.Replace(
+                phoneNumber.Trim(), @"[\s().-]", "");
+
+            
+            if (number.StartsWith("+"))
+            {
+                number = number.Substring(1);
+            }
+
+            if (!Regex.IsMatch(number, @"^\d+$"))
+            {
+                throw new ArgumentException(
+                    "The phone number contains invalid characters.");
+            }
+
+           
+            if (number.StartsWith("0"))
+            {
+                if (number.Length != 10)
+                {
+                    throw new ArgumentException(
+                        "The South African phone number is invalid.");
+                }
+
+                number = "27" + number.Substring(1);
+            }
+            
+            else if (number.StartsWith("27"))
+            {
+                if (number.Length != 11)
+                {
+                    throw new ArgumentException(
+                        "The international phone number is invalid.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException(
+                    "Use a South African number beginning with 0 or +27.");
+            }
+
+            return "+" + number;
+        }
     }
-}
+    }

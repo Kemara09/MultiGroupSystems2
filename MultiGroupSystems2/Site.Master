@@ -1,164 +1,498 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="MultiGroupSystemsTester.SiteMaster" %>
+﻿
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="MultiGroupSystemsTester.SiteMaster" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Multigroup Inc.</asp:ContentPlaceHolder></title>
+
+    <!-- Apply saved theme before page rendering -->
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem("siteTheme");
+                if (theme === "dark" || theme === "light") {
+                    document.documentElement.setAttribute("data-theme", theme);
+                }
+            } catch (e) { }
+        })();
+    </script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" runat="server" />
+
     <style>
-        .footer { color:#ffffff; }
-        body { background:#F1EFE8; }
-        .navbar-custom { background:#0C2A44; }
-        .navbar-custom .nav-link, .navbar-custom .navbar-brand { color:#CDE0F2 !important; }
-        .navbar-custom .navbar-brand { font-weight:600; color:#ffffff !important; }
-        .btn-teal { background:#0F6E56; color:#E1F5EE; border:none; }
-        .btn-teal:hover { background:#0B5744; color:#ffffff; }
-        .btn-navy { background:#0C447C; color:#E6F1FB; border:none; }
-        .btn-navy:hover { background:#093762; color:#ffffff; }
-        .hero-section { background:#2D5A82; padding:0; }
-        .hero-section h1 { font-weight:700; }
-        .hero-section .btn-primary { background:#F2994A; border:none; color:#ffffff; }
-        .hero-section .btn-primary:hover { background:#DB8236; }
-        .feature-card { background:#ffffff; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
-        .feature-card h4 { color:#0C2A44; font-weight:600; }
-        .feature-card p { color:#5F5E5A; }
-        .feature-card-link { cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-        .feature-card-link:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
-        .cta-section { background:#E9ECEF; }
-        .cta-section h2 { color:#0C2A44; font-weight:700; }
+        :root {
+            color-scheme: light;
+            --page-bg: #F1EFE8;
+            --surface-bg: #ffffff;
+            --text-color: #212529;
+            --muted-text: #5F5E5A;
+            --border-color: #dee2e6;
+            --input-bg: #ffffff;
+            --nav-bg: #0C2A44;
+            --nav-text: #CDE0F2;
+            --heading-color: #0C2A44;
+            --link-color: #0C447C;
+            --feature-bg: #ffffff;
+            --cta-bg: #E9ECEF;
+            --hero-bg: #2D5A82;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --page-bg: #121820;
+            --surface-bg: #1e2936;
+            --text-color: #e8edf3;
+            --muted-text: #b0bdcb;
+            --border-color: #3b4858;
+            --input-bg: #263342;
+            --nav-bg: #101b28;
+            --nav-text: #d5e5f5;
+            --heading-color: #d5e5f5;
+            --link-color: #8ab4ff;
+            --feature-bg: #1e2936;
+            --cta-bg: #202c39;
+            --hero-bg: #1c3b56;
+        }
+
+        body {
+            background: var(--page-bg);
+            color: var(--text-color);
+            transition: background-color .2s, color .2s;
+        }
+
+        .navbar-custom {
+            background: var(--nav-bg);
+        }
+
+        .navbar-custom .nav-link,
+        .navbar-custom .navbar-brand {
+            color: var(--nav-text) !important;
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: 600;
+            color: #ffffff !important;
+        }
+
+        .footer {
+            color: #ffffff;
+            background: var(--nav-bg) !important;
+        }
+
+        .btn-teal {
+            background: #0F6E56;
+            color: #E1F5EE;
+            border: none;
+        }
+
+        .btn-teal:hover {
+            background: #0B5744;
+            color: #ffffff;
+        }
+
+        .btn-navy {
+            background: #0C447C;
+            color: #E6F1FB;
+            border: none;
+        }
+
+        .btn-navy:hover {
+            background: #093762;
+            color: #ffffff;
+        }
+
+        .hero-section {
+            background: var(--hero-bg);
+            padding: 0;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+        }
+
+        .hero-section .btn-primary {
+            background: #F2994A;
+            border: none;
+            color: #ffffff;
+        }
+
+        .hero-section .btn-primary:hover {
+            background: #DB8236;
+        }
+
+        .feature-card {
+            background: var(--feature-bg);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+        }
+
+        .feature-card h4 {
+            color: var(--heading-color);
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--muted-text);
+        }
+
+        .feature-card-link {
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .feature-card-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(0,0,0,.12);
+        }
+
+        .cta-section {
+            background: var(--cta-bg);
+            color: var(--text-color);
+        }
+
+        .cta-section h2 {
+            color: var(--heading-color);
+            font-weight: 700;
+        }
+
+        .card,
+        .modal-content,
+        .dropdown-menu,
+        .list-group-item {
+            background-color: var(--surface-bg);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+
+        .dropdown-item {
+            color: var(--text-color);
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: var(--cta-bg);
+            color: var(--text-color);
+        }
+
+        main {
+            color: var(--text-color);
+        }
+
+        main a:not(.btn) {
+            color: var(--link-color);
+        }
+
+        .text-muted,
+        .text-secondary {
+            color: var(--muted-text) !important;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-color: var(--link-color);
+        }
+
+        .form-control::placeholder {
+            color: var(--muted-text);
+        }
+
+        .table {
+            --bs-table-bg: var(--surface-bg);
+            --bs-table-color: var(--text-color);
+            --bs-table-border-color: var(--border-color);
+            --bs-table-striped-bg: var(--page-bg);
+            --bs-table-striped-color: var(--text-color);
+            --bs-table-hover-bg: var(--cta-bg);
+            --bs-table-hover-color: var(--text-color);
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--nav-text);
+            border-radius: 20px;
+            padding: 6px 10px;
+            background: transparent;
+            color: var(--nav-text);
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: .9rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,.12);
+        }
+
+        .theme-toggle:focus-visible {
+            outline: 2px solid #F2994A;
+            outline-offset: 3px;
+        }
+
+        /* Password visibility controls */
+        .pw-wrap {
+            position: relative;
+            display: block;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .pw-wrap input {
+            padding-right: 4.5rem;
+        }
+
+        .pw-toggle {
+            position: absolute;
+            top: 50%;
+            right: .5rem;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--link-color);
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: .25rem .5rem;
+        }
+
+        .pw-toggle:hover {
+            opacity: .8;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body, .feature-card-link {
+                transition: none;
+            }
+        }
     </style>
 </head>
+
 <body>
-    
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server" />
+
         <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
             <div class="container-fluid">
+
                 <a class="navbar-brand fw-bold" href="~/Default.aspx" runat="server">Multigroup Inc.</a>
-               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+
+                <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navMenu"
+                    aria-controls="navMenu" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="~/Default.aspx" runat="server">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/Products.aspx" runat="server">Shop</a></li>
-                    
-<li class="nav-item">
-    <a class="nav-link" id="lnkCartCount"
-       runat="server" href="~/Cart.aspx">Cart</a>
-</li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" id="lnkCartCount" runat="server" href="~/Cart.aspx">Cart</a>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="~/TrackDelivery.aspx" runat="server">Track Delivery</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/MyOrders.aspx" runat="server">My Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="~/MyAccount.aspx" runat="server">My Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="~/MyAccount.aspx" runat="server">My Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/About.aspx" runat="server">About Us</a></li>
                         <li class="nav-item"><a class="nav-link" href="~/Contact.aspx" runat="server">Contact</a></li>
-                    
                     </ul>
-                    </div> 
+
+                    <ul class="navbar-nav me-lg-2">
+                        <li class="nav-item d-flex align-items-center py-2 py-lg-0">
+                            <button type="button" id="themeToggle"
+                                class="theme-toggle"
+                                aria-label="Switch to dark mode"
+                                aria-pressed="false">
+                                <span id="themeIcon" aria-hidden="true">🌙</span>
+                                <span id="themeLabel">Dark mode</span>
+                            </button>
+                        </li>
+                    </ul>
+
                     <ul class="navbar-nav">
-                          <li class="nav-item">
-                          <asp:HyperLink ID="lnkCustomerAuth" runat="server" CssClass="nav-link" NavigateUrl="~/Account/CustomerLogin.aspx">Log In</asp:HyperLink>
-                          </li>
-                         <li class="nav-item"> <a class="nav-link" href="~/Wishlist.aspx" runat="server"> &#9829; Wishlist </a></li>
-                          <li class="nav-item">
-                          <asp:HyperLink ID="lnkRegister" runat="server" CssClass="nav-link" NavigateUrl="~/Account/Register.aspx">Register</asp:HyperLink>
-                          </li>
-                          <li class="nav-item">
-                          <asp:LinkButton ID="btnCustomerLogout" runat="server" CssClass="nav-link" OnClick="btnCustomerLogout_Click">Log Out</asp:LinkButton>
-                          </li>
-                         <li class="nav-item">
-    <a class="nav-link" id="lnkStaffLogin" runat="server" href="~/Account/Login.aspx">Staff Login</a>
-</li>
-<li class="nav-item dropdown" id="liStaffMenu" runat="server" visible="false">
-    <a class="nav-link dropdown-toggle" href="#" id="ddlStaffMenu" role="button" data-bs-toggle="dropdown">
-        Staff Menu
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="ddlStaffMenu">
-    <li><a class="dropdown-item" href="~/Admin/AddProduct.aspx" runat="server">Add Product</a></li>
-    <li><a class="dropdown-item" href="~/Admin/AddSupplier.aspx" runat="server">Add Supplier</a></li>
-    <li><a class="dropdown-item" href="~/Admin/OrderLogistics.aspx" runat="server">Order Logistics</a></li>
-    <li><a class="dropdown-item" href="~/Admin/Reports.aspx" runat="server">Reports</a></li>
-    <li><a class="dropdown-item" href="~/Admin/StaffDataCapture.aspx" runat="server">Staff Data Capture</a></li>
-    <li><hr class="dropdown-divider" /></li>
-    <li><asp:LinkButton ID="btnStaffLogout" runat="server" CssClass="dropdown-item" OnClick="btnStaffLogout_Click">Staff Log Out</asp:LinkButton></li>
-</ul>
-</li>
+                        <li class="nav-item">
+                            <asp:HyperLink ID="lnkCustomerAuth" runat="server"
+                                CssClass="nav-link"
+                                NavigateUrl="~/Account/CustomerLogin.aspx">Log In</asp:HyperLink>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Wishlist.aspx" runat="server">&#9829; Wishlist</a>
+                        </li>
+                        <li class="nav-item">
+                            <asp:HyperLink ID="lnkRegister" runat="server"
+                                CssClass="nav-link"
+                                NavigateUrl="~/Account/Register.aspx">Register</asp:HyperLink>
+                        </li>
+                        <li class="nav-item">
+                            <asp:LinkButton ID="btnCustomerLogout" runat="server"
+                                CssClass="nav-link"
+                                OnClick="btnCustomerLogout_Click">Log Out</asp:LinkButton>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="lnkStaffLogin" runat="server"
+                                href="~/Account/Login.aspx">Staff Login</a>
+                        </li>
+
+                        <li class="nav-item dropdown" id="liStaffMenu"
+                            runat="server" visible="false">
+                            <a class="nav-link dropdown-toggle" href="#"
+                                id="ddlStaffMenu" role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Staff Menu
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end"
+                                aria-labelledby="ddlStaffMenu">
+                                <li><a class="dropdown-item" href="~/Admin/AddProduct.aspx" runat="server">Add Product</a></li>
+                                <li><a class="dropdown-item" href="~/Admin/AddSupplier.aspx" runat="server">Add Supplier</a></li>
+                                <li><a class="dropdown-item" href="~/Admin/OrderLogistics.aspx" runat="server">Order Logistics</a></li>
+                                <li><a class="dropdown-item" href="~/Admin/Reports.aspx" runat="server">Reports</a></li>
+                                <li><a class="dropdown-item" href="~/Admin/StaffDataCapture.aspx" runat="server">Staff Data Capture</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <asp:LinkButton ID="btnStaffLogout" runat="server"
+                                        CssClass="dropdown-item"
+                                        OnClick="btnStaffLogout_Click">Staff Log Out</asp:LinkButton>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
-            
+            </div>
         </nav>
 
         <main class="container my-4">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </main>
 
-      <footer class="footer text-center py-3 mt-5" style="background:#0C2A44;">
+        <footer class="footer text-center py-3 mt-5" style="background:#0C2A44;">
             <div class="container">
                 <p class="mb-0">&copy; <%: DateTime.Now.Year %> Multigroup Inc. All rights reserved.</p>
-                <p class="mb-0"><a href="~/PrivacyPolicy.aspx" runat="server" style="color:#CDE0F2; text-decoration:underline;">Privacy Policy</a></p>
+                <p class="mb-0">
+                    <a href="~/PrivacyPolicy.aspx" runat="server"
+                        style="color:#CDE0F2; text-decoration:underline;">Privacy Policy</a>
+                </p>
             </div>
         </footer>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <style>
-    .pw-wrap { position: relative; display: block; width: fit-content; max-width: 100%; }
-    .pw-wrap input { padding-right: 4.5rem; }
-    .pw-toggle {
-        position: absolute;
-        top: 50%;
-        right: 0.5rem;
-        transform: translateY(-50%);
-        border: none;
-        background: transparent;
-        color: #0C447C;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-        padding: 0.25rem 0.5rem;
-    }
-    .pw-toggle:hover { color: #093762; }
-</style>
-<script>
-    (function () {
-        document.querySelectorAll('input[type="password"]').forEach(function (input) {
-            var wrap = document.createElement('div');
-            wrap.className = 'pw-wrap';
-            input.parentNode.insertBefore(wrap, input);
-            wrap.appendChild(input);
 
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'pw-toggle';
-            btn.textContent = 'Show';
-            btn.setAttribute('aria-label', 'Show password');
-            btn.addEventListener('click', function () {
-                var reveal = input.type === 'password';
-                input.type = reveal ? 'text' : 'password';
-                btn.textContent = reveal ? 'Hide' : 'Show';
-                btn.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
-            });
-            wrap.appendChild(btn);
-        });
-    })();
-</script>
+        <!-- Password visibility toggle -->
+        <script>
+            (function () {
+                document.querySelectorAll('input[type="password"]').forEach(function (input) {
+                    if (input.dataset.pwToggleAdded === "true") return;
+                    input.dataset.pwToggleAdded = "true";
 
-        <div id="cookieConsentBanner" class="alert alert-dark d-none" style="position:fixed; bottom:0; left:0; right:0; z-index:1050; border-radius:0; margin-bottom:0;">
+                    var wrap = document.createElement('div');
+                    wrap.className = 'pw-wrap';
+                    input.parentNode.insertBefore(wrap, input);
+                    wrap.appendChild(input);
+
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'pw-toggle';
+                    btn.textContent = 'Show';
+                    btn.setAttribute('aria-label', 'Show password');
+
+                    btn.addEventListener('click', function () {
+                        var reveal = input.type === 'password';
+                        input.type = reveal ? 'text' : 'password';
+                        btn.textContent = reveal ? 'Hide' : 'Show';
+                        btn.setAttribute('aria-label',
+                            reveal ? 'Hide password' : 'Show password');
+                    });
+
+                    wrap.appendChild(btn);
+                });
+            })();
+        </script>
+
+        <!-- Dark mode toggle -->
+        <script>
+            (function () {
+                var toggle = document.getElementById("themeToggle");
+                var icon = document.getElementById("themeIcon");
+                var label = document.getElementById("themeLabel");
+
+                if (!toggle || !icon || !label) return;
+
+                function applyTheme(theme, save) {
+                    var dark = theme === "dark";
+
+                    document.documentElement.setAttribute("data-theme", theme);
+                    icon.textContent = dark ? "☀️" : "🌙";
+                    label.textContent = dark ? "Light mode" : "Dark mode";
+
+                    toggle.setAttribute("aria-label",
+                        dark ? "Switch to light mode" : "Switch to dark mode");
+                    toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+
+                    if (save) {
+                        try {
+                            localStorage.setItem("siteTheme", theme);
+                        } catch (e) { }
+                    }
+                }
+
+                var savedTheme = null;
+                try {
+                    savedTheme = localStorage.getItem("siteTheme");
+                } catch (e) { }
+
+                applyTheme(savedTheme === "dark" ? "dark" : "light", false);
+
+                toggle.addEventListener("click", function () {
+                    var currentlyDark =
+                        document.documentElement.getAttribute("data-theme") === "dark";
+
+                    applyTheme(currentlyDark ? "light" : "dark", true);
+                });
+            })();
+        </script>
+
+        <!-- Cookie consent -->
+        <div id="cookieConsentBanner"
+            class="alert alert-dark d-none"
+            style="position:fixed; bottom:0; left:0; right:0; z-index:1050; border-radius:0; margin-bottom:0;">
+
             <div class="container d-flex justify-content-between align-items-center flex-wrap">
-               <span class="me-3">We use cookies to improve your experience on this site (e.g. to remember your login). By continuing to browse, you agree to our use of cookies. <a href="~/PrivacyPolicy.aspx" runat="server" class="text-light text-decoration-underline">Learn more</a></span>
-                <button type="button" class="btn btn-teal btn-sm" onclick="acceptCookieConsent()">Accept</button>
+                <span class="me-3">
+                    We use cookies to improve your experience on this site
+                    (e.g. to remember your login). By continuing to browse,
+                    you agree to our use of cookies.
+                    <a href="~/PrivacyPolicy.aspx" runat="server"
+                        class="text-light text-decoration-underline">Learn more</a>
+                </span>
+                <button type="button" class="btn btn-teal btn-sm"
+                    onclick="acceptCookieConsent()">Accept</button>
             </div>
         </div>
+
         <script>
             function acceptCookieConsent() {
-                document.cookie = "CookieConsent=accepted; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
-                document.getElementById('cookieConsentBanner').classList.add('d-none');
+                document.cookie = "CookieConsent=accepted; max-age=" +
+                    (60 * 60 * 24 * 365) + "; path=/; SameSite=Lax";
+                document.getElementById('cookieConsentBanner')
+                    .classList.add('d-none');
             }
+
             (function checkCookieConsent() {
                 if (document.cookie.indexOf('CookieConsent=accepted') === -1) {
-                    document.getElementById('cookieConsentBanner').classList.remove('d-none');
+                    document.getElementById('cookieConsentBanner')
+                        .classList.remove('d-none');
                 }
             })();
         </script>
