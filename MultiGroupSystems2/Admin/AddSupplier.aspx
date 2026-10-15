@@ -28,7 +28,7 @@
 
         <div class="form-body">
             <div class="form-group full-width">
-                <label>Supplier Name</label>
+                <label>Supplier Name</label>               
                 <input type="text" placeholder="Enter supplier name" />
             </div>
 
@@ -61,28 +61,48 @@
                 </div>
             </div>
 
-            <div class="form-group full-width">
-                <label>Address</label>
-                <textarea rows="4" placeholder="Enter supplier address"></textarea>
-            </div>
+           <div class="form-row">
+    <div class="form-group" style="flex: 0 0 25%;">
+        <label>Street No.</label>
+        <asp:TextBox ID="txtStreetNo" runat="server" CssClass="form-control" placeholder="No." />
+    </div>
+    <div class="form-group" style="flex: 1;">
+        <label>Street Name</label>
+        <asp:TextBox ID="txtStreetName" runat="server" CssClass="form-control" placeholder="Enter street name" />
+    </div>
+</div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>City</label>
-                    <input type="text" placeholder="Enter city" />
-                </div>
-                <div class="form-group">
-                    <label>Country</label>
-                    <select>
-                        <option>Select country</option>
-                        <option>South Africa</option>
-                        <option>United Kingdom</option>
-                        <option>United States</option>
-                        <option>Australia</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-            </div>
+<div class="form-row">
+    <div class="form-group">
+        <label>Suburb</label>
+        <asp:TextBox ID="txtSuburb" runat="server" CssClass="form-control" placeholder="Enter suburb" />
+    </div>
+    <div class="form-group">
+        <label>City</label>
+        <asp:TextBox ID="txtCity" runat="server" CssClass="form-control" placeholder="Enter city" />
+    </div>
+</div>
+    <div class="form-row">
+    <div class="form-group">
+        <label>Province</label>
+        <asp:DropDownList ID="ddlProvince" runat="server" CssClass="form-control">
+            <asp:ListItem Text="Select province" Value="" />
+            <asp:ListItem Text="KwaZulu-Natal" Value="KwaZulu-Natal" />
+            <asp:ListItem Text="Gauteng" Value="Gauteng" />
+            <asp:ListItem Text="Western Cape" Value="Western Cape" />
+            <asp:ListItem Text="Eastern Cape" Value="Eastern Cape" />
+            <asp:ListItem Text="Free State" Value="Free State" />
+            <asp:ListItem Text="Northern Cape" Value="Northern Cape" />
+            <asp:ListItem Text="North West" Value="North West" />
+            <asp:ListItem Text="Mpumalanga" Value="Mpumalanga" />
+            <asp:ListItem Text="Limpopo" Value="Limpopo" />
+        </asp:DropDownList>
+    </div>
+        <div class="form-group">
+        <label>Postal Code</label>
+        <asp:TextBox ID="txtPostalCode" runat="server" CssClass="form-control" placeholder="Enter postal code" />
+    </div>
+
 
             <div class="form-group full-width">
                 <label>Additional Notes</label>
