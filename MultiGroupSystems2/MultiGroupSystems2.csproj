@@ -498,6 +498,7 @@
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\PasswordHasher.cs" />
+    <Compile Include="Services\PasswordPolicy.cs" />
     <Compile Include="Services\PasswordResetService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="Site.Master.cs">
@@ -538,7 +539,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
