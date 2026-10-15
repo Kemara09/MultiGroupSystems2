@@ -422,7 +422,6 @@
     </Compile>
     <Compile Include="Account\Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
@@ -497,9 +496,11 @@
     </Compile>
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
+    <Compile Include="Services\OtpService.cs" />
     <Compile Include="Services\PasswordHasher.cs" />
     <Compile Include="Services\PasswordPolicy.cs" />
     <Compile Include="Services\PasswordResetService.cs" />
+    <Compile Include="Services\RegistrationOtpService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
