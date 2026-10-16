@@ -24,22 +24,28 @@ namespace MultiGroupSystemsTester.Account
                 string firstName;
                 if (PasswordResetService.CreateRequest(email, out token, out firstName))
                 {
-                    string link = GetBaseUrl() + ResolveUrl("~/Account/ResetPassword.aspx") + "?token=" + token;     
+                    string link = GetBaseUrl() + ResolveUrl("~/Account/ResetPassword.aspx") + "?token=" + token;
                     EmailService.SendPasswordResetEmail(email, firstName, link);
                 }
             }
             catch (Exception ex)
             {
-                
-                System.Diagnostics.Debug.WriteLine("Password reset failed: " + ex.Message);
+                System.Diagnostics.Trace.TraceError(
+                    "Password reset failed: " + ex.ToString()
+                );
+
+                lblError.Text = "Password reset failed. Please check the application error log.";
+                pnlForm.Visible = true;
+                pnlSent.Visible = false;
+                return;
             }
 
-         
+
             pnlForm.Visible = false;
             pnlSent.Visible = true;
         }
 
-        
+
         private string GetBaseUrl()
         {
             string configured = ConfigurationManager.AppSettings["SiteBaseUrl"];

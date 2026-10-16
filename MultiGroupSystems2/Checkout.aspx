@@ -3,9 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
-        /* ================================
-           MULTIGROUP CHECKOUT
-           ================================ */
+        
 
         .checkout-page {
             background: #f3f4f6;
@@ -26,7 +24,6 @@
             margin-bottom: 25px;
         }
 
-        /* Main columns */
         .checkout-layout {
             display: grid;
             grid-template-columns: minmax(0, 1fr) 340px;
@@ -45,7 +42,7 @@
             top: 20px;
         }
 
-        /* Cards */
+       
         .checkout-card {
             background: #ffffff;
             border: 1px solid #ddd;
@@ -70,7 +67,7 @@
             text-transform: none;
         }
 
-        /* Delivery method */
+        
         .delivery-methods {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -120,7 +117,6 @@
             font-size: 11px;
         }
 
-        /* Address */
         .address-display {
             background: #fafafa;
             border: 1px solid #e4e4e4;
@@ -138,7 +134,7 @@
             color: #555;
         }
 
-        /* Date selection */
+        
         .delivery-dates {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -180,7 +176,7 @@
             margin-top: 4px;
         }
 
-        /* Time */
+       
         .delivery-time {
             margin-top: 15px;
             padding: 12px;
@@ -200,7 +196,7 @@
             color: #666;
         }
 
-        /* Forms */
+      
         .form-label {
             font-size: 13px;
             font-weight: 500;
@@ -219,7 +215,7 @@
             box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
         }
 
-        /* Payment */
+        
         .payment-box {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -238,7 +234,7 @@
             color: #777;
         }
 
-        /* Order summary */
+        
         .summary-card {
             background: white;
             border: 1px solid #ddd;
@@ -291,7 +287,7 @@
             background: #066b4d;
         }
 
-        /* Items */
+      
         .order-items-card {
             margin-top: 15px;
             background: white;
@@ -338,14 +334,13 @@
             font-weight: 600;
         }
 
-        /* Additional options */
+       
         .additional-option {
             padding: 5px 0;
             font-size: 13px;
             color: #555;
         }
 
-        /* Success */
         .success-box {
             background: #e9f8f0;
             border: 1px solid #b8e5ca;
@@ -354,7 +349,7 @@
             margin-bottom: 25px;
         }
 
-        /* Responsive */
+        
         @media (max-width: 900px) {
             .checkout-layout {
                 grid-template-columns: 1fr;
@@ -388,69 +383,66 @@
         }
     </style>
 
-   <script>
-       document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-           var changeAddressBtn = document.getElementById("changeAddressBtn");
-           var closeAddressBtn = document.getElementById("closeAddressBtn");
-           var customerDetails = document.getElementById("customer-details");
+            var changeAddressBtn = document.getElementById("changeAddressBtn");
+            var closeAddressBtn = document.getElementById("closeAddressBtn");
+            var customerDetails = document.getElementById("customer-details");
 
-           /* ==============================
-              OPEN CHANGE ADDRESS
-           ============================== */
+           
 
-           if (changeAddressBtn) {
+            if (changeAddressBtn) {
 
-               changeAddressBtn.addEventListener("click", function (e) {
+                changeAddressBtn.addEventListener("click", function (e) {
 
-                   e.preventDefault();
+                    e.preventDefault();
 
-                   customerDetails.style.display = "block";
+                    customerDetails.style.display = "block";
 
-                   customerDetails.scrollIntoView({
-                       behavior: "smooth",
-                       block: "start"
-                   });
+                    customerDetails.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
 
-               });
+                });
 
-           }
+            }
 
 
-           /* ==============================
-              CLOSE CHANGE ADDRESS
-           ============================== */
+            
 
-           if (closeAddressBtn) {
+            if (closeAddressBtn) {
 
-               closeAddressBtn.addEventListener("click", function (e) {
+                closeAddressBtn.addEventListener("click", function (e) {
 
-                   e.preventDefault();
+                    e.preventDefault();
 
-                   customerDetails.style.display = "none";
+                    customerDetails.style.display = "none";
 
-                   changeAddressBtn.scrollIntoView({
-                       behavior: "smooth",
-                       block: "center"
-                   });
+                    changeAddressBtn.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
 
-               });
+                });
 
-           }
+            }
 
-       });
-   </script>
-     <div class="checkout-page">
+        });
+    </script>
+
+    <div class="checkout-page">
 
         <div class="checkout-container">
 
             <h1 class="checkout-title">Checkout</h1>
 
-            <!-- SUCCESS MESSAGE -->
+           
             <asp:Panel ID="pnlSuccess" runat="server" CssClass="success-box" Visible="false">
             </asp:Panel>
 
-            <!-- ERROR MESSAGE -->
+           
             <asp:Label ID="lblError"
                 runat="server"
                 CssClass="alert alert-danger d-block"
@@ -462,14 +454,12 @@
 
                 <div class="checkout-layout">
 
-                    <!-- ==========================================
-                         LEFT SIDE
-                         ========================================== -->
+                   
 
                     <div class="checkout-left">
 
 
-                        <!-- DELIVERY METHOD -->
+                        
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -511,370 +501,79 @@
                         </div>
 
 
-                        <!-- DELIVERY ADDRESS -->
-                       <div class="checkout-card-title">
-    Delivery Address
+                       
+                        <div class="checkout-card">
 
-    <span style="float:right;">
-        <a href="javascript:void(0);"
-           id="changeAddressBtn"
-           style="font-size:12px;
-                  color:#087f5b;
-                  text-decoration:none;
-                  cursor:pointer;">
-            ✏ Change
-        </a>
-    </span>
-</div>
+                            <div class="checkout-card-title">
+                                Delivery Address
+
+                                <span style="float:right;">
+                                    <a href="javascript:void(0);"
+                                       id="changeAddressBtn"
+                                       style="font-size:12px;
+                                              color:#087f5b;
+                                              text-decoration:none;
+                                              cursor:pointer;">
+                                        ✏ Change
+                                    </a>
+                                </span>
+                            </div>
 
                             <div class="address-display">
-
                                 <div class="address-name">
-                                    <asp:Label ID="lblAddressName"
-                                        runat="server">
-                                    </asp:Label>
+                                    <asp:Label ID="lblAddressName" runat="server" />
                                 </div>
 
                                 <div class="address-text">
-                                    <asp:Label ID="lblAddress"
-                                        runat="server">
-                                    </asp:Label>
+                                    <asp:Label ID="lblAddress" runat="server" />
                                 </div>
 
-                                <div style="margin-top:8px;
-                                            font-size:12px;
-                                            color:#777;">
-
+                                <div style="margin-top:8px;font-size:12px;color:#777;">
                                     Phone:
-                                    <asp:Label ID="lblAddressPhone"
-                                        runat="server">
-                                    </asp:Label>
-
+                                    <asp:Label ID="lblAddressPhone" runat="server" />
                                 </div>
-
                             </div>
 
                         </div>
+                        
+                        <div id="customer-details"
+                             class="checkout-card"
+                             style="display:none;">
 
+                            <div class="checkout-card-title">
+                                Customer &amp; Delivery Details
 
-                        <!-- CUSTOMER DETAILS -->
-                      <div id="customer-details"
-     class="checkout-card"
-     style="display:none;">
+                                <span style="float:right;">
+                                    <a href="javascript:void(0);"
+                                       id="closeAddressBtn"
+                                       style="font-size:12px;
+                                              color:#087f5b;
+                                              text-decoration:none;
+                                              cursor:pointer;">
+                                        CANCEL
+                                    </a>
+                                </span>
+                            </div>
 
-    <div class="checkout-card-title">
-        Customer &amp; Delivery Details
 
-        <span style="float:right;">
-            <a href="javascript:void(0);"
-               id="closeAddressBtn"
-               style="font-size:12px;
-                      color:#087f5b;
-                      text-decoration:none;
-                      cursor:pointer;">
-                CANCEL
-            </a>
-        </span>
-    </div>
+                            
+                            <div style="display:none;">
 
+                                <asp:TextBox ID="txtFirstName" runat="server" />
 
-    <!--
-        Hidden fields kept so existing C# code-behind
-        does not break.
-    -->
-    <div style="display:none;">
+                                <asp:TextBox ID="txtLastName" runat="server" />
 
-        <asp:TextBox
-            ID="TextBox1"
-            runat="server" />
+                                <asp:TextBox ID="txtEmail" runat="server" />
 
-        <asp:TextBox
-            ID="TextBox2"
-            runat="server" />
+                                <asp:TextBox ID="txtStreetNumber" runat="server" />
 
-        <asp:TextBox
-            ID="TextBox3"
-            runat="server" />
+                                <asp:TextBox ID="txtStreetName" runat="server" />
 
-        <asp:TextBox
-            ID="TextBox4"
-            runat="server" />
+                            </div>
 
-        <asp:TextBox
-            ID="TextBox5"
-            runat="server" />
 
-    </div>
-
-
-    <!-- PHONE NUMBER -->
-    <div class="row g-3">
-
-        <div class="col-md-6">
-
-            <label class="form-label">
-                Phone number
-            </label>
-
-            <asp:TextBox
-                ID="TextBox6"
-                runat="server"
-                CssClass="form-control" />
-
-            <asp:RequiredFieldValidator
-                runat="server"
-                ControlToValidate="txtPhone"
-                CssClass="text-danger"
-                Display="Dynamic"
-                ErrorMessage="Required." />
-
-            <asp:RegularExpressionValidator
-                runat="server"
-                ControlToValidate="txtPhone"
-                CssClass="text-danger"
-                Display="Dynamic"
-                ErrorMessage="Enter a valid 10-digit number."
-                ValidationExpression="^0[0-9]{9}$" />
-
-        </div>
-
-    </div>
-
-
-    <!-- STREET ADDRESS -->
-    <div class="row g-3 mt-1">
-
-        <div class="col-md-12">
-
-            <label class="form-label">
-                Street address
-            </label>
-
-            <asp:TextBox
-                ID="txtStreetAddress"
-                runat="server"
-                CssClass="form-control"
-                placeholder="e.g. 10 Fredman Drive" />
-
-            <asp:RequiredFieldValidator
-                runat="server"
-                ControlToValidate="txtStreetAddress"
-                CssClass="text-danger"
-                Display="Dynamic"
-                ErrorMessage="Please enter your street address." />
-
-        </div>
-
-    </div>
-
-
-    <!-- SUBURB / CITY / PROVINCE -->
-    <div class="row g-3 mt-1">
-
-        <!-- SUBURB -->
-        <div class="col-md-4">
-
-            <label class="form-label">
-                Suburb
-            </label>
-
-            <asp:TextBox
-                ID="TextBox7"
-                runat="server"
-                CssClass="form-control" />
-
-        </div>
-
-
-        <!-- CITY -->
-        <div class="col-md-4">
-
-            <label class="form-label">
-                City
-            </label>
-
-            <asp:TextBox
-                ID="TextBox8"
-                runat="server"
-                CssClass="form-control" />
-
-        </div>
-
-
-        <!-- PROVINCE -->
-        <div class="col-md-4">
-
-            <label class="form-label">
-                Province
-            </label>
-
-            <asp:DropDownList
-                ID="DropDownList1"
-                runat="server"
-                CssClass="form-select">
-
-                <asp:ListItem
-                    Text="-- Select --"
-                    Value="" />
-
-                <asp:ListItem
-                    Text="Eastern Cape"
-                    Value="Eastern Cape" />
-
-                <asp:ListItem
-                    Text="Free State"
-                    Value="Free State" />
-
-                <asp:ListItem
-                    Text="Gauteng"
-                    Value="Gauteng" />
-
-                <asp:ListItem
-                    Text="KwaZulu-Natal"
-                    Value="KwaZulu-Natal" />
-
-                <asp:ListItem
-                    Text="Limpopo"
-                    Value="Limpopo" />
-
-                <asp:ListItem
-                    Text="Mpumalanga"
-                    Value="Mpumalanga" />
-
-                <asp:ListItem
-                    Text="North West"
-                    Value="North West" />
-
-                <asp:ListItem
-                    Text="Northern Cape"
-                    Value="Northern Cape" />
-
-                <asp:ListItem
-                    Text="Western Cape"
-                    Value="Western Cape" />
-
-            </asp:DropDownList>
-
-            <asp:RequiredFieldValidator
-                runat="server"
-                ControlToValidate="ddlProvince"
-                InitialValue=""
-                CssClass="text-danger"
-                Display="Dynamic"
-                ErrorMessage="Please select a province." />
-
-        </div>
-
-    </div>
-
-
-    <!-- POSTAL CODE -->
-    <div class="row g-3 mt-1">
-
-        <div class="col-md-4">
-
-            <label class="form-label">
-                Postal code
-            </label>
-
-            <asp:TextBox
-                ID="TextBox9"
-                runat="server"
-                CssClass="form-control" />
-
-            <asp:RequiredFieldValidator
-                runat="server"
-                ControlToValidate="txtPostalCode"
-                CssClass="text-danger"
-                Display="Dynamic"
-                ErrorMessage="Required." />
-
-            <asp:RegularExpressionValidator
-                runat="server"
-                ControlToValidate="txtPostalCode"
-                CssClass="text-danger"
-                Display="Dynamic"
-                ErrorMessage="Enter a valid 4-digit postal code."
-                ValidationExpression="^[0-9]{4}$" />
-
-        </div>
-
-    </div>
-
-</div>
-
+                           
                             <div class="row g-3">
-
-                                <div class="col-md-6">
-
-                                    <label class="form-label">
-                                        First name
-                                    </label>
-
-                                    <asp:TextBox
-                                        ID="txtFirstName"
-                                        runat="server"
-                                        CssClass="form-control" />
-
-                                    <asp:RequiredFieldValidator
-                                        runat="server"
-                                        ControlToValidate="txtFirstName"
-                                        CssClass="text-danger"
-                                        Display="Dynamic"
-                                        ErrorMessage="Required." />
-
-                                </div>
-
-
-                                <div class="col-md-6">
-
-                                    <label class="form-label">
-                                        Last name
-                                    </label>
-
-                                    <asp:TextBox
-                                        ID="txtLastName"
-                                        runat="server"
-                                        CssClass="form-control" />
-
-                                    <asp:RequiredFieldValidator
-                                        runat="server"
-                                        ControlToValidate="txtLastName"
-                                        CssClass="text-danger"
-                                        Display="Dynamic"
-                                        ErrorMessage="Required." />
-
-                                </div>
-
-
-                                <div class="col-md-6">
-
-                                    <label class="form-label">
-                                        Email
-                                    </label>
-
-                                    <asp:TextBox
-                                        ID="txtEmail"
-                                        runat="server"
-                                        CssClass="form-control" />
-
-                                    <asp:RequiredFieldValidator
-                                        runat="server"
-                                        ControlToValidate="txtEmail"
-                                        CssClass="text-danger"
-                                        Display="Dynamic"
-                                        ErrorMessage="Required." />
-
-                                    <asp:RegularExpressionValidator
-                                        runat="server"
-                                        ControlToValidate="txtEmail"
-                                        CssClass="text-danger"
-                                        Display="Dynamic"
-                                        ErrorMessage="Invalid email."
-                                        ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" />
-
-                                </div>
-
 
                                 <div class="col-md-6">
 
@@ -904,42 +603,40 @@
 
                                 </div>
 
+                            </div>
 
-                                <div class="col-md-3">
+
+                           
+                            <div class="row g-3 mt-1">
+
+                                <div class="col-md-12">
 
                                     <label class="form-label">
-                                        Street number
+                                        Street address
                                     </label>
 
                                     <asp:TextBox
-                                        ID="txtStreetNumber"
+                                        ID="txtStreetAddress"
                                         runat="server"
-                                        CssClass="form-control" />
+                                        CssClass="form-control"
+                                        placeholder="e.g. 10 Fredman Drive" />
 
                                     <asp:RequiredFieldValidator
                                         runat="server"
-                                        ControlToValidate="txtStreetNumber"
+                                        ControlToValidate="txtStreetAddress"
                                         CssClass="text-danger"
                                         Display="Dynamic"
-                                        ErrorMessage="Required." />
+                                        ErrorMessage="Please enter your street address." />
 
                                 </div>
 
-
-                                <div class="col-md-9">
-
-                                    <label class="form-label">
-                                        Street name
-                                    </label>
-
-                                    <asp:TextBox
-                                        ID="txtStreetName"
-                                        runat="server"
-                                        CssClass="form-control" />
-
-                                </div>
+                            </div>
 
 
+                         
+                            <div class="row g-3 mt-1">
+
+                                
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -954,20 +651,10 @@
                                 </div>
 
 
-                                <div class="col-md-4">
-
-                                    <label class="form-label">
-                                        City
-                                    </label>
-
-                                    <asp:TextBox
-                                        ID="txtCity"
-                                        runat="server"
-                                        CssClass="form-control" />
-
-                                </div>
+                                
 
 
+                                
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -979,10 +666,7 @@
                                         runat="server"
                                         CssClass="form-select">
 
-                                        <asp:ListItem
-                                            Text="-- Select --"
-                                            Value="" />
-
+                                        <asp:ListItem Text="-- Select --" Value="" />
                                         <asp:ListItem Text="Eastern Cape" Value="Eastern Cape" />
                                         <asp:ListItem Text="Free State" Value="Free State" />
                                         <asp:ListItem Text="Gauteng" Value="Gauteng" />
@@ -1005,6 +689,11 @@
 
                                 </div>
 
+                            </div>
+
+
+                            
+                            <div class="row g-3 mt-1">
 
                                 <div class="col-md-4">
 
@@ -1037,9 +726,7 @@
                             </div>
 
                         </div>
-
-
-                        <!-- DELIVERY DATE -->
+                       
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1109,7 +796,7 @@
                         </div>
 
 
-                        <!-- PAYMENT METHOD -->
+                        
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1154,7 +841,7 @@
                             </div>
 
 
-                            <!-- CARD DETAILS -->
+                           
                             <asp:Panel
                                 ID="pnlCardDetails"
                                 runat="server"
@@ -1230,7 +917,7 @@
                             </asp:Panel>
 
 
-                            <!-- EFT -->
+                           
                             <asp:Panel
                                 ID="pnlEFTDetails"
                                 runat="server"
@@ -1257,7 +944,7 @@
                         </div>
 
 
-                        <!-- ADDITIONAL INFORMATION -->
+                        
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1291,14 +978,12 @@
                     </div>
 
 
-                    <!-- ==========================================
-                         RIGHT SIDE
-                         ========================================== -->
+                  
 
                     <div class="checkout-right">
 
 
-                        <!-- ORDER SUMMARY -->
+                        
                         <div class="summary-card">
 
                             <div class="summary-title">
@@ -1393,7 +1078,7 @@
                         </div>
 
 
-                        <!-- ITEMS -->
+                      
                         <div class="order-items-card">
 
                             <div class="summary-title"

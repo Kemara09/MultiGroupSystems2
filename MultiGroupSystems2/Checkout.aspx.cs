@@ -47,23 +47,70 @@ namespace MultiGroupSystemsTester
                     {
                         if (reader.Read())
                         {
+                            // Hidden fields (read later by the order / invoice code)
                             txtFirstName.Text = reader["FirstName"].ToString();
                             txtLastName.Text = reader["LastName"].ToString();
-                            txtPhone.Text = reader["PhoneNumber"].ToString();
                             txtEmail.Text = reader["EmailAddress"].ToString();
                             txtStreetNumber.Text = reader["StreetNumber"].ToString();
                             txtStreetName.Text = reader["StreetName"].ToString();
+
+                            // Visible fields in the CHANGE panel
+                            txtPhone.Text = reader["PhoneNumber"].ToString();
                             txtSuburb.Text = reader["Suburb"].ToString();
-                            txtCity.Text = reader["City"].ToString();
-                            ddlProvince.SelectedValue = reader["Province"].ToString();
+                            
                             txtPostalCode.Text = reader["PostalCode"].ToString();
+
+                            // The panel shows one combined street field
+                            txtStreetAddress.Text =
+                                (txtStreetNumber.Text.Trim() + " " + txtStreetName.Text.Trim()).Trim();
+
+                            // FindByValue avoids an exception if the saved province
+                            // doesn't exactly match a list item
+                            var province = ddlProvince.Items.FindByValue(reader["Province"].ToString().Trim());
+                            if (province != null)
+                            {
+                                ddlProvince.ClearSelection();
+                                province.Selected = true;
+                            }
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("PREFILL ERROR: " + ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Splits the single "Street address" box into street number and street name,
+        /// so the hidden fields used by the order / invoice code stay in step.
+        /// </summary>
+        private void SyncStreetFields()
+        {
+            string streetAddress = txtStreetAddress.Text.Trim();
+
+            string streetNumber = "";
+            string streetName = "";
+
+            string[] addressParts = streetAddress.Split(
+                new[] { ' ' },
+                2,
+                StringSplitOptions.RemoveEmptyEntries
+            );
+
+            if (addressParts.Length > 0)
+            {
+                streetNumber = addressParts[0];
+            }
+
+            if (addressParts.Length > 1)
+            {
+                streetName = addressParts[1].Trim();
+            }
+
+            txtStreetNumber.Text = streetNumber;
+            txtStreetName.Text = streetName;
         }
 
         private void LoadCheckoutSummary()
@@ -106,7 +153,7 @@ namespace MultiGroupSystemsTester
             lblAddress.Text =
                 $"{txtStreetNumber.Text.Trim()} {txtStreetName.Text.Trim()}<br />" +
                 $"{txtSuburb.Text.Trim()}<br />" +
-                $"{txtCity.Text.Trim()}, {ddlProvince.SelectedValue}<br />" +
+               // $"{txtCity.Text.Trim()}, {ddlProvince.SelectedValue}<br />" +
                 $"{txtPostalCode.Text.Trim()}";
 
             lblAddressPhone.Text = txtPhone.Text.Trim();
@@ -114,35 +161,20 @@ namespace MultiGroupSystemsTester
 
         protected void ddlPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // The page posts back here. The CHANGE panel closes again after a postback,
+            // so make sure the address card shows any edits the user already made.
+            SyncStreetFields();
+            UpdateAddressDisplay();
+
             pnlCardDetails.Visible = ddlPaymentMethod.SelectedValue == "Card";
             pnlEFTDetails.Visible = ddlPaymentMethod.SelectedValue == "EFT";
         }
 
         protected void btnPlaceOrder_Click(object sender, EventArgs e)
         {
-            string streetAddress = txtStreetAddress.Text.Trim();
+            SyncStreetFields();
+            UpdateAddressDisplay();
 
-            string streetNumber = "";
-            string streetName = "";
-
-            string[] addressParts = streetAddress.Split(
-                new[] { ' ' },
-                2,
-                StringSplitOptions.RemoveEmptyEntries
-            );
-
-            if (addressParts.Length > 0)
-            {
-                streetNumber = addressParts[0];
-            }
-
-            if (addressParts.Length > 1)
-            {
-                streetName = addressParts[1];
-            }
-
-            txtStreetNumber.Text = streetNumber;
-            txtStreetName.Text = streetName;
             if (!Page.IsValid) return;
 
             List<CartItem> cart = Session["Cart"] as List<CartItem>;
@@ -170,14 +202,7 @@ namespace MultiGroupSystemsTester
                     SqlTransaction tx = conn.BeginTransaction();
                     try
                     {
-                        int customerId;
-
-                        
-                            customerId = Convert.ToInt32(Session["CustomerID"]);
-                        
-                        
-                        
-                            
+                        int customerId = Convert.ToInt32(Session["CustomerID"]);
 
                         decimal totalAmount = cart.Sum(c => c.Subtotal);
                         int orderId;
@@ -223,7 +248,7 @@ namespace MultiGroupSystemsTester
                         tx.Commit();
                         Session["Cart"] = null;
 
-                        
+
                         var invoiceRows = new List<MultiGroupSystemsTester.Models.InvoiceReportRow>();
                         decimal subtotalSum = cart.Sum(c => c.Subtotal);
                         decimal vatSum = subtotalSum * 0.15m;
@@ -248,7 +273,7 @@ namespace MultiGroupSystemsTester
                                 CustomerName = $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}",
                                 CustomerEmail = txtEmail.Text.Trim(),
                                 CustomerPhone = txtPhone.Text.Trim(),
-                                CustomerAddress = $"{txtStreetNumber.Text.Trim()} {txtStreetName.Text.Trim()}, {txtSuburb.Text.Trim()}, {txtCity.Text.Trim()}, {ddlProvince.SelectedValue}, {txtPostalCode.Text.Trim()}",
+                                CustomerAddress = $"{txtStreetNumber.Text.Trim()} {txtStreetName.Text.Trim()}, {txtSuburb.Text.Trim()}, {ddlProvince.SelectedValue}, {txtPostalCode.Text.Trim()}",
                                 StaffName = "Online Order",
                                 LineNumber = lineNum++,
                                 ProductName = item.ProductName,
