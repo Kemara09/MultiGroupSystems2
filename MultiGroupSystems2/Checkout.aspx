@@ -386,6 +386,33 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+        
+/* GEOAPIFY ADDRESS AUTOCOMPLETE */
+
+#addressSuggestions {
+    position: relative;
+    z-index: 1000;
+    max-height: 240px;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+#addressSuggestions .list-group-item {
+    cursor: pointer;
+    font-size: 13px;
+    padding: 12px;
+}
+
+#addressSuggestions .list-group-item:hover {
+    background-color: #f0faf6;
+    color: #087f5b;
+}
+
+#addressSearch:focus {
+    border-color: #087f5b;
+    box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
+}
+
     </style>
 
    <script>
@@ -439,6 +466,92 @@
            }
 
        });
+
+       document.addEventListener("DOMContentLoaded", function () {
+           const search = document.getElementById("addressSearch");
+           const suggestions = document.getElementById("addressSuggestions");
+           const selected = document.getElementById("<%= txtSelectedAddress.ClientID %>");
+    const hidden = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
+
+           const apiKey = "eb16ae629b324ef4a7189cd6a2b1e868";
+
+    if (!search || !suggestions || !selected || !hidden) return;
+
+    let debounceTimer;
+    let controller;
+
+    search.addEventListener("input", function () {
+        clearTimeout(debounceTimer);
+        if (controller) controller.abort();
+
+        const query = search.value.trim();
+
+        // Invalidate a previous selection when searching again
+        selected.value = "";
+        hidden.value = "";
+        suggestions.replaceChildren();
+        suggestions.style.display = "none";
+
+        if (query.length < 3) return;
+
+        debounceTimer = setTimeout(async function () {
+            controller = new AbortController();
+
+            try {
+                const url =
+                    "https://api.geoapify.com/v1/geocode/autocomplete" +
+                    "?text=" + encodeURIComponent(query) +
+                    "&filter=countrycode:za" +
+                    "&format=json" +
+                    "&apiKey=" + encodeURIComponent(apiKey);
+
+                const response = await fetch(url, {
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error("Geoapify request failed: " + response.status);
+                }
+
+                const data = await response.json();
+
+                if (search.value.trim() !== query) return;
+
+                suggestions.replaceChildren();
+
+                (data.results || []).forEach(function (result) {
+                    const address = result.formatted;
+                    if (!address) return;
+
+                    const item = document.createElement("button");
+                    item.type = "button";
+                    item.className = "list-group-item list-group-item-action";
+                    item.textContent = address;
+
+                    item.addEventListener("click", function () {
+                        search.value = address;
+                        selected.value = address;
+                        hidden.value = address;
+
+                        suggestions.replaceChildren();
+                        suggestions.style.display = "none";
+                    });
+
+                    suggestions.appendChild(item);
+                });
+
+                suggestions.style.display =
+                    suggestions.children.length ? "block" : "none";
+
+            } catch (error) {
+                if (error.name !== "AbortError") {
+                    console.error("Geoapify error:", error);
+                }
+            }
+        }, 400);
+    });
+});
+
    </script>
      <div class="checkout-page">
 
@@ -575,6 +688,44 @@
                 CANCEL
             </a>
         </span>
+        
+<!-- GEOAPIFY ADDRESS SEARCH -->
+<div class="mt-3 mb-3">
+
+    <label class="form-label">
+        Search for a new delivery address
+    </label>
+
+    <input type="text"
+           id="addressSearch"
+           class="form-control"
+           placeholder="Start typing your address..."
+           autocomplete="off" />
+
+    <!-- Address suggestions will appear here -->
+    <div id="addressSuggestions"
+         class="list-group mt-1"
+         style="display:none;">
+    </div>
+
+    <label class="form-label mt-3">
+        Selected delivery address
+    </label>
+
+    <asp:TextBox
+        ID="txtSelectedAddress"
+        runat="server"
+        CssClass="form-control"
+        ReadOnly="true"
+        placeholder="Your selected address will appear here..." />
+
+    <!-- Stores selected address details across postbacks -->
+    <asp:HiddenField
+        ID="hdnSelectedAddress"
+        runat="server" />
+
+</div>
+
     </div>
 
 
