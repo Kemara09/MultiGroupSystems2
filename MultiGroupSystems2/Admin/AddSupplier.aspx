@@ -27,7 +27,7 @@
         </div>
 
         <div class="form-body">
-            <div class="form-group full-width" style="margin-bottom: 20px;">
+            <div class="form-group full-width" style="margin-bottom: 20px;">      
                 <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
             </div>
 <!-- supplier name-->
@@ -149,5 +149,5 @@
             <p>Make sure the supplier information is accurate before adding it to the system.</p>
         </div>
     </div>
-
+    <!-- format code make it neater css stuff -->
 </asp:Content>

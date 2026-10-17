@@ -34,7 +34,7 @@ namespace MultiGroupSystemsTester.Admin
                         cmd.Parameters.AddWithValue("@EmailAddress", txtEmailAddress.Text.Trim());
                         cmd.Parameters.AddWithValue("@PhoneNumber", txtPhoneNumber.Text.Trim());
                        
-
+                        // add supplier type field to db later stage
                         
                         cmd.Parameters.AddWithValue("@StreetNo", string.IsNullOrEmpty(txtStreetNo.Text) ? (object)DBNull.Value : txtStreetNo.Text.Trim());
                         cmd.Parameters.AddWithValue("@StreetName", txtStreetName.Text.Trim());
@@ -42,7 +42,7 @@ namespace MultiGroupSystemsTester.Admin
                         cmd.Parameters.AddWithValue("@City", txtCity.Text.Trim());
                         cmd.Parameters.AddWithValue("@Province", ddlProvince.SelectedValue);
                         cmd.Parameters.AddWithValue("@PostalCode", txtPostalCode.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Notes", string.IsNullOrEmpty(txtNotes.Text) ? (object)DBNull.Value : txtNotes.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Notes", string.IsNullOrEmpty(txtNotes.Text) ? (object)DBNull.Value : txtNotes.Text.Trim()); // add field to db later  stage 
 
                         try
                         {
