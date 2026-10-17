@@ -55,13 +55,14 @@
                 </div>
             </div>
 <!-- phonenumber-->
-            <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px;">
-                <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
-                    <label style="display: block; font-weight: 600; font-size: 14px; color: #333333; margin-bottom: 8px;">Phone Number</label>
-                    <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control" placeholder="Enter phone number" />
-                    <asp:RequiredFieldValidator ID="rfvPhone" runat="server" ControlToValidate="txtPhoneNumber" ErrorMessage="Phone number is required." ForeColor="Red" Display="Dynamic" />
-                    <asp:RegularExpressionValidator ID="revPhone" runat="server" ControlToValidate="txtPhoneNumber" ValidationExpression="^\d{10}$" ErrorMessage="Phone number must be exactly 10 digits." ForeColor="Red" Display="Dynamic" />
-                </div>
+           <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+    <label style="display: block; font-weight: 600; font-size: 14px; color: #333333; margin-bottom: 8px;">Phone Number</label>
+    <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control" placeholder="+27 31 123 4567" />
+    <asp:RequiredFieldValidator ID="rfvPhone" runat="server" ControlToValidate="txtPhoneNumber" ErrorMessage="Phone number is required." ForeColor="Red" Display="Dynamic" />
+    <asp:RegularExpressionValidator ID="revPhone" runat="server" ControlToValidate="txtPhoneNumber" 
+        ValidationExpression="^\+27\s\d{2}\s\d{3}\s\d{4}$" 
+        ErrorMessage="Phone number must be in the format: +27 XX XXX XXXX" ForeColor="Red" Display="Dynamic" />
+</div>
 <!-- supp type-->
                 <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
                     <label style="display: block; font-weight: 600; font-size: 14px; color: #333333; margin-bottom: 8px;">Supplier Type</label>
