@@ -42,6 +42,15 @@ namespace MultiGroupSystemsTester
         protected global::System.Web.UI.WebControls.Panel pnlForm;
 
         /// <summary>
+        /// hfDeliveryMethod control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfDeliveryMethod;
+
+        /// <summary>
         /// lblAddressName control.
         /// </summary>
         /// <remarks>
@@ -141,6 +150,15 @@ namespace MultiGroupSystemsTester
         protected global::System.Web.UI.WebControls.TextBox txtSuburb;
 
         /// <summary>
+        /// txtCity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCity;
+
+        /// <summary>
         /// ddlProvince control.
         /// </summary>
         /// <remarks>
@@ -157,6 +175,15 @@ namespace MultiGroupSystemsTester
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPostalCode;
+
+        /// <summary>
+        /// hfDeliveryDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfDeliveryDate;
 
         /// <summary>
         /// ddlPaymentMethod control.
