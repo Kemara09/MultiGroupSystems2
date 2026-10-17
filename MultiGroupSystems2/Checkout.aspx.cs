@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -47,7 +48,7 @@ namespace MultiGroupSystemsTester
                     {
                         if (reader.Read())
                         {
-                            // Hidden fields (read later by the order / invoice code)
+                            // Hidden fields (read later by the invoice code)
                             txtFirstName.Text = reader["FirstName"].ToString();
                             txtLastName.Text = reader["LastName"].ToString();
                             txtEmail.Text = reader["EmailAddress"].ToString();
@@ -57,7 +58,7 @@ namespace MultiGroupSystemsTester
                             // Visible fields in the CHANGE panel
                             txtPhone.Text = reader["PhoneNumber"].ToString();
                             txtSuburb.Text = reader["Suburb"].ToString();
-                            
+                            txtCity.Text = reader["City"].ToString();
                             txtPostalCode.Text = reader["PostalCode"].ToString();
 
                             // The panel shows one combined street field
@@ -84,7 +85,7 @@ namespace MultiGroupSystemsTester
 
         /// <summary>
         /// Splits the single "Street address" box into street number and street name,
-        /// so the hidden fields used by the order / invoice code stay in step.
+        /// so the hidden fields used by the invoice code stay in step.
         /// </summary>
         private void SyncStreetFields()
         {
@@ -111,6 +112,14 @@ namespace MultiGroupSystemsTester
 
             txtStreetNumber.Text = streetNumber;
             txtStreetName.Text = streetName;
+        }
+
+        /// <summary>
+        /// Returns DBNull for empty text, otherwise the trimmed text.
+        /// </summary>
+        private static object DbText(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? (object)DBNull.Value : value.Trim();
         }
 
         private void LoadCheckoutSummary()
@@ -210,6 +219,31 @@ namespace MultiGroupSystemsTester
                 return;
             }
 
+            // The date comes from a hidden field in the browser, so validate it:
+            // it must be one of the four dates offered (today to today + 3 days).
+            DateTime deliveryDate;
+            if (!DateTime.TryParseExact(hfDeliveryDate.Value, "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out deliveryDate)
+                || deliveryDate.Date < DateTime.Today
+                || deliveryDate.Date > DateTime.Today.AddDays(3))
+            {
+                lblError.Text = "Please choose a valid delivery date.";
+                lblError.Visible = true;
+                return;
+            }
+
+            // Delivery instructions: only used if the box was ticked and something was typed.
+            // Trimmed to 250 characters to match the database column.
+            string deliveryInstructions = "";
+            if (chkDeliveryInstructions.Checked && !string.IsNullOrWhiteSpace(txtDeliveryInstructions.Text))
+            {
+                deliveryInstructions = txtDeliveryInstructions.Text.Trim();
+                if (deliveryInstructions.Length > 250)
+                {
+                    deliveryInstructions = deliveryInstructions.Substring(0, 250);
+                }
+            }
+
             string connStr = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
 
             try
@@ -240,21 +274,9 @@ namespace MultiGroupSystemsTester
                         string deliveryPostalCode = usingGeoapify ? "" : txtPostalCode.Text.Trim();
                         string deliveryPhone = txtPhone.Text.Trim();
                         const string insertOrder = @"
-                         INSERT INTO [Order]
-                            (
-                                CustomerID, StaffID, TotalAmount, OrderDate,
-                                OrderStatus, DeliveryStatus, PaymentMethod,
-                                DeliveryStreetAddress, DeliverySuburb,
-                                DeliveryProvince, DeliveryPostalCode, DeliveryPhone
-                            )
-                         VALUES
-                            (
-                               @CustomerID, NULL, @TotalAmount, @OrderDate,
-                               @OrderStatus, @DeliveryStatus, @PaymentMethod,
-                               @DeliveryStreetAddress, @DeliverySuburb,
-                               @DeliveryProvince, @DeliveryPostalCode, @DeliveryPhone
-                              );
-                         SELECT SCOPE_IDENTITY();";
+                            INSERT INTO [Order] (CustomerID, StaffID, TotalAmount, OrderDate, OrderStatus, DeliveryStatus, PaymentMethod)
+                            VALUES (@CustomerID, NULL, @TotalAmount, @OrderDate, @OrderStatus, @DeliveryStatus, @PaymentMethod);
+                            SELECT SCOPE_IDENTITY();";
                         using (SqlCommand cmdOrder = new SqlCommand(insertOrder, conn, tx))
                         {
                             cmdOrder.Parameters.AddWithValue("@CustomerID", customerId);
@@ -262,12 +284,8 @@ namespace MultiGroupSystemsTester
                             cmdOrder.Parameters.AddWithValue("@OrderDate", DateTime.Now);
                             cmdOrder.Parameters.AddWithValue("@OrderStatus", "Pending");
                             cmdOrder.Parameters.AddWithValue("@DeliveryStatus", "Not Dispatched");
+                            cmdOrder.Parameters.AddWithValue("@DeliveryDate", deliveryDate.Date);
                             cmdOrder.Parameters.AddWithValue("@PaymentMethod", ddlPaymentMethod.SelectedValue);
-                            cmdOrder.Parameters.AddWithValue("@DeliveryStreetAddress", deliveryAddress);
-                            cmdOrder.Parameters.AddWithValue("@DeliverySuburb", deliverySuburb);
-                            cmdOrder.Parameters.AddWithValue("@DeliveryProvince", deliveryProvince);
-                            cmdOrder.Parameters.AddWithValue("@DeliveryPostalCode", deliveryPostalCode);
-                            cmdOrder.Parameters.AddWithValue("@DeliveryPhone", deliveryPhone);
                             orderId = Convert.ToInt32(cmdOrder.ExecuteScalar());
                         }
 
@@ -365,7 +383,19 @@ namespace MultiGroupSystemsTester
 
                         string invoiceUrl = Page.ResolveUrl("~/InvoiceDownload.ashx") + "?orderId=" + orderId;
                         string emailNote = emailSent ? " We've also emailed a copy to you" : "";
-                        string smsNote = smsSent ? " and texted you a confirmation." : "";
+                        string smsNote = smsSent ? " and texted you a confirmation." : (emailSent ? "." : "");
+
+                        // Delivery / collection details chosen on the page
+                        string method = isDelivery ? "Delivery" : "Collection";
+                        string deliveryNote = $" {method} date: {deliveryDate:dddd, dd MMMM yyyy}.";
+
+                        string instructionsNote = "";
+                        if (deliveryInstructions.Length > 0)
+                        {
+                            instructionsNote = "<p>Delivery instructions: " +
+                                System.Web.HttpUtility.HtmlEncode(deliveryInstructions) +
+                                "</p>";
+                        }
 
                         var summary = new System.Text.StringBuilder();
                         summary.Append("<table class='table table-sm mt-3 mb-2'>");
@@ -387,15 +417,20 @@ namespace MultiGroupSystemsTester
                         summary.Append("</div>");
 
                         pnlSuccess.Controls.Add(new System.Web.UI.LiteralControl(
-                            $"<p>Thank you! Your order #{orderId} has been placed.{emailNote}{smsNote} " +
+                            $"<p>Thank you! Your order #{orderId} has been placed.{emailNote}{smsNote}{deliveryNote} " +
                             $"<a href='{invoiceUrl}' target='_blank'>View your invoice</a></p>" +
+                            instructionsNote +
                             summary.ToString()));
                         pnlSuccess.Visible = true;
                         pnlForm.Visible = false;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         tx.Rollback();
+
+                        // Full error goes to the Visual Studio Output window (not shown to customers)
+                        System.Diagnostics.Debug.WriteLine("ORDER ERROR: " + ex);
+
                         lblError.Text = "Something went wrong placing your order. Please try again.";
                         lblError.Visible = true;
                     }

@@ -34,17 +34,18 @@ namespace MultiGroupSystemsTester.Account
                     "Password reset failed: " + ex.ToString()
                 );
 
-                lblError.Text = "Password reset failed. Please check the application error log.";
+                // TEMPORARY DEBUG: shows the real error on the page. Remove before submitting.
+                lblError.Text = "Password reset failed: " + ex.GetType().Name + " - " + ex.Message
+                    + (ex.InnerException != null ? " | " + ex.InnerException.Message : "");
+
                 pnlForm.Visible = true;
                 pnlSent.Visible = false;
                 return;
             }
 
-
             pnlForm.Visible = false;
             pnlSent.Visible = true;
         }
-
 
         private string GetBaseUrl()
         {

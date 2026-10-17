@@ -3,7 +3,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
-        
+        /* ================================
+           MULTIGROUP CHECKOUT
+           ================================ */
 
         .checkout-page {
             background: #f3f4f6;
@@ -24,6 +26,7 @@
             margin-bottom: 25px;
         }
 
+        /* Main columns */
         .checkout-layout {
             display: grid;
             grid-template-columns: minmax(0, 1fr) 340px;
@@ -42,7 +45,7 @@
             top: 20px;
         }
 
-       
+        /* Cards */
         .checkout-card {
             background: #ffffff;
             border: 1px solid #ddd;
@@ -67,7 +70,7 @@
             text-transform: none;
         }
 
-        
+        /* Delivery method */
         .delivery-methods {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -117,6 +120,7 @@
             font-size: 11px;
         }
 
+        /* Address */
         .address-display {
             background: #fafafa;
             border: 1px solid #e4e4e4;
@@ -134,7 +138,7 @@
             color: #555;
         }
 
-        
+        /* Date selection */
         .delivery-dates {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -148,6 +152,13 @@
             text-align: center;
             background: white;
             min-height: 80px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .date-option:hover {
+            border-color: #087f5b;
+            background: #f8fffc;
         }
 
         .date-option.selected {
@@ -176,7 +187,7 @@
             margin-top: 4px;
         }
 
-       
+        /* Time */
         .delivery-time {
             margin-top: 15px;
             padding: 12px;
@@ -196,7 +207,7 @@
             color: #666;
         }
 
-      
+        /* Forms */
         .form-label {
             font-size: 13px;
             font-weight: 500;
@@ -215,7 +226,7 @@
             box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
         }
 
-        
+        /* Payment */
         .payment-box {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -234,7 +245,7 @@
             color: #777;
         }
 
-        
+        /* Order summary */
         .summary-card {
             background: white;
             border: 1px solid #ddd;
@@ -287,7 +298,7 @@
             background: #066b4d;
         }
 
-      
+        /* Items */
         .order-items-card {
             margin-top: 15px;
             background: white;
@@ -334,13 +345,14 @@
             font-weight: 600;
         }
 
-       
+        /* Additional options */
         .additional-option {
             padding: 5px 0;
             font-size: 13px;
             color: #555;
         }
 
+        /* Success */
         .success-box {
             background: #e9f8f0;
             border: 1px solid #b8e5ca;
@@ -349,7 +361,7 @@
             margin-bottom: 25px;
         }
 
-        
+        /* Responsive */
         @media (max-width: 900px) {
             .checkout-layout {
                 grid-template-columns: 1fr;
@@ -445,7 +457,9 @@
             }
 
 
-            
+            /* ==============================
+               CLOSE CHANGE ADDRESS
+            ============================== */
 
             if (closeAddressBtn) {
 
@@ -483,6 +497,73 @@
 
                 });
 
+            }
+
+
+            /* ==============================
+               DELIVERY DATE SELECTION
+            ============================== */
+
+            var dateBoxes = document.querySelectorAll(".date-option");
+            var dateField = document.getElementById("<%= hfDeliveryDate.ClientID %>");
+
+            function selectDate(box) {
+                dateBoxes.forEach(function (b) { b.classList.remove("selected"); });
+                box.classList.add("selected");
+                dateField.value = box.getAttribute("data-date");
+            }
+
+            dateBoxes.forEach(function (box) {
+                box.addEventListener("click", function () { selectDate(box); });
+            });
+
+            // Restore the choice after a postback (the payment dropdown reloads the page)
+            var savedDate = null;
+            dateBoxes.forEach(function (b) {
+                if (dateField.value && b.getAttribute("data-date") === dateField.value) savedDate = b;
+            });
+            selectDate(savedDate || dateBoxes[0]);
+
+
+            /* ==============================
+               DELIVERY INSTRUCTIONS TOGGLE
+            ============================== */
+
+            var chk = document.getElementById("<%= chkDeliveryInstructions.ClientID %>");
+            var instr = document.getElementById("<%= txtDeliveryInstructions.ClientID %>");
+
+            function toggleInstructions() {
+                instr.style.display = chk.checked ? "block" : "none";
+                if (chk.checked) instr.focus();
+            }
+
+            chk.addEventListener("change", toggleInstructions);
+
+            // Restore after postback without stealing focus
+            instr.style.display = chk.checked ? "block" : "none";
+
+
+            /* ==============================
+               DELIVERY / COLLECTION
+            ============================== */
+
+            var methodBoxes = document.querySelectorAll(".delivery-option");
+            var methodField = document.getElementById("<%= hfDeliveryMethod.ClientID %>");
+            var addressCard = document.getElementById("address-card");
+
+            function selectMethod(box) {
+                methodBoxes.forEach(function (b) { b.classList.remove("selected"); });
+                box.classList.add("selected");
+
+                var method = box.getAttribute("data-method");
+                methodField.value = method;
+
+                var isDelivery = (method === "Delivery");
+                addressCard.style.display = isDelivery ? "block" : "none";
+
+                if (!isDelivery) {
+                    customerDetails.style.display = "none";
+                }
             }
 
        });
@@ -602,11 +683,11 @@
 
             <h1 class="checkout-title">Checkout</h1>
 
-           
+            <!-- SUCCESS MESSAGE -->
             <asp:Panel ID="pnlSuccess" runat="server" CssClass="success-box" Visible="false">
             </asp:Panel>
 
-           
+            <!-- ERROR MESSAGE -->
             <asp:Label ID="lblError"
                 runat="server"
                 CssClass="alert alert-danger d-block"
@@ -618,21 +699,25 @@
 
                 <div class="checkout-layout">
 
-                   
+                    <!-- ==========================================
+                         LEFT SIDE
+                         ========================================== -->
 
                     <div class="checkout-left">
 
 
-                        
+                        <!-- DELIVERY METHOD -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
                                 Delivery Method
                             </div>
 
+                            <asp:HiddenField ID="hfDeliveryMethod" runat="server" Value="Delivery" />
+
                             <div class="delivery-methods">
 
-                                <div class="delivery-option selected">
+                                <div class="delivery-option selected" data-method="Delivery">
 
                                     <span class="delivery-icon">🚚</span>
 
@@ -646,7 +731,7 @@
 
                                 </div>
 
-                                <div class="delivery-option">
+                                <div class="delivery-option" data-method="Collection">
 
                                     <span class="delivery-icon">📦</span>
 
@@ -665,8 +750,8 @@
                         </div>
 
 
-                       
-                        <div class="checkout-card">
+                        <!-- DELIVERY ADDRESS -->
+                        <div id="address-card" class="checkout-card">
 
                             <div class="checkout-card-title">
                                 Delivery Address
@@ -699,7 +784,10 @@
                             </div>
 
                         </div>
-                        
+                        <!-- END DELIVERY ADDRESS -->
+
+
+                        <!-- CUSTOMER & DELIVERY DETAILS (opens when CHANGE is clicked) -->
                         <div id="customer-details"
                              class="checkout-card"
                              style="display:none;">
@@ -755,8 +843,11 @@
 </div>
 
 
-
-                            
+                            <!--
+                                Hidden fields: not shown to the user, but the code-behind reads them.
+                                They are filled in Page_Load from the logged-in customer's record.
+                                txtStreetNumber / txtStreetName are split from txtStreetAddress.
+                            -->
                             <div style="display:none;">
 
                                 <asp:TextBox ID="txtFirstName" runat="server" />
@@ -772,7 +863,7 @@
                             </div>
 
 
-                           
+                            <!-- PHONE NUMBER -->
                             <div class="row g-3">
 
                                 <div class="col-md-6">
@@ -837,7 +928,7 @@
                          
                            <div class="row g-3 mt-1" style="display:none;">
 
-                                
+                                <!-- SUBURB -->
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -852,10 +943,22 @@
                                 </div>
 
 
-                                
+                                <!-- CITY -->
+                                <div class="col-md-4">
+
+                                    <label class="form-label">
+                                        City
+                                    </label>
+
+                                    <asp:TextBox
+                                        ID="txtCity"
+                                        runat="server"
+                                        CssClass="form-control" />
+
+                                </div>
 
 
-                                
+                                <!-- PROVINCE -->
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -929,16 +1032,22 @@
                             </div>
 
                         </div>
-                       
+                        <!-- END CUSTOMER & DELIVERY DETAILS -->
+
+
+                        <!-- DELIVERY DATE -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
                                 Delivery Date &amp; Time
                             </div>
 
+                            <asp:HiddenField ID="hfDeliveryDate" runat="server" />
+
                             <div class="delivery-dates">
 
-                                <div class="date-option selected">
+                                <div class="date-option selected"
+                                     data-date="<%= DateTime.Now.ToString("yyyy-MM-dd") %>">
                                     <span class="date-day">Today</span>
                                     <span class="date-number">
                                         <%= DateTime.Now.Day %>
@@ -948,7 +1057,8 @@
                                     </span>
                                 </div>
 
-                                <div class="date-option">
+                                <div class="date-option"
+                                     data-date="<%= DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") %>">
                                     <span class="date-day">Tomorrow</span>
                                     <span class="date-number">
                                         <%= DateTime.Now.AddDays(1).Day %>
@@ -958,7 +1068,8 @@
                                     </span>
                                 </div>
 
-                                <div class="date-option">
+                                <div class="date-option"
+                                     data-date="<%= DateTime.Now.AddDays(2).ToString("yyyy-MM-dd") %>">
                                     <span class="date-day">
                                         <%= DateTime.Now.AddDays(2).ToString("ddd") %>
                                     </span>
@@ -970,7 +1081,8 @@
                                     </span>
                                 </div>
 
-                                <div class="date-option">
+                                <div class="date-option"
+                                     data-date="<%= DateTime.Now.AddDays(3).ToString("yyyy-MM-dd") %>">
                                     <span class="date-day">
                                         <%= DateTime.Now.AddDays(3).ToString("ddd") %>
                                     </span>
@@ -999,7 +1111,7 @@
                         </div>
 
 
-                        
+                        <!-- PAYMENT METHOD -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1044,7 +1156,7 @@
                             </div>
 
 
-                           
+                            <!-- CARD DETAILS -->
                             <asp:Panel
                                 ID="pnlCardDetails"
                                 runat="server"
@@ -1120,7 +1232,7 @@
                             </asp:Panel>
 
 
-                           
+                            <!-- EFT -->
                             <asp:Panel
                                 ID="pnlEFTDetails"
                                 runat="server"
@@ -1147,7 +1259,7 @@
                         </div>
 
 
-                        
+                        <!-- ADDITIONAL INFORMATION -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1172,8 +1284,9 @@
                                 CssClass="form-control mt-2"
                                 TextMode="MultiLine"
                                 Rows="3"
+                                MaxLength="250"
                                 placeholder="Optional delivery instructions..."
-                                Visible="false" />
+                                style="display:none;" />
 
                         </div>
 
@@ -1181,12 +1294,14 @@
                     </div>
 
 
-                  
+                    <!-- ==========================================
+                         RIGHT SIDE
+                         ========================================== -->
 
                     <div class="checkout-right">
 
 
-                        
+                        <!-- ORDER SUMMARY -->
                         <div class="summary-card">
 
                             <div class="summary-title">
@@ -1281,7 +1396,7 @@
                         </div>
 
 
-                      
+                        <!-- ITEMS -->
                         <div class="order-items-card">
 
                             <div class="summary-title"
