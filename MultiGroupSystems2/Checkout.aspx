@@ -393,6 +393,33 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+        
+/* GEOAPIFY ADDRESS AUTOCOMPLETE */
+
+#addressSuggestions {
+    position: relative;
+    z-index: 1000;
+    max-height: 240px;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+#addressSuggestions .list-group-item {
+    cursor: pointer;
+    font-size: 13px;
+    padding: 12px;
+}
+
+#addressSuggestions .list-group-item:hover {
+    background-color: #f0faf6;
+    color: #087f5b;
+}
+
+#addressSearch:focus {
+    border-color: #087f5b;
+    box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
+}
+
     </style>
 
     <script>
@@ -512,20 +539,9 @@
                 }
             }
 
-            methodBoxes.forEach(function (box) {
-                box.addEventListener("click", function () { selectMethod(box); });
-            });
-
-            var savedMethod = null;
-            methodBoxes.forEach(function (b) {
-                if (b.getAttribute("data-method") === methodField.value) savedMethod = b;
-            });
-            selectMethod(savedMethod || methodBoxes[0]);
-
-        });
-    </script>
-
-    <div class="checkout-page">
+       });
+   </script>
+     <div class="checkout-page">
 
         <div class="checkout-container">
 
@@ -643,17 +659,17 @@
                             <div class="checkout-card-title">
                                 Customer &amp; Delivery Details
 
-                                <span style="float:right;">
-                                    <a href="javascript:void(0);"
-                                       id="closeAddressBtn"
-                                       style="font-size:12px;
-                                              color:#087f5b;
-                                              text-decoration:none;
-                                              cursor:pointer;">
-                                        CANCEL
-                                    </a>
-                                </span>
-                            </div>
+        <span style="float:right;">
+            <a href="javascript:void(0);"
+               id="closeAddressBtn"
+               style="font-size:12px;
+                      color:#087f5b;
+                      text-decoration:none;
+                      cursor:pointer;">
+                CANCEL
+            </a>
+        </span>
+    </div>
 
 
                             <!--
