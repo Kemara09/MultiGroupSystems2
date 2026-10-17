@@ -416,6 +416,11 @@
             var changeAddressBtn = document.getElementById("changeAddressBtn");
             var closeAddressBtn = document.getElementById("closeAddressBtn");
             var customerDetails = document.getElementById("customer-details");
+            var hiddenAddress = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
+            var deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
+
+            var previousAddress = "";
+            var previousHiddenAddress = "";
 
            
 
@@ -424,6 +429,9 @@
                 changeAddressBtn.addEventListener("click", function (e) {
 
                     e.preventDefault();
+                    
+                    previousAddress = deliveryCardAddress.textContent;
+                    previousHiddenAddress = hiddenAddress.value;
 
                     customerDetails.style.display = "block";
 
@@ -444,6 +452,27 @@
                 closeAddressBtn.addEventListener("click", function (e) {
 
                     e.preventDefault();
+                    if (deliveryCardAddress) {
+                        deliveryCardAddress.textContent = previousAddress;
+                    }
+
+                    if (hiddenAddress) {
+                        hiddenAddress.value = previousHiddenAddress;
+                    }
+                    const selectedAddress = document.getElementById("<%= txtSelectedAddress.ClientID %>");
+                    const hiddenAddress = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
+                    const addressSearch = document.getElementById("addressSearch");
+                    const addressSuggestions = document.getElementById("addressSuggestions");
+
+                    
+                    if (selectedAddress) selectedAddress.value = "";
+                    //if (hiddenAddress) hiddenAddress.value = "";
+                    if (addressSearch) addressSearch.value = "";
+
+                    if (addressSuggestions) {
+                        addressSuggestions.replaceChildren();
+                        addressSuggestions.style.display = "none";
+                    }
 
                     customerDetails.style.display = "none";
 
@@ -457,7 +486,116 @@
             }
 
        });
-   </script>
+    </script>
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const search = document.getElementById("addressSearch");
+        const suggestions = document.getElementById("addressSuggestions");
+        const selected = document.getElementById("<%= txtSelectedAddress.ClientID %>");
+    const hidden = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
+
+        const apiKey = "eb16ae629b324ef4a7189cd6a2b1e868";
+
+    if (!search || !suggestions || !selected || !hidden) return;
+
+    let debounceTimer;
+    let controller;
+
+    function clearSuggestions() {
+        suggestions.replaceChildren();
+        suggestions.style.display = "none";
+    }
+
+    search.addEventListener("input", function () {
+
+        clearTimeout(debounceTimer);
+
+        if (controller) controller.abort();
+
+        const query = search.value.trim();
+
+        // Clear a previous selection when the customer types again
+        selected.value = "";
+        hidden.value = "";
+        clearSuggestions();
+
+        if (query.length < 3) return;
+
+        debounceTimer = setTimeout(async function () {
+
+            controller = new AbortController();
+
+            try {
+                const url =
+                    "https://api.geoapify.com/v1/geocode/autocomplete" +
+                    "?text=" + encodeURIComponent(query) +
+                    "&filter=countrycode:za" +
+                    "&format=json" +
+                    "&limit=5" +
+                    "&apiKey=" + encodeURIComponent(apiKey);
+
+                const response = await fetch(url, {
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error("Geoapify error: " + response.status);
+                }
+
+                const data = await response.json();
+
+                if (search.value.trim() !== query) return;
+
+                clearSuggestions();
+
+                (data.results || []).forEach(function (result) {
+
+                    if (!result.formatted ||
+                        result.country_code !== "za") return;
+
+                    const item = document.createElement("button");
+
+                    item.type = "button";
+                    item.className =
+                        "list-group-item list-group-item-action";
+
+                    item.textContent = result.formatted;
+
+                    item.addEventListener("click", function () {
+
+                        search.value = result.formatted;
+                        selected.value = result.formatted;
+                        hidden.value = result.formatted;
+                        const deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
+
+                        if (deliveryCardAddress) {
+                            deliveryCardAddress.textContent = result.formatted;
+                        }
+
+                        clearSuggestions();
+                    });
+
+                    suggestions.appendChild(item);
+                });
+
+                if (suggestions.children.length > 0) {
+                    suggestions.style.display = "block";
+                }
+
+            } catch (error) {
+                if (error.name !== "AbortError") {
+                    console.error("Geoapify:", error);
+                }
+            }
+
+        }, 400);
+    });
+
+});
+</script>
+
      <div class="checkout-page">
 
         <div class="checkout-container">
@@ -580,6 +718,42 @@
             </a>
         </span>
     </div>
+                            
+<!-- GEOAPIFY ADDRESS SEARCH -->
+<div class="mt-3 mb-3">
+
+    <label class="form-label">
+        Search for a new delivery address
+    </label>
+
+    <input type="text"
+           id="addressSearch"
+           class="form-control"
+           placeholder="Start typing your address..."
+           autocomplete="off" />
+
+    <div id="addressSuggestions"
+         class="list-group mt-1"
+         style="display:none;">
+    </div>
+
+    <label class="form-label mt-3">
+        Selected delivery address
+    </label>
+
+    <asp:TextBox
+        ID="txtSelectedAddress"
+        runat="server"
+        CssClass="form-control"
+        ReadOnly="true"
+        placeholder="Your selected address will appear here..." />
+
+    <asp:HiddenField
+        ID="hdnSelectedAddress"
+        runat="server" />
+
+</div>
+
 
 
                             
@@ -633,7 +807,7 @@
 
 
                            
-                            <div class="row g-3 mt-1">
+                            <div class="row g-3 mt-1" style="display:none;">
 
                                 <div class="col-md-12">
 
@@ -650,6 +824,7 @@
                                     <asp:RequiredFieldValidator
                                         runat="server"
                                         ControlToValidate="txtStreetAddress"
+                                        Enabled="false"
                                         CssClass="text-danger"
                                         Display="Dynamic"
                                         ErrorMessage="Please enter your street address." />
@@ -660,7 +835,7 @@
 
 
                          
-                            <div class="row g-3 mt-1">
+                           <div class="row g-3 mt-1" style="display:none;">
 
                                 
                                 <div class="col-md-4">
@@ -719,7 +894,7 @@
 
 
                             
-                            <div class="row g-3 mt-1">
+                            <div class="row g-3 mt-1" style="display:none;">
 
                                 <div class="col-md-4">
 
@@ -735,6 +910,7 @@
                                     <asp:RequiredFieldValidator
                                         runat="server"
                                         ControlToValidate="txtPostalCode"
+                                        Enabled="false"
                                         CssClass="text-danger"
                                         Display="Dynamic"
                                         ErrorMessage="Required." />
@@ -742,6 +918,7 @@
                                     <asp:RegularExpressionValidator
                                         runat="server"
                                         ControlToValidate="txtPostalCode"
+                                        Enabled="false"
                                         CssClass="text-danger"
                                         Display="Dynamic"
                                         ErrorMessage="Enter a valid 4-digit postal code."

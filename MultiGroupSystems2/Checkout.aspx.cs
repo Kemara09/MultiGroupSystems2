@@ -145,25 +145,43 @@ namespace MultiGroupSystemsTester
             rptOrderItems.DataBind();
         }
 
+        private string GetDeliveryAddress()
+        {
+            
+            string selectedAddress = hdnSelectedAddress.Value?.Trim();
+
+            if (!string.IsNullOrWhiteSpace(selectedAddress))
+            {
+                return selectedAddress;
+            }
+
+           
+            return string.Join(", ", new[]
+            {
+        (txtStreetNumber.Text.Trim() + " " +
+         txtStreetName.Text.Trim()).Trim(),
+        txtSuburb.Text.Trim(),
+        ddlProvince.SelectedValue,
+        txtPostalCode.Text.Trim()
+    }.Where(part => !string.IsNullOrWhiteSpace(part)));
+        }
+
+
         private void UpdateAddressDisplay()
         {
             lblAddressName.Text =
                 $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}";
 
-            lblAddress.Text =
-                $"{txtStreetNumber.Text.Trim()} {txtStreetName.Text.Trim()}<br />" +
-                $"{txtSuburb.Text.Trim()}<br />" +
-               // $"{txtCity.Text.Trim()}, {ddlProvince.SelectedValue}<br />" +
-                $"{txtPostalCode.Text.Trim()}";
+            lblAddress.Text = Server.HtmlEncode(GetDeliveryAddress());
+            
 
             lblAddressPhone.Text = txtPhone.Text.Trim();
         }
 
         protected void ddlPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // The page posts back here. The CHANGE panel closes again after a postback,
-            // so make sure the address card shows any edits the user already made.
-            SyncStreetFields();
+
+            //SyncStreetFields();
             UpdateAddressDisplay();
 
             pnlCardDetails.Visible = ddlPaymentMethod.SelectedValue == "Card";
@@ -172,7 +190,7 @@ namespace MultiGroupSystemsTester
 
         protected void btnPlaceOrder_Click(object sender, EventArgs e)
         {
-            SyncStreetFields();
+            //SyncStreetFields();
             UpdateAddressDisplay();
 
             if (!Page.IsValid) return;
@@ -206,10 +224,37 @@ namespace MultiGroupSystemsTester
 
                         decimal totalAmount = cart.Sum(c => c.Subtotal);
                         int orderId;
+                        string deliveryAddress = GetDeliveryAddress();
+                        if (string.IsNullOrWhiteSpace(deliveryAddress) || deliveryAddress.Length > 150)
+                        {
+                            lblError.Text = "Please select a valid delivery address (maximum 150 characters).";
+                            lblError.Visible = true;
+                            return;
+                        }
+                        bool usingGeoapify = !string.IsNullOrWhiteSpace(
+                            hdnSelectedAddress.Value
+                        );
+
+                        string deliverySuburb = usingGeoapify ? "" : txtSuburb.Text.Trim();
+                        string deliveryProvince = usingGeoapify ? "" : ddlProvince.SelectedValue;
+                        string deliveryPostalCode = usingGeoapify ? "" : txtPostalCode.Text.Trim();
+                        string deliveryPhone = txtPhone.Text.Trim();
                         const string insertOrder = @"
-                            INSERT INTO [Order] (CustomerID, StaffID, TotalAmount, OrderDate, OrderStatus, DeliveryStatus, PaymentMethod)
-                            VALUES (@CustomerID, NULL, @TotalAmount, @OrderDate, @OrderStatus, @DeliveryStatus, @PaymentMethod);
-                            SELECT SCOPE_IDENTITY();";
+                         INSERT INTO [Order]
+                            (
+                                CustomerID, StaffID, TotalAmount, OrderDate,
+                                OrderStatus, DeliveryStatus, PaymentMethod,
+                                DeliveryStreetAddress, DeliverySuburb,
+                                DeliveryProvince, DeliveryPostalCode, DeliveryPhone
+                            )
+                         VALUES
+                            (
+                               @CustomerID, NULL, @TotalAmount, @OrderDate,
+                               @OrderStatus, @DeliveryStatus, @PaymentMethod,
+                               @DeliveryStreetAddress, @DeliverySuburb,
+                               @DeliveryProvince, @DeliveryPostalCode, @DeliveryPhone
+                              );
+                         SELECT SCOPE_IDENTITY();";
                         using (SqlCommand cmdOrder = new SqlCommand(insertOrder, conn, tx))
                         {
                             cmdOrder.Parameters.AddWithValue("@CustomerID", customerId);
@@ -218,6 +263,11 @@ namespace MultiGroupSystemsTester
                             cmdOrder.Parameters.AddWithValue("@OrderStatus", "Pending");
                             cmdOrder.Parameters.AddWithValue("@DeliveryStatus", "Not Dispatched");
                             cmdOrder.Parameters.AddWithValue("@PaymentMethod", ddlPaymentMethod.SelectedValue);
+                            cmdOrder.Parameters.AddWithValue("@DeliveryStreetAddress", deliveryAddress);
+                            cmdOrder.Parameters.AddWithValue("@DeliverySuburb", deliverySuburb);
+                            cmdOrder.Parameters.AddWithValue("@DeliveryProvince", deliveryProvince);
+                            cmdOrder.Parameters.AddWithValue("@DeliveryPostalCode", deliveryPostalCode);
+                            cmdOrder.Parameters.AddWithValue("@DeliveryPhone", deliveryPhone);
                             orderId = Convert.ToInt32(cmdOrder.ExecuteScalar());
                         }
 
@@ -273,7 +323,7 @@ namespace MultiGroupSystemsTester
                                 CustomerName = $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}",
                                 CustomerEmail = txtEmail.Text.Trim(),
                                 CustomerPhone = txtPhone.Text.Trim(),
-                                CustomerAddress = $"{txtStreetNumber.Text.Trim()} {txtStreetName.Text.Trim()}, {txtSuburb.Text.Trim()}, {ddlProvince.SelectedValue}, {txtPostalCode.Text.Trim()}",
+                                CustomerAddress = GetDeliveryAddress(),
                                 StaffName = "Online Order",
                                 LineNumber = lineNum++,
                                 ProductName = item.ProductName,
