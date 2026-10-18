@@ -48,25 +48,24 @@ namespace MultiGroupSystemsTester
                     {
                         if (reader.Read())
                         {
-                            // Hidden fields (read later by the invoice code)
+                           
                             txtFirstName.Text = reader["FirstName"].ToString();
                             txtLastName.Text = reader["LastName"].ToString();
                             txtEmail.Text = reader["EmailAddress"].ToString();
                             txtStreetNumber.Text = reader["StreetNumber"].ToString();
                             txtStreetName.Text = reader["StreetName"].ToString();
 
-                            // Visible fields in the CHANGE panel
+                           
                             txtPhone.Text = reader["PhoneNumber"].ToString();
                             txtSuburb.Text = reader["Suburb"].ToString();
                             txtCity.Text = reader["City"].ToString();
                             txtPostalCode.Text = reader["PostalCode"].ToString();
 
-                            // The panel shows one combined street field
+                           
                             txtStreetAddress.Text =
                                 (txtStreetNumber.Text.Trim() + " " + txtStreetName.Text.Trim()).Trim();
 
-                            // FindByValue avoids an exception if the saved province
-                            // doesn't exactly match a list item
+                            
                             var province = ddlProvince.Items.FindByValue(reader["Province"].ToString().Trim());
                             if (province != null)
                             {
@@ -83,10 +82,7 @@ namespace MultiGroupSystemsTester
             }
         }
 
-        /// <summary>
-        /// Splits the single "Street address" box into street number and street name,
-        /// so the hidden fields used by the invoice code stay in step.
-        /// </summary>
+     
         private void SyncStreetFields()
         {
             string streetAddress = txtStreetAddress.Text.Trim();
@@ -114,9 +110,7 @@ namespace MultiGroupSystemsTester
             txtStreetName.Text = streetName;
         }
 
-        /// <summary>
-        /// Returns DBNull for empty text, otherwise the trimmed text.
-        /// </summary>
+        
         private static object DbText(string value)
         {
             return string.IsNullOrWhiteSpace(value) ? (object)DBNull.Value : value.Trim();
@@ -156,7 +150,7 @@ namespace MultiGroupSystemsTester
 
         private string GetDeliveryAddress()
         {
-            
+
             string selectedAddress = hdnSelectedAddress.Value?.Trim();
 
             if (!string.IsNullOrWhiteSpace(selectedAddress))
@@ -164,7 +158,7 @@ namespace MultiGroupSystemsTester
                 return selectedAddress;
             }
 
-           
+
             return string.Join(", ", new[]
             {
         (txtStreetNumber.Text.Trim() + " " +
@@ -182,7 +176,7 @@ namespace MultiGroupSystemsTester
                 $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}";
 
             lblAddress.Text = Server.HtmlEncode(GetDeliveryAddress());
-            
+
 
             lblAddressPhone.Text = txtPhone.Text.Trim();
         }
@@ -190,7 +184,7 @@ namespace MultiGroupSystemsTester
         protected void ddlPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            //SyncStreetFields();
+        
             UpdateAddressDisplay();
 
             pnlCardDetails.Visible = ddlPaymentMethod.SelectedValue == "Card";
@@ -199,7 +193,7 @@ namespace MultiGroupSystemsTester
 
         protected void btnPlaceOrder_Click(object sender, EventArgs e)
         {
-            //SyncStreetFields();
+       
             UpdateAddressDisplay();
 
             if (!Page.IsValid) return;
@@ -219,8 +213,7 @@ namespace MultiGroupSystemsTester
                 return;
             }
 
-            // The date comes from a hidden field in the browser, so validate it:
-            // it must be one of the four dates offered (today to today + 3 days).
+            
             DateTime deliveryDate;
             if (!DateTime.TryParseExact(hfDeliveryDate.Value, "yyyy-MM-dd",
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out deliveryDate)
@@ -232,8 +225,7 @@ namespace MultiGroupSystemsTester
                 return;
             }
 
-            // Delivery instructions: only used if the box was ticked and something was typed.
-            // Trimmed to 250 characters to match the database column.
+            
             string deliveryInstructions = "";
             if (chkDeliveryInstructions.Checked && !string.IsNullOrWhiteSpace(txtDeliveryInstructions.Text))
             {
@@ -274,8 +266,16 @@ namespace MultiGroupSystemsTester
                         string deliveryPostalCode = usingGeoapify ? "" : txtPostalCode.Text.Trim();
                         string deliveryPhone = txtPhone.Text.Trim();
                         const string insertOrder = @"
-                            INSERT INTO [Order] (CustomerID, StaffID, TotalAmount, OrderDate, OrderStatus, DeliveryStatus, PaymentMethod)
-                            VALUES (@CustomerID, NULL, @TotalAmount, @OrderDate, @OrderStatus, @DeliveryStatus, @PaymentMethod);
+                            INSERT INTO [Order]
+                                (CustomerID, StaffID, TotalAmount, OrderDate, OrderStatus,
+                                 DeliveryStatus, DeliveryDate, PaymentMethod,
+                                 DeliveryStreetAddress, DeliverySuburb, DeliveryProvince,
+                                 DeliveryPostalCode, DeliveryPhone, DeliveryInstructions)
+                            VALUES
+                                (@CustomerID, NULL, @TotalAmount, @OrderDate, @OrderStatus,
+                                 @DeliveryStatus, @DeliveryDate, @PaymentMethod,
+                                 @DeliveryStreetAddress, @DeliverySuburb, @DeliveryProvince,
+                                 @DeliveryPostalCode, @DeliveryPhone, @DeliveryInstructions);
                             SELECT SCOPE_IDENTITY();";
                         using (SqlCommand cmdOrder = new SqlCommand(insertOrder, conn, tx))
                         {
@@ -286,6 +286,12 @@ namespace MultiGroupSystemsTester
                             cmdOrder.Parameters.AddWithValue("@DeliveryStatus", "Not Dispatched");
                             cmdOrder.Parameters.AddWithValue("@DeliveryDate", deliveryDate.Date);
                             cmdOrder.Parameters.AddWithValue("@PaymentMethod", ddlPaymentMethod.SelectedValue);
+                            cmdOrder.Parameters.AddWithValue("@DeliveryStreetAddress", deliveryAddress);
+                            cmdOrder.Parameters.AddWithValue("@DeliverySuburb", DbText(deliverySuburb));
+                            cmdOrder.Parameters.AddWithValue("@DeliveryProvince", DbText(deliveryProvince));
+                            cmdOrder.Parameters.AddWithValue("@DeliveryPostalCode", DbText(deliveryPostalCode));
+                            cmdOrder.Parameters.AddWithValue("@DeliveryPhone", DbText(deliveryPhone));
+                            cmdOrder.Parameters.AddWithValue("@DeliveryInstructions", DbText(deliveryInstructions));
                             orderId = Convert.ToInt32(cmdOrder.ExecuteScalar());
                         }
 
@@ -385,8 +391,8 @@ namespace MultiGroupSystemsTester
                         string emailNote = emailSent ? " We've also emailed a copy to you" : "";
                         string smsNote = smsSent ? " and texted you a confirmation." : (emailSent ? "." : "");
 
-                        // Delivery / collection details chosen on the page
-                        string method = isDelivery ? "Delivery" : "Collection";
+                        
+                        string method = "Delivery"; 
                         string deliveryNote = $" {method} date: {deliveryDate:dddd, dd MMMM yyyy}.";
 
                         string instructionsNote = "";
@@ -428,7 +434,7 @@ namespace MultiGroupSystemsTester
                     {
                         tx.Rollback();
 
-                        // Full error goes to the Visual Studio Output window (not shown to customers)
+                        
                         System.Diagnostics.Debug.WriteLine("ORDER ERROR: " + ex);
 
                         lblError.Text = "Something went wrong placing your order. Please try again.";
