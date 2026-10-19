@@ -302,6 +302,7 @@
     <Content Include="Admin\Web.config" />
     <Content Include="InvoiceDownload.ashx" />
     <Content Include="Admin\AdminMaster.master" />
+    <Content Include="Wishlist.aspx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
