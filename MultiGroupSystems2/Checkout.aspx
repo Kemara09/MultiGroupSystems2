@@ -434,14 +434,14 @@
             var previousAddress = "";
             var previousHiddenAddress = "";
 
-           
+
 
             if (changeAddressBtn) {
 
                 changeAddressBtn.addEventListener("click", function (e) {
 
                     e.preventDefault();
-                    
+
                     previousAddress = deliveryCardAddress.textContent;
                     previousHiddenAddress = hiddenAddress.value;
 
@@ -566,7 +566,7 @@
                 }
             }
 
-       });
+        });
     </script>
     
 <script>
@@ -575,81 +575,81 @@
         const search = document.getElementById("addressSearch");
         const suggestions = document.getElementById("addressSuggestions");
         const selected = document.getElementById("<%= txtSelectedAddress.ClientID %>");
-    const hidden = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
+        const hidden = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
 
         const apiKey = "eb16ae629b324ef4a7189cd6a2b1e868";
 
-    if (!search || !suggestions || !selected || !hidden) return;
+        if (!search || !suggestions || !selected || !hidden) return;
 
-    let debounceTimer;
-    let controller;
+        let debounceTimer;
+        let controller;
 
-    function clearSuggestions() {
-        suggestions.replaceChildren();
-        suggestions.style.display = "none";
-    }
+        function clearSuggestions() {
+            suggestions.replaceChildren();
+            suggestions.style.display = "none";
+        }
 
-    search.addEventListener("input", function () {
+        search.addEventListener("input", function () {
 
-        clearTimeout(debounceTimer);
+            clearTimeout(debounceTimer);
 
-        if (controller) controller.abort();
+            if (controller) controller.abort();
 
-        const query = search.value.trim();
+            const query = search.value.trim();
 
-        // Clear a previous selection when the customer types again
-        selected.value = "";
-        hidden.value = "";
-        clearSuggestions();
+            // Clear a previous selection when the customer types again
+            selected.value = "";
+            hidden.value = "";
+            clearSuggestions();
 
-        if (query.length < 3) return;
+            if (query.length < 3) return;
 
-        debounceTimer = setTimeout(async function () {
+            debounceTimer = setTimeout(async function () {
 
-            controller = new AbortController();
+                controller = new AbortController();
 
-            try {
-                const url =
-                    "https://api.geoapify.com/v1/geocode/autocomplete" +
-                    "?text=" + encodeURIComponent(query) +
-                    "&filter=countrycode:za" +
-                    "&format=json" +
-                    "&limit=5" +
-                    "&apiKey=" + encodeURIComponent(apiKey);
+                try {
+                    const url =
+                        "https://api.geoapify.com/v1/geocode/autocomplete" +
+                        "?text=" + encodeURIComponent(query) +
+                        "&filter=countrycode:za" +
+                        "&format=json" +
+                        "&limit=5" +
+                        "&apiKey=" + encodeURIComponent(apiKey);
 
-                const response = await fetch(url, {
-                    signal: controller.signal
-                });
+                    const response = await fetch(url, {
+                        signal: controller.signal
+                    });
 
-                if (!response.ok) {
-                    throw new Error("Geoapify error: " + response.status);
-                }
+                    if (!response.ok) {
+                        throw new Error("Geoapify error: " + response.status);
+                    }
 
-                const data = await response.json();
+                    const data = await response.json();
 
-                if (search.value.trim() !== query) return;
+                    if (search.value.trim() !== query) return;
 
-                clearSuggestions();
+                    clearSuggestions();
 
-                (data.results || []).forEach(function (result) {
+                    (data.results || []).forEach(function (result) {
 
-                    if (!result.formatted ||
-                        result.country_code !== "za") return;
+                        if (!result.formatted ||
+                            result.country_code !== "za") return;
 
-                    const item = document.createElement("button");
+                        const item = document.createElement("button");
 
-                    item.type = "button";
-                    item.className =
-                        "list-group-item list-group-item-action";
+                        item.type = "button";
+                        item.className =
+                            "list-group-item list-group-item-action";
 
-                    item.textContent = result.formatted;
+                        item.textContent = result.formatted;
 
-                    item.addEventListener("click", function () {
+                        item.addEventListener("click", function () {
 
-                        search.value = result.formatted;
-                        selected.value = result.formatted;
-                        hidden.value = result.formatted;
-                        const deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
+                            search.value = result.formatted;
+                            selected.value = result.formatted;
+                            hidden.value = result.formatted;
+                            const deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
 
                         if (deliveryCardAddress) {
                             deliveryCardAddress.textContent = result.formatted;
@@ -674,7 +674,7 @@
         }, 400);
     });
 
-});
+    });
 </script>
 
      <div class="checkout-page">
