@@ -677,6 +677,18 @@
     });
 </script>
 
+            methodBoxes.forEach(function(box) {
+                box.addEventListener("click", function() { selectMethod(box); });
+            });
+
+            // Restore the choice after a postback (the payment dropdown reloads the page)
+            var savedMethod = null;
+            methodBoxes.forEach(function(b) {
+                if (b.getAttribute("data-method") === methodField.value) savedMethod = b;
+            });
+            selectMethod(savedMethod || methodBoxes[0]);
+       });
+    </script>
      <div class="checkout-page">
 
         <div class="checkout-container">
