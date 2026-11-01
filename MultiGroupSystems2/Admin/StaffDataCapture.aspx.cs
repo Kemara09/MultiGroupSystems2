@@ -4,6 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
 
 namespace MultiGroupSystemsTester.Admin
 {
@@ -14,17 +18,17 @@ namespace MultiGroupSystemsTester.Admin
 
         }
 
-        protected System.Void BtnSave_Click()
+        protected void BtnSave_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
-                
-                string connString = WebConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
+
+                string connStr = ConfigurationManager.ConnectionStrings["GroupWst14"].ConnectionString;
 
                 string query = "INSERT INTO Staff (FirstName, LastName, Role, EmailAddress, PhoneNumber, Username, Password) " +
                                "VALUES (@FirstName, @LastName, @Role, @EmailAddress, @PhoneNumber, @Username, @Password)";
 
-                using (SqlConnection conn = new SqlConnection(connString))
+                using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
