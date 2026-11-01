@@ -13,5 +13,44 @@ namespace MultiGroupSystemsTester.Admin
         {
 
         }
+
+        protected System.Void BtnSave_Click()
+        {
+            if (Page.IsValid)
+            {
+                
+                string connString = WebConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
+
+                string query = "INSERT INTO Staff (FirstName, LastName, Role, EmailAddress, PhoneNumber, Username, Password) " +
+                               "VALUES (@FirstName, @LastName, @Role, @EmailAddress, @PhoneNumber, @Username, @Password)";
+
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text.Trim());
+                        cmd.Parameters.AddWithValue("@LastName", txtLastName.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Role", ddlRole.SelectedValue);
+                        cmd.Parameters.AddWithValue("@EmailAddress", txtEmail.Text.Trim());
+                        cmd.Parameters.AddWithValue("@PhoneNumber", txtPhone.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Username", txtUsername.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Password", txtPassword.Text.Trim());
+
+                        try
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+
+                            Response.Redirect("Dashboard.aspx", false);
+                            Context.ApplicationInstance.CompleteRequest();
+                        }
+                        catch (Exception ex)
+                        {
+                            Response.Write("<script>alert('Error saving staff member: " + ex.Message.Replace("'", "\\'") + "');</script>");
+                        }
+                    }
+                }
+            }
+        }
     }
 }
