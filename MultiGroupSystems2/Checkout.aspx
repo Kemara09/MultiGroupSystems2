@@ -474,11 +474,10 @@
                         hiddenAddress.value = previousHiddenAddress;
                     }
                     const selectedAddress = document.getElementById("<%= txtSelectedAddress.ClientID %>");
-                    const hiddenAddress = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
                     const addressSearch = document.getElementById("addressSearch");
                     const addressSuggestions = document.getElementById("addressSuggestions");
 
-                    
+
                     if (selectedAddress) selectedAddress.value = "";
                     //if (hiddenAddress) hiddenAddress.value = "";
                     if (addressSearch) addressSearch.value = "";
@@ -566,6 +565,17 @@
                 }
             }
 
+            methodBoxes.forEach(function(box) {
+                box.addEventListener("click", function() { selectMethod(box); });
+            });
+
+            // Restore the choice after a postback (the payment dropdown reloads the page)
+            var savedMethod = null;
+            methodBoxes.forEach(function(b) {
+                if (b.getAttribute("data-method") === methodField.value) savedMethod = b;
+            });
+            selectMethod(savedMethod || methodBoxes[0]);
+
         });
     </script>
     
@@ -651,44 +661,32 @@
                             hidden.value = result.formatted;
                             const deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
 
-                        if (deliveryCardAddress) {
-                            deliveryCardAddress.textContent = result.formatted;
-                        }
+                            if (deliveryCardAddress) {
+                                deliveryCardAddress.textContent = result.formatted;
+                            }
 
-                        clearSuggestions();
+                            clearSuggestions();
+                        });
+
+                        suggestions.appendChild(item);
                     });
 
-                    suggestions.appendChild(item);
-                });
+                    if (suggestions.children.length > 0) {
+                        suggestions.style.display = "block";
+                    }
 
-                if (suggestions.children.length > 0) {
-                    suggestions.style.display = "block";
+                } catch (error) {
+                    if (error.name !== "AbortError") {
+                        console.error("Geoapify:", error);
+                    }
                 }
 
-            } catch (error) {
-                if (error.name !== "AbortError") {
-                    console.error("Geoapify:", error);
-                }
-            }
-
-        }, 400);
-    });
+            }, 400);
+        });
 
     });
 </script>
 
-            methodBoxes.forEach(function(box) {
-                box.addEventListener("click", function() { selectMethod(box); });
-            });
-
-            // Restore the choice after a postback (the payment dropdown reloads the page)
-            var savedMethod = null;
-            methodBoxes.forEach(function(b) {
-                if (b.getAttribute("data-method") === methodField.value) savedMethod = b;
-            });
-            selectMethod(savedMethod || methodBoxes[0]);
-       });
-    </script>
      <div class="checkout-page">
 
         <div class="checkout-container">

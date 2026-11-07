@@ -366,6 +366,7 @@
     <Content Include="InvoiceDownload.ashx" />
     <Content Include="Admin\AdminMaster.master" />
     <Content Include="Wishlist.aspx" />
+    <Content Include="ChatHandler.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -480,6 +481,10 @@
     </Compile>
     <Compile Include="Account\Forgotpassword.aspx.designer.cs">
       <DependentUpon>Forgotpassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ChatbotService.cs" />
+    <Compile Include="ChatHandler.ashx.cs">
+      <DependentUpon>ChatHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

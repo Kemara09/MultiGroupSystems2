@@ -11,10 +11,12 @@
             <label class="form-label">Password</label>
             <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
         </div>
-        <div class="mb-3 form-check">
-            <asp:CheckBox ID="chkRememberMe" runat="server" CssClass="form-check-input" />
-            <label class="form-check-label">Remember me</label>
-        </div>
+       <div class="form-check">
+    <asp:CheckBox ID="chkRememberMe" runat="server"
+        Text="Remember me"
+        InputAttributes-class="form-check-input"
+        LabelAttributes-class="form-check-label" />
+</div>
         <div class="mb-3">
             <div class="g-recaptcha" data-sitekey="<%= System.Configuration.ConfigurationManager.AppSettings["RecaptchaSiteKey"] %>"></div>
         </div>

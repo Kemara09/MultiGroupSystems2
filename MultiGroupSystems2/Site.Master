@@ -497,5 +497,221 @@
             })();
         </script>
     </form>
+    <style>
+    #mgChat { position: fixed; left: 24px; bottom: 24px; z-index: 10000; font-family: inherit; }
+
+    #mgChatToggle {
+        width: 58px; height: 58px; border-radius: 50%; border: none;
+        background: #008c98; color: #fff; font-size: 26px; cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,.25); transition: background .2s ease;
+    }
+    #mgChatToggle:hover { background: #006e79; }
+
+    #mgChatPanel {
+        position: absolute; left: 0; bottom: 72px;
+        width: 360px; max-width: calc(100vw - 32px); height: 480px; max-height: calc(100vh - 120px);
+        background: #fff; border: 1px solid #e2e9ef; border-radius: 16px;
+        box-shadow: 0 12px 36px rgba(16,38,62,.22);
+        display: flex; flex-direction: column; overflow: hidden;
+    }
+    #mgChatPanel[hidden] { display: none; }
+
+    #mgChatPanel header {
+        background: linear-gradient(115deg, #10263e, #18485b); color: #fff;
+        padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+        font-weight: 700;
+    }
+    #mgChatClose { background: none; border: none; color: #fff; font-size: 24px; line-height: 1; cursor: pointer; }
+
+    #mgChatLog { flex: 1; overflow-y: auto; padding: 14px; background: #f5f8fb; }
+
+    .mgMsg {
+        max-width: 85%; margin-bottom: 10px; padding: 9px 13px; border-radius: 14px;
+        font-size: 14px; line-height: 1.45; white-space: pre-line; overflow-wrap: anywhere;
+    }
+    .mgMsg.bot { background: #fff; color: #10263e; border: 1px solid #e2e9ef; border-bottom-left-radius: 4px; }
+    .mgMsg.user { background: #008c98; color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+    .mgMsg a {
+        display: inline-block; margin-top: 8px; margin-right: 6px; padding: 5px 12px;
+        background: #e6f5f6; color: #006e79; border-radius: 999px; font-weight: 600; text-decoration: none;
+    }
+    .mgMsg a:hover { background: #cdebed; }
+
+    #mgChatChips { padding: 8px 12px 0; display: flex; flex-wrap: wrap; gap: 6px; background: #fff; }
+    #mgChatChips button {
+        border: 1px solid #008c98; background: #fff; color: #008c98; border-radius: 999px;
+        padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    #mgChatChips button:hover { background: #008c98; color: #fff; }
+
+    .mgChatForm { display: flex; gap: 8px; padding: 12px; background: #fff; }
+    .mgChatForm input {
+        flex: 1; border: 1px solid #ccd6df; border-radius: 9px; padding: 9px 12px; font-size: 14px; min-width: 0;
+    }
+    .mgChatForm button {
+        background: #008c98; color: #fff; border: none; border-radius: 9px; padding: 0 16px; font-weight: 600; cursor: pointer;
+    }
+    .mgChatForm button:disabled { background: #aab7c2; cursor: not-allowed; }
+</style>
+
+<div id="mgChat"
+     data-auth='<%= Session["CustomerID"] != null ? "1" : "0" %>'
+     data-url='<%= ResolveUrl("~/ChatHandler.ashx") %>'>
+
+    <button type="button" id="mgChatToggle" aria-label="Open chat assistant" aria-expanded="false">&#128172;</button>
+
+    <section id="mgChatPanel" role="dialog" aria-label="MultiGroup assistant" hidden>
+        <header>
+            <span>MultiGroup Assistant</span>
+            <button type="button" id="mgChatClose" aria-label="Close chat">&times;</button>
+        </header>
+
+        <div id="mgChatLog" aria-live="polite"></div>
+
+        <div id="mgChatChips">
+            <button type="button" data-q="Where is my order?">My orders</button>
+            <button type="button" data-q="What's in my cart?">My cart</button>
+            <button type="button" data-q="Delivery information">Delivery</button>
+        </div>
+
+        <div class="mgChatForm">
+            <input type="text" id="mgChatInput" maxlength="300" autocomplete="off"
+                   placeholder="Type your question..." aria-label="Chat message" />
+            <button type="button" id="mgChatSend">Send</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    (function () {
+        var root = document.getElementById("mgChat");
+        if (!root) return;
+
+        var url = root.getAttribute("data-url");
+        var auth = root.getAttribute("data-auth");   // "1" = logged in, "0" = logged out
+
+        var KEY = "mgChat";
+        var AUTH_KEY = "mgChatAuth";
+        var OPEN_KEY = "mgChatOpen";
+
+        var panel = document.getElementById("mgChatPanel");
+        var toggle = document.getElementById("mgChatToggle");
+        var log = document.getElementById("mgChatLog");
+        var input = document.getElementById("mgChatInput");
+        var sendBtn = document.getElementById("mgChatSend");
+        var history = [];
+
+        // If the login state changed since the last page load (logged in or logged out),
+        // wipe the old conversation so nothing carries over between accounts.
+        try {
+            var lastAuth = sessionStorage.getItem(AUTH_KEY);
+            if (lastAuth !== null && lastAuth !== auth) {
+                sessionStorage.removeItem(KEY);
+                sessionStorage.removeItem(OPEN_KEY);
+            }
+            sessionStorage.setItem(AUTH_KEY, auth);
+        } catch (e) { }
+
+        function save() {
+            try { sessionStorage.setItem(KEY, JSON.stringify(history)); } catch (e) { }
+        }
+
+        function render(role, text, links) {
+            var div = document.createElement("div");
+            div.className = "mgMsg " + role;
+            div.textContent = text;                      // textContent = no HTML injection
+
+            (links || []).forEach(function (l) {
+                var a = document.createElement("a");
+                a.href = l.url;
+                a.textContent = l.text;
+                div.appendChild(document.createElement("br"));
+                div.appendChild(a);
+            });
+
+            log.appendChild(div);
+            log.scrollTop = log.scrollHeight;
+            return div;
+        }
+
+        function addMessage(role, text, links) {
+            render(role, text, links);
+            history.push({ role: role, text: text, links: links || [] });
+            save();
+        }
+
+        function ask(message, showUserBubble) {
+            if (showUserBubble) addMessage("user", message);
+
+            sendBtn.disabled = true;
+            var typing = render("bot", "Typing...");
+
+            fetch(url, {
+                method: "POST",
+                credentials: "same-origin",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "message=" + encodeURIComponent(message)
+            })
+                .then(function (r) {
+                    if (!r.ok) throw new Error("HTTP " + r.status);
+                    return r.json();
+                })
+                .then(function (data) {
+                    log.removeChild(typing);
+                    addMessage("bot", data.reply, data.links);
+                })
+                .catch(function (err) {
+                    log.removeChild(typing);
+                    // Shown but NOT saved to history, so a fixed server works on the next open
+                    render("bot", "Sorry, I couldn't reach the server. Please try again.");
+                })
+                .then(function () { sendBtn.disabled = false; input.focus(); });
+        }
+
+        function submit() {
+            var text = input.value.trim();
+            if (!text || sendBtn.disabled) return;
+            input.value = "";
+            ask(text, true);
+        }
+
+        function open() {
+            panel.hidden = false;
+            toggle.setAttribute("aria-expanded", "true");
+            try { sessionStorage.setItem(OPEN_KEY, "1"); } catch (e) { }
+
+            // First time opened: ask the server for a (personalised) greeting
+            if (history.length === 0) ask("hi", false);
+            input.focus();
+        }
+
+        function close() {
+            panel.hidden = true;
+            toggle.setAttribute("aria-expanded", "false");
+            try { sessionStorage.removeItem(OPEN_KEY); } catch (e) { }
+        }
+
+        // Restore history after page navigation
+        try {
+            history = JSON.parse(sessionStorage.getItem(KEY) || "[]");
+            history.forEach(function (m) { render(m.role, m.text, m.links); });
+            if (sessionStorage.getItem(OPEN_KEY) === "1") {
+                panel.hidden = false;
+                toggle.setAttribute("aria-expanded", "true");
+            }
+        } catch (e) { history = []; }
+
+        toggle.addEventListener("click", function () { panel.hidden ? open() : close(); });
+        document.getElementById("mgChatClose").addEventListener("click", close);
+        sendBtn.addEventListener("click", submit);
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") { e.preventDefault(); submit(); }
+        });
+
+        document.querySelectorAll("#mgChatChips button").forEach(function (b) {
+            b.addEventListener("click", function () { ask(b.getAttribute("data-q"), true); });
+        });
+    })();
+</script>
 </body>
 </html>
