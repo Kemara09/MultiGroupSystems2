@@ -1,0 +1,1 @@
+﻿<%@ WebHandler Language="C#" CodeBehind="StaffStatus.ashx.cs" Class="MultiGroupSystemsTester.StaffStatus" %>

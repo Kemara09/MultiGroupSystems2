@@ -221,6 +221,7 @@
     <Content Include="Account\CustomerLogin.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\ResetPassword.aspx" />
+    <Content Include="Account\StaffActivate.aspx" />
     <Content Include="Admin\AddProduct.aspx" />
     <Content Include="Admin\AddProduct.css" />
     <Content Include="Admin\AddSupplier.aspx" />
@@ -367,6 +368,8 @@
     <Content Include="Admin\AdminMaster.master" />
     <Content Include="Wishlist.aspx" />
     <Content Include="ChatHandler.ashx" />
+    <Content Include="Account\CheckAccountStatus.ashx" />
+    <Content Include="Account\StaffStatus.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -429,6 +432,17 @@
     </Compile>
     <Compile Include="Account\ResetPassword.aspx.designer.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\StaffActivate.aspx.cs">
+      <DependentUpon>StaffActivate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\StaffActivate.aspx.designer.cs">
+      <DependentUpon>StaffActivate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\StaffOtpService.cs" />
+    <Compile Include="Account\StaffStatus.ashx.cs">
+      <DependentUpon>StaffStatus.ashx</DependentUpon>
     </Compile>
     <Compile Include="Admin\AddProduct.aspx.cs">
       <DependentUpon>AddProduct.aspx</DependentUpon>

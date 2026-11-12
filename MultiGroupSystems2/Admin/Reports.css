@@ -711,3 +711,282 @@ button {
         gap: 8px;
     }
 }
+
+
+/* =========================================
+   BUSINESS REPORTS PAGE (Reports.aspx)
+   ========================================= */
+
+.business-reports {
+    max-width: 1200px;
+    padding-bottom: 30px;
+}
+
+    .business-reports h2 {
+        margin: 0 0 12px;
+        font-size: 17px;
+        color: #0f172a;
+    }
+
+    .business-reports h3 {
+        margin: 18px 0 4px;
+        font-size: 14px;
+        color: #1e293b;
+    }
+
+    .business-reports p {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+/* Heading + primary button */
+.br-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 30px 0 20px;
+}
+
+    .br-heading h1 {
+        margin: 0;
+        font-size: 28px;
+        color: #0f172a;
+    }
+
+    .br-heading p {
+        margin: 7px 0 0;
+    }
+
+.br-button,
+.br-button:visited {
+    display: inline-block;
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 12px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    transition: 0.2s;
+}
+
+    .br-button:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+/* Cards */
+.br-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
+}
+
+    .br-panel[role="alert"] {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #b91c1c;
+    }
+
+.br-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+    .br-overview .br-panel {
+        margin-bottom: 0;
+    }
+
+        .br-overview .br-panel h3 {
+            margin-top: 0;
+        }
+
+/* Browse reports tabs */
+.business-reports nav h2 {
+    margin: 10px 0 10px;
+    font-size: 16px;
+}
+
+.business-reports nav .br-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px;
+    margin-bottom: 25px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
+}
+
+    .business-reports nav .br-links a,
+    .business-reports nav .br-links a:visited {
+        padding: 8px 14px;
+        border-radius: 8px;
+        color: #475569;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+    }
+
+        .business-reports nav .br-links a:hover {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .business-reports nav .br-links a[aria-current="page"] {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+.business-reports a:focus-visible,
+.business-reports input:focus-visible,
+.business-reports select:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+/* Previous / Next page links (the .br-links that is NOT inside nav) */
+.business-reports section > .br-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+    .business-reports section > .br-links a,
+    .business-reports section > .br-links a:visited {
+        padding: 7px 14px;
+        border: 1px solid #dbeafe;
+        border-radius: 6px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .business-reports section > .br-links a:hover {
+            background: #dbeafe;
+        }
+
+/* Data table */
+.br-table {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+    .br-table table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px;
+    }
+
+    .br-table th {
+        padding: 12px 14px;
+        text-align: left;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .br-table td {
+        padding: 12px 14px;
+        color: #475569;
+        font-size: 13px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .br-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .br-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .br-table td a {
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .br-table td a:hover {
+            text-decoration: underline;
+        }
+
+/* Create report form */
+.br-fields {
+    display: grid;
+    gap: 6px;
+    max-width: 480px;
+    margin: 16px 0 24px;
+}
+
+    .br-fields label {
+        margin-top: 10px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .br-fields input[type="text"],
+    .br-fields input:not([type]),
+    .br-fields select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        background: #ffffff;
+        color: #1e293b;
+        font: inherit;
+        font-size: 13px;
+    }
+
+        .br-fields input:focus,
+        .br-fields select:focus {
+            border-color: #2563eb;
+        }
+
+    .br-fields small {
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    .br-fields .br-button {
+        justify-self: start;
+        margin-top: 14px;
+        cursor: pointer;
+    }
+
+/* Small screens */
+@media (max-width: 750px) {
+    .br-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .business-reports nav .br-links {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
