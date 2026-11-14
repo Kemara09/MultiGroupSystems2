@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="Delivery & Returns" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInfo.aspx.cs" Inherits="MultiGroupSystemsTester.DeliveryInfo" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <section class="container py-5">
-        <div class="text-center text-white mb-5">
-            <h1 class="display-5 fw-bold">Delivery &amp; Returns</h1>
+<div class="text-center page-header mb-5">  
+    <h1 class="display-5 fw-bold">Delivery &amp; Returns</h1>
             <p class="lead">Here's what to expect after you place an order.</p>
         </div>
 
@@ -28,8 +28,7 @@
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="feature-card p-4 h-100">
                     <h4>Returns</h4>
-                    <p>Return unused items within 7 days for a refund or exchange.Click Contact Us to start the Process</p>
-                </div>
+<p>Return unused items within 7 days for a refund or exchange. Click Contact Us to start the process.</p>                </div>
             </div>
         </div>
 
