@@ -121,13 +121,7 @@
         .hero-section .btn-primary:hover {
             background: #DB8236;
         }
-        .page-header h1 {
-    color: var(--heading-color);
-}
 
-.page-header p {
-    color: var(--muted-text);
-}
         .feature-card {
             background: var(--feature-bg);
             color: var(--text-color);
@@ -585,151 +579,131 @@
 </div>
 
 <script>
-(function() {
-    var root = document.getElementById("mgChat");
-    if (!root) return;
+    (function () {
+        var root = document.getElementById("mgChat");
+        if (!root) return;
 
-    var url = root.getAttribute("data-url");
-    var auth = root.getAttribute("data-auth");
+        var url = root.getAttribute("data-url");
+        var auth = root.getAttribute("data-auth");   
 
-    var KEY = "mgChat";
-    var AUTH_KEY = "mgChatAuth";
-    var OPEN_KEY = "mgChatOpen";
+        var KEY = "mgChat";
+        var AUTH_KEY = "mgChatAuth";
+        var OPEN_KEY = "mgChatOpen";
 
-    var panel = document.getElementById("mgChatPanel");
-    var toggle = document.getElementById("mgChatToggle");
-    var log = document.getElementById("mgChatLog");
-    var input = document.getElementById("mgChatInput");
-    var sendBtn = document.getElementById("mgChatSend");
-    var history = [];
+        var panel = document.getElementById("mgChatPanel");
+        var toggle = document.getElementById("mgChatToggle");
+        var log = document.getElementById("mgChatLog");
+        var input = document.getElementById("mgChatInput");
+        var sendBtn = document.getElementById("mgChatSend");
+        var history = [];
 
-    try {
-        var lastAuth = sessionStorage.getItem(AUTH_KEY);
-        if (lastAuth !== null && lastAuth !== auth) {
-            sessionStorage.removeItem(KEY);
-            sessionStorage.removeItem(OPEN_KEY);
+        try {
+            var lastAuth = sessionStorage.getItem(AUTH_KEY);
+            if (lastAuth !== null && lastAuth !== auth) {
+                sessionStorage.removeItem(KEY);
+                sessionStorage.removeItem(OPEN_KEY);
+            }
+            sessionStorage.setItem(AUTH_KEY, auth);
+        } catch (e) { }
+
+        function save() {
+            try { sessionStorage.setItem(KEY, JSON.stringify(history)); } catch (e) { }
         }
-        sessionStorage.setItem(AUTH_KEY, auth);
-    } catch (e) { }
 
-    function save() {
-        try { sessionStorage.setItem(KEY, JSON.stringify(history)); } catch (e) { }
-    }
+        function render(role, text, links) {
+            var div = document.createElement("div");
+            div.className = "mgMsg " + role;
+            div.textContent = text;                     
 
-    function render(role, text, links) {
-        var div = document.createElement("div");
-        div.className = "mgMsg " + role;
-        div.textContent = text;
+            (links || []).forEach(function (l) {
+                var a = document.createElement("a");
+                a.href = l.url;
+                a.textContent = l.text;
+                div.appendChild(document.createElement("br"));
+                div.appendChild(a);
+            });
 
-        (links || []).forEach(function(l) {
-            var a = document.createElement("a");
-            a.href = l.url;
-            a.textContent = l.text;
-            div.appendChild(document.createElement("br"));
-            div.appendChild(a);
-        });
+            log.appendChild(div);
+            log.scrollTop = log.scrollHeight;
+            return div;
+        }
 
-        log.appendChild(div);
-        log.scrollTop = log.scrollHeight;
-        return div;
-    }
+        function addMessage(role, text, links) {
+            render(role, text, links);
+            history.push({ role: role, text: text, links: links || [] });
+            save();
+        }
 
-    function addMessage(role, text, links) {
-        render(role, text, links);
-        history.push({ role: role, text: text, links: links || [] });
-        save();
-    }
+        function ask(message, showUserBubble) {
+            if (showUserBubble) addMessage("user", message);
 
-    function ask(message, showUserBubble) {
-        if (showUserBubble) addMessage("user", message);
+            sendBtn.disabled = true;
+            var typing = render("bot", "Typing...");
 
-        sendBtn.disabled = true;
-        var typing = render("bot", "Typing...");
-
-        fetch(url, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "message=" + encodeURIComponent(message)
-        })
-            .then(function(r) {
-                if (!r.ok) throw new Error("HTTP " + r.status);
-                return r.json();
+            fetch(url, {
+                method: "POST",
+                credentials: "same-origin",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "message=" + encodeURIComponent(message)
             })
-            .then(function(data) {
-                log.removeChild(typing);
-                addMessage("bot", data.reply, data.links);
-            })
-            .catch(function(err) {
-                log.removeChild(typing);
+                .then(function (r) {
+                    if (!r.ok) throw new Error("HTTP " + r.status);
+                    return r.json();
+                })
+                .then(function (data) {
+                    log.removeChild(typing);
+                    addMessage("bot", data.reply, data.links);
+                })
+                .catch(function (err) {
+                    log.removeChild(typing);
+                   
+                    render("bot", "Sorry, I couldn't reach the server. Please try again.");
+                })
+                .then(function () { sendBtn.disabled = false; input.focus(); });
+        }
 
-                render("bot", "Sorry, I couldn't reach the server. Please try again.");
-            })
-            .then(function() { sendBtn.disabled = false; input.focus(); });
-    }
+        function submit() {
+            var text = input.value.trim();
+            if (!text || sendBtn.disabled) return;
+            input.value = "";
+            ask(text, true);
+        }
 
-    function submit() {
-        var text = input.value.trim();
-        if (!text || sendBtn.disabled) return;
-        input.value = "";
-        ask(text, true);
-    }
-
-    function open() {
-        panel.hidden = false;
-        toggle.setAttribute("aria-expanded", "true");
-        try { sessionStorage.setItem(OPEN_KEY, "1"); } catch (e) { }
-
-        if (history.length === 0) ask("hi", false);
-        input.focus();
-    }
-
-    function close() {
-        panel.hidden = true;
-        toggle.setAttribute("aria-expanded", "false");
-        try { sessionStorage.removeItem(OPEN_KEY); } catch (e) { }
-    }
-
-    try {
-        history = JSON.parse(sessionStorage.getItem(KEY) || "[]");
-        history.forEach(function(m) { render(m.role, m.text, m.links); });
-        if (sessionStorage.getItem(OPEN_KEY) === "1") {
+        function open() {
             panel.hidden = false;
             toggle.setAttribute("aria-expanded", "true");
+            try { sessionStorage.setItem(OPEN_KEY, "1"); } catch (e) { }
+
+            if (history.length === 0) ask("hi", false);
+            input.focus();
         }
-    } catch (e) { history = []; }
 
-    toggle.addEventListener("click", function() { panel.hidden ? open() : close(); });
-    document.getElementById("mgChatClose").addEventListener("click", close);
-    sendBtn.addEventListener("click", submit);
-    input.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") { e.preventDefault(); submit(); }
-    });
+        function close() {
+            panel.hidden = true;
+            toggle.setAttribute("aria-expanded", "false");
+            try { sessionStorage.removeItem(OPEN_KEY); } catch (e) { }
+        }
 
-    document.querySelectorAll("#mgChatChips button").forEach(function(b) {
-        b.addEventListener("click", function() { ask(b.getAttribute("data-q"), true); });
-    });
+        try {
+            history = JSON.parse(sessionStorage.getItem(KEY) || "[]");
+            history.forEach(function (m) { render(m.role, m.text, m.links); });
+            if (sessionStorage.getItem(OPEN_KEY) === "1") {
+                panel.hidden = false;
+                toggle.setAttribute("aria-expanded", "true");
+            }
+        } catch (e) { history = []; }
+
+        toggle.addEventListener("click", function () { panel.hidden ? open() : close(); });
+        document.getElementById("mgChatClose").addEventListener("click", close);
+        sendBtn.addEventListener("click", submit);
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") { e.preventDefault(); submit(); }
+        });
+
+        document.querySelectorAll("#mgChatChips button").forEach(function (b) {
+            b.addEventListener("click", function () { ask(b.getAttribute("data-q"), true); });
+        });
     })();
 </script>
-    <script>
-        (function () {
-            var chat = document.getElementById('mgChat');
-            var panel = document.getElementById('mgChatPanel');
-            var banner = document.getElementById('cookieConsentBanner');
-            if (!chat || !panel || !banner) return;
-
-            function place() {
-                var h = banner.classList.contains('d-none') ? 0 : banner.offsetHeight;
-                chat.style.bottom = (h + 24) + 'px';
-                // keep the open panel fully on screen: button offset + button height + gap
-                panel.style.maxHeight = 'calc(100vh - ' + (h + 24 + 72 + 16) + 'px)';
-            }
-
-            place();
-            window.addEventListener('resize', place);
-            new MutationObserver(place).observe(banner, { attributes: true, attributeFilter: ['class'] });
-        })();
-    </script>
 </body>
 </html>
-

@@ -65,7 +65,6 @@
         color: #253c50;
         margin-bottom: 7px;
     }
-   
 
     .shop-toolbar .form-control,
     .shop-toolbar .form-select {
@@ -83,7 +82,7 @@
     .shop-section-title {
         font-size: 24px;
         font-weight: 750;
-        color: #253c50;
+        color: #10263e;
         margin: 25px 0 20px;
     }
 
@@ -306,38 +305,6 @@
             height: 240px;
         }
     }
-    /* Theme-aware overrides */
-.shop-section-title {
-    color: var(--heading-color);
-}
-
-.shop-toolbar {
-    background: var(--surface-bg);
-    border-color: var(--border-color);
-}
-
-.shop-toolbar label {
-    color: var(--text-color);
-}
-
-.product-grid tr {
-    background: var(--surface-bg);
-    border-color: var(--border-color);
-}
-
-.product-image-wrap {
-    background: #ffffff;
-    border-bottom-color: var(--border-color);
-}
-
-.product-name {
-    color: var(--heading-color);
-}
-
-.product-description,
-.product-price .vat-note {
-    color: var(--muted-text);
-}
 </style>
 
 <div class="shop-page">
