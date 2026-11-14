@@ -371,6 +371,7 @@
     <Content Include="Admin\Web.config" />
     <Content Include="InvoiceDownload.ashx" />
     <Content Include="Admin\AdminMaster.master" />
+    <Content Include="ViewSwitcher.ascx" />
     <Content Include="Wishlist.aspx" />
     <Content Include="ChatHandler.ashx" />
     <Content Include="Account\CheckAccountStatus.ashx" />
