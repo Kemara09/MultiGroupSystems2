@@ -7,11 +7,8 @@ using System.Text;
 
 namespace MultiGroupSystemsTester.Services
 {
-    /// <summary>
-    ///OtpService (5 min expiry, 3 attempts, 60 s resend cooldown,
-    /// max 5 sends/hour) and it reuses the OtpSendResult / OtpVerifyResult
-    /// Codes are stored hashed in dbo.StaffLoginOtp 
-    /// </summary>
+    
+   
     public static class StaffOtpService
     {
         private const int ExpiryMinutes = 5;
@@ -61,7 +58,6 @@ namespace MultiGroupSystemsTester.Services
                 if (sentLastHour >= MaxSendsPerHour) return OtpSendResult.TooManyRequests;
                 if (enforceCooldown && secondsSinceLast < ResendCooldownSeconds) return OtpSendResult.TooSoon;
 
-                // Ensure only newest code works.
                 using (var cmd = new SqlCommand(
                     "UPDATE StaffLoginOtp SET UsedAt = SYSUTCDATETIME() WHERE StaffID = @Id AND UsedAt IS NULL", conn))
                 {

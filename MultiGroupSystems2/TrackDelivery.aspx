@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
 <style>
-    /* Track Delivery page — light theme defaults */
     .track-delivery-page {
         --track-page-bg: #f1efe8;
         --track-card-bg: #ffffff;
@@ -28,7 +27,6 @@
         transition: background-color 0.2s, color 0.2s;
     }
 
-    /* Dark theme */
     [data-theme="dark"] .track-delivery-page {
         --track-page-bg: #151b24;
         --track-card-bg: #202936;
@@ -157,7 +155,6 @@
         font-weight: 700;
     }
 
-    /* Four-step delivery progress indicator */
     .track-delivery-page .stepper-wrapper {
         position: relative;
         margin: 0 12px 30px;
@@ -235,7 +232,6 @@
         font-weight: 700;
     }
 
-    /* Map */
     .track-delivery-page #deliveryMap {
         display: none;
         width: 100%;
@@ -324,7 +320,6 @@
 </div>
 
 
-    <!-- Leaflet Map JS Engine -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         var map = null;
@@ -388,9 +383,8 @@
                     }
 
                     map.setView([lat, lng], 15);
-                    setTimeout(function () { map.invalidateSize(); }, 300);
+                    setTimeout(function() { map.invalidateSize(); }, 300);
 
-                    currentMarker = L.marker([lat, lng]).addTo(map)
                     const popupContent = document.createElement('div');
                     const heading = document.createElement('strong');
                     heading.textContent = 'Delivery Address:';
@@ -405,11 +399,11 @@
                         .addTo(map)
                         .bindPopup(popupContent)
                         .openPopup();
-                        .openPopup();
                 })
                 .catch(err => {
                     console.error("Geocoding error:", err);
                 });
+                
         }
     </script>
 </asp:Content>

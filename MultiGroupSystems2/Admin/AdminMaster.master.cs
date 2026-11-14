@@ -21,13 +21,13 @@ namespace MultiGroupSystemsTester.Admin
 
         private void LoadAdminDetails()
         {
-            // Full name stored when the administrator logs in
+            
             string fullName = Session["AdminFullName"] as string;
 
-            // Role stored when the administrator logs in
+            
             string role = Session["AdminRole"] as string;
 
-            // If no session information exists
+            
             if (string.IsNullOrEmpty(fullName))
             {
                 fullName = "Staff User";
@@ -38,14 +38,14 @@ namespace MultiGroupSystemsTester.Admin
                 role = "Administrator";
             }
 
-            // Display full name and role
+            
             lblAdminFullName.Text = fullName;
             lblAdminRole.Text = role;
 
             lblSidebarFullName.Text = fullName;
             lblSidebarRole.Text = role;
 
-            // Create initials from the full name
+            
             lblProfileInitials.Text = GetInitials(fullName);
             lblSidebarInitials.Text = GetInitials(fullName);
         }
@@ -71,8 +71,7 @@ namespace MultiGroupSystemsTester.Admin
             ).ToUpper();
         }
 
-        // Hide the menu items this role isn't allowed to open.
-        // This is cosmetic only - the real check is in AdminPage.
+        
         private void ApplyRoleAccess()
         {
             string role = Session["AdminRole"] as string;
@@ -88,7 +87,7 @@ namespace MultiGroupSystemsTester.Admin
 
         private void HighlightActiveNavItem()
         {
-            // Without the extension, so it works for both /Admin/Reports and /Admin/Reports.aspx
+            
             string currentPage = Path.GetFileNameWithoutExtension(Request.Path);
 
             SetActive(navDashboard, "Dashboard", currentPage);
@@ -112,7 +111,7 @@ namespace MultiGroupSystemsTester.Admin
         {
             FormsAuthentication.SignOut();
 
-            // Clear the stored name/role so the next person on this browser can't inherit them
+            
             Session.Clear();
             Session.Abandon();
 

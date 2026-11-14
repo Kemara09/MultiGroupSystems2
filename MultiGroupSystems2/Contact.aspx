@@ -21,7 +21,6 @@
                 <div class="col-lg-5 text-center">
                     <div class="hero-circle-wrapper">
                         
-                        <!-- picturee -->
                         <div class="hero-circle-frame">
                             <img src="Images/Contact!.jpg" alt="Customer Support Representative" />
                         </div>

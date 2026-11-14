@@ -16,8 +16,7 @@ namespace MultiGroupSystemsTester.Admin
 
             if (!AdminAccess.CanAccess(role, page))
             {
-                // 'true' stops the request right here. With 'false', a Manager could still
-                // POST to StaffDataCapture and trigger the save button before the redirect lands.
+                
                 Response.Redirect("~/Admin/AccessDenied.aspx", true);
             }
         }
@@ -39,7 +38,7 @@ namespace MultiGroupSystemsTester.Admin
                 }
                 catch (Exception)
                 {
-                    // malformed/tampered cookie — treat as not logged in
+                    
                 }
             }
 

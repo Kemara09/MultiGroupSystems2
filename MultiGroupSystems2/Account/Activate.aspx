@@ -10,7 +10,6 @@
                     We'll text a verification code to the mobile number we have on file for you.
                 </p>
 
-                <!-- Step 1: Find account -->
                 <asp:Panel ID="pnlFindAccount" runat="server">
                     <div class="mb-3">
                         <label for="txtEmail" class="form-label">Email Address</label>
@@ -21,7 +20,6 @@
                         Style="background-color:#0F6E56; color:#fff;" OnClick="btnFindAccount_Click" />
                 </asp:Panel>
 
-                <!-- Step 2: Enter the SMS code -->
                 <asp:Panel ID="pnlVerifyCode" runat="server" Visible="false">
                     <p class="mb-3">
                         We sent a 6-digit code by SMS to your phone ending in
@@ -43,7 +41,6 @@
                     </div>
                 </asp:Panel>
 
-                <!-- Step 3: Set password (only reachable after the code is verified) -->
                 <asp:Panel ID="pnlSetPassword" runat="server" Visible="false">
                     <p class="mb-3">Your phone is verified. Create a password to finish activating your account.</p>
 

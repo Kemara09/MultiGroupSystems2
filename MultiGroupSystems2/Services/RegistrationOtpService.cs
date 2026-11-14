@@ -7,9 +7,7 @@ using MultiGroupSystemsTester.Services;
 
 namespace MultiGroupSystemsTester
 {
-    /// <summary>
-    /// SMS codes that prove a new customer owns the phone number they typed in, before account created.
-    /// </summary>
+    
     public static class RegistrationOtpService
     {
         private const int ExpiryMinutes = 5;

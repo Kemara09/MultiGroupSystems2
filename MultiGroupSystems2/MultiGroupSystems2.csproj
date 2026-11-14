@@ -238,6 +238,7 @@
     <Content Include="Account\Forgotpassword.aspx" />
     <Content Include="Admin\ViewOrders.aspx" />
     <Content Include="Admin\ViewOrders.css" />
+    <Content Include="DeliveryInfo.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\Products\27inch dell monitor.jpg" />
     <Content Include="Images\Products\2tb Storage.jpg" />
@@ -374,6 +375,7 @@
     <Content Include="ChatHandler.ashx" />
     <Content Include="Account\CheckAccountStatus.ashx" />
     <Content Include="Account\StaffStatus.ashx" />
+    <None Include="Properties\PublishProfiles\IST-WST-Group-14 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -516,6 +518,13 @@
     <Compile Include="Admin\ViewOrders.aspx.designer.cs">
       <DependentUpon>ViewOrders.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DeliveryInfo.aspx.cs">
+      <DependentUpon>DeliveryInfo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryInfo.aspx.designer.cs">
+      <DependentUpon>DeliveryInfo.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Services\ChatbotService.cs" />
     <Compile Include="ChatHandler.ashx.cs">
       <DependentUpon>ChatHandler.ashx</DependentUpon>
@@ -652,7 +661,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

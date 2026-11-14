@@ -32,9 +32,7 @@ namespace MultiGroupSystemsTester.Admin
             string connStr = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
             string username = txtUsername.Text.Trim();
 
-            // The password is left empty on purpose: an empty password means "not activated yet".
-            // The staff member sets their own (hashed with PasswordHasher) on StaffActivate.aspx
-            // after verifying the SMS code.
+        
             string query = "INSERT INTO Staff (FirstName, LastName, Role, EmailAddress, PhoneNumber, Username, Password) " +
                            "VALUES (@FirstName, @LastName, @Role, @EmailAddress, @PhoneNumber, @Username, @Password)";
 
@@ -44,7 +42,7 @@ namespace MultiGroupSystemsTester.Admin
                 {
                     conn.Open();
 
-                    // Activation finds the account by username, so two staff can't share one
+                   
                     using (SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Staff WHERE Username = @Username", conn))
                     {
                         check.Parameters.Add("@Username", SqlDbType.VarChar, 50).Value = username;

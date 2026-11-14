@@ -18,7 +18,6 @@ namespace MultiGroupSystemsTester
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Only logged-in customers can access their wishlist
             if (Session["CustomerID"] == null)
             {
                 Response.Redirect(

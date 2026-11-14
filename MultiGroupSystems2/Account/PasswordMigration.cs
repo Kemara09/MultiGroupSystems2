@@ -4,20 +4,10 @@ using System.Data.SqlClient;
 
 namespace MultiGroupSystemsTester.Admin
 {
-    /// <summary>
-    /// ONE-TIME use: hashes any plaintext passwords left in the Staff table (for example from
-    /// accounts created with the old form that had a password box), using your existing
-    /// PasswordHasher so the login keeps working.
-    ///
-    /// Skipped on purpose:
-    ///   - empty/NULL passwords (those accounts are waiting for SMS activation)
-    ///   - values that are already in the PasswordHasher format
-    ///
-    /// Run it once, check the result, then delete the call.
-    /// </summary>
+   
     public static class PasswordMigration
     {
-        // PasswordHasher format: iterations.base64(16-byte salt).base64(32-byte hash)
+        
         public static bool LooksHashed(string stored)
         {
             if (string.IsNullOrWhiteSpace(stored))

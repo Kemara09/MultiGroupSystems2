@@ -46,7 +46,6 @@
                     <asp:BoundField DataField="DeliveryProvince" HeaderText="Province" />
                     <asp:TemplateField HeaderText="">
                         <ItemTemplate>
-                            <%-- Change "orderId" if OrderLogistics reads a different query string name --%>
                             <asp:HyperLink runat="server" CssClass="vo-link" Text="Update"
                                 NavigateUrl='<%# "~/Admin/OrderLogistics.aspx?orderId=" + Eval("OrderID") %>' />
                         </ItemTemplate>

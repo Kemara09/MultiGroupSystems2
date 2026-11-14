@@ -59,8 +59,7 @@ namespace MultiGroupSystemsTester
             if (Has(lower, "thanks", "thank you", "cheers", "appreciate"))
                 return Say("You're welcome! Is there anything else I can help with?");
 
-            // 2. Personalised intents
-            if (Has(lower, "my order", "my orders", "order status", "track", "tracking", "where is my", "my purchases", "recent order", "last order")
+           if (Has(lower, "my order", "my orders", "order status", "track", "tracking", "where is my", "my purchases", "recent order", "last order")
                 || Regex.IsMatch(lower, @"\border\s*#?\s*\d+"))
             {
                 return OrdersReply(customerId, lower);
@@ -75,8 +74,7 @@ namespace MultiGroupSystemsTester
             if (Has(lower, "my account", "my details", "my profile", "my email", "log in", "login", "sign in", "register", "sign up"))
                 return AccountReply(customerId);
 
-            // 3. General FAQs 
-            if (Has(lower, "delivery", "deliver", "shipping", "collect", "collection"))
+          if (Has(lower, "delivery", "deliver", "shipping", "collect", "collection"))
             {
                 return Say(
                     "We offer Delivery or Collection at checkout. You choose your delivery date when you check out, " +
@@ -111,7 +109,6 @@ namespace MultiGroupSystemsTester
             if (Has(lower, "help", "what can you do", "options", "menu"))
                 return HelpReply(loggedIn);
 
-            // 4. Product questions
             return ProductReply(text);
         }
 
@@ -165,8 +162,7 @@ namespace MultiGroupSystemsTester
                                  "Please log in and ask me again.");
             }
 
-            // Look up only specific order number
-           
+          
             int? orderId = null;
             Match m = Regex.Match(lower, @"\b(\d{1,9})\b");
             if (m.Success && lower.Contains("order"))

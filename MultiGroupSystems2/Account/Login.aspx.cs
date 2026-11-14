@@ -82,7 +82,7 @@ namespace MultiGroupSystemsTester.Account
                     }
                 }
 
-                // IF Staff account has not been activated.
+                
                 if (string.IsNullOrEmpty(storedPassword))
                 {
                     string activationUrl =
@@ -125,7 +125,6 @@ namespace MultiGroupSystemsTester.Account
                         connStr, staffId, storedPassword, password);
                 }
 
-                // Password verified
                 
                 ClearPending();
 

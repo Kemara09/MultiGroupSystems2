@@ -36,40 +36,43 @@
     </div>
 
 </div>
-    <section class="hero-section text-white text-center">
-        <div class="container py-5">
-            <h1 class="display-4 fw-bold">Welcome to Multigroup Inc.</h1>
-            <p class="lead">Streamlined order management, built for reliability and speed.</p>
-            <a href="~/Products.aspx" runat="server" class="btn btn-lg btn-primary mt-3">Shop Now</a>
-        </div>
-    </section>
-
-    <section class="container py-5">
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <a href="~/TrackDelivery.aspx" runat="server" class="text-decoration-none">
-                    <div class="feature-card p-4 h-100 feature-card-link">
-                        <h4>Order Tracking</h4>
-                        <p>Real-time visibility into every order, from placement to delivery.</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-card p-4 h-100">
-                    <h4>Secure Access</h4>
-                    <p>Role-based logins keep customer and company data protected.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-    <a href="~/Admin/Reports.aspx" runat="server" class="text-decoration-none">
-    <div class="feature-card p-4 h-100 feature-card-link">
-        <h4>Reliable Reporting</h4>
-        <p>Business intelligence built directly on live system data.</p>
+   <section class="hero-section text-white text-center">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold">Welcome to Multigroup Inc.</h1>
+        <p class="lead">Browse our range, order online and get it delivered or collect it at a given pick up point.</p>
+        <a href="~/Products.aspx" runat="server" class="btn btn-lg btn-primary mt-3">Shop Now</a>
     </div>
-</a>
+</section>
+
+   <section class="container py-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <a href="~/Products.aspx?category=YourTopCategory" runat="server" class="text-decoration-none d-block h-100">
+                <div class="feature-card p-4 h-100 feature-card-link">
+                    <h4>Popular Picks</h4>
+                    <p>See what other customers are buying most. <span class="card-arrow">Browse now &rarr;</span></p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <a href="~/DeliveryInfo.aspx" runat="server" class="text-decoration-none d-block h-100">
+                <div class="feature-card p-4 h-100 feature-card-link">
+                    <h4>Delivery You Can Count On</h4>
+                    <p>Find out how fast we deliver and how we handle returns. <span class="card-arrow">See how it works &rarr;</span></p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+    <a href="~/Account/Register.aspx" runat="server" class="text-decoration-none d-block h-100">
+        <div class="feature-card p-4 h-100 feature-card-link">
+            <h4>Create Your Free Account</h4>
+            <p>Check out faster and get delivery updates. <span class="card-arrow">Sign up &rarr;</span></p>
+        </div>
+    </a>
 </div>
-</div>
-    </section>
+    </div>
+</section>
+
 
     <section class="cta-section text-center py-5">
         <div class="container">

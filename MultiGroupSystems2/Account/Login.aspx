@@ -5,7 +5,6 @@
         <asp:Label ID="lblError" runat="server" CssClass="alert alert-danger d-block" Visible="false"></asp:Label>
         <asp:Label ID="lblInfo" runat="server" CssClass="alert alert-info d-block" Visible="false"></asp:Label>
 
-        <%-- STEP 1: username + password --%>
         <asp:Panel ID="pnlCredentials" runat="server">
             <div class="mb-3">
                 <label class="form-label">Username</label>
@@ -21,7 +20,6 @@
             <p class="text-muted small mt-3 mb-0">Forgot your password? Please contact a manager to have it reset.</p>
         </asp:Panel>
 
-        <%-- STEP 2: SMS verification code (second factor) --%>
         <asp:Panel ID="pnlOtp" runat="server" Visible="false">
             <p class="mb-3">Enter the 6-digit code we sent to the mobile number ending in <strong><asp:Label ID="lblLastDigits" runat="server" /></strong>.</p>
             <div class="mb-3">

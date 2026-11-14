@@ -86,7 +86,6 @@
         margin: 25px 0 20px;
     }
 
-    /* Convert the existing GridView into a card grid */
     .product-grid {
         display: block;
         width: 100%;

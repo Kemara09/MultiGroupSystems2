@@ -65,7 +65,7 @@
     <style>
         .cart-item-card {
             background: #ffffff;
-            color: #172b3a; /* dark text so it stays readable in dark mode */
+            color: #172b3a;
             border: 1px solid #E3E1DA;
             border-radius: 8px;
         }
@@ -88,11 +88,10 @@
         }
         .cart-summary-card {
             background: #ffffff;
-            color: #172b3a; /* dark text so it stays readable in dark mode */
+            color: #172b3a;
             border: 1px solid #E3E1DA;
             border-radius: 8px;
         }
-        /* Keep the "Unit Price" grey readable inside the white cards */
         .cart-item-card .text-muted,
         .cart-summary-card .text-muted {
             color: #6b7280 !important;

@@ -298,12 +298,10 @@
             CssClass="alert alert-danger d-block"
             Visible="false" />
 
-        <!-- STEP 1: REGISTRATION DETAILS -->
         <asp:Panel ID="pnlForm" runat="server">
 
             <div class="register-card">
 
-                <!-- PERSONAL INFORMATION -->
                 <div class="register-section">
 
                     <div class="register-section-title">
@@ -397,7 +395,6 @@
                     </div>
                 </div>
 
-                <!-- ADDRESS INFORMATION -->
                 <div class="register-section">
 
                     <div class="register-section-title">
@@ -507,7 +504,6 @@
                     </div>
                 </div>
 
-                <!-- ACCOUNT SECURITY -->
                 <div class="register-section">
 
                     <div class="register-section-title">
@@ -575,7 +571,6 @@
                     </div>
                 </div>
 
-                <!-- SUBMIT -->
                 <div class="register-actions">
 
                     <asp:Button
@@ -598,7 +593,6 @@
 
         </asp:Panel>
 
-        <!-- STEP 2: SMS VERIFICATION -->
         <asp:Panel ID="pnlVerify" runat="server" Visible="false">
 
             <div class="register-card verification-card">

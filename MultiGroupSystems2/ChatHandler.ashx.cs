@@ -31,7 +31,6 @@ namespace MultiGroupSystemsTester
                 string message = context.Request.Form["message"];
 
                 
-                // never from anything the browser sends.
                 int? customerId = null;
                 if (context.Session != null && context.Session["CustomerID"] != null)
                 {

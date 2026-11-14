@@ -12,7 +12,7 @@
 
     <div class="page-container">
 
-        <!-- PAGE HEADER -->
+        
         <header class="page-header">
             <div class="header-content">
                 <h1>Staff Data Capture</h1>
@@ -21,10 +21,8 @@
             
         </header>
 
-        <!-- MAIN CONTENT -->
         <main class="content-area">
 
-            <!-- PERSONAL INFORMATION -->
             <section class="card">
                 <div class="card-header">
                     <h2>Personal Information</h2>
@@ -74,7 +72,6 @@
             </section>
 
 
-            <!-- ACCOUNT & ROLE DETAILS -->
             <section class="card">
                 <div class="card-header">
                     <h2>Account & Role Details</h2>
@@ -111,7 +108,6 @@
             </section>
 
 
-           <!-- FORM FOOTER -->
 <div class="form-footer">
     <asp:Button ID="BtnCancel" runat="server" Text="Cancel" CssClass="btn btn-secondary"
         CausesValidation="false" OnClick="BtnCancel_Click" />

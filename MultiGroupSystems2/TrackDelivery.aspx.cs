@@ -30,8 +30,6 @@ namespace MultiGroupSystemsTester
             lblError.Text = "";
             lblStatusHeading.Text = "Ordered";
 
-            // IMPORTANT:
-            // Confirm this session key matches CustomerLogin.aspx.cs.
             object sessionCustomerId = Session["CustomerID"];
 
             int customerId;
@@ -148,7 +146,6 @@ namespace MultiGroupSystemsTester
                                 break;
                         }
 
-                        // Safely encode the address as a JavaScript string.
                         JavaScriptSerializer serializer =
                             new JavaScriptSerializer();
 

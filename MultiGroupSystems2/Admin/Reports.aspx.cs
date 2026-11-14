@@ -436,7 +436,6 @@ namespace MultiGroupSystemsTester
                     break;
             }
 
-            // SQL fragments above are fixed by the application.
             string sql = "SELECT CONVERT(char(7), " + date + ", 120) AS [Month], " + value +
                          " FROM " + table + " WHERE " + date + " >= @start AND " + date + " < @end" +
                          filter + " GROUP BY CONVERT(char(7), " + date + ", 120) ORDER BY [Month]";

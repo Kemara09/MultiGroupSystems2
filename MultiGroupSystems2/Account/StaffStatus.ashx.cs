@@ -27,7 +27,7 @@ namespace MultiGroupSystemsTester
 
             try
             {
-                // Simple throttle
+                
                 string ip = context.Request.UserHostAddress ?? "unknown";
                 string key = "staffstatus:" + ip;
                 int count = (HttpRuntime.Cache[key] as int?) ?? 0;

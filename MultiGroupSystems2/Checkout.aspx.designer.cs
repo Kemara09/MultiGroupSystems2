@@ -24,15 +24,6 @@ namespace MultiGroupSystemsTester
         protected global::System.Web.UI.WebControls.Panel pnlSuccess;
 
         /// <summary>
-        /// lblError control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblError;
-
-        /// <summary>
         /// pnlForm control.
         /// </summary>
         /// <remarks>
@@ -76,6 +67,24 @@ namespace MultiGroupSystemsTester
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblAddressPhone;
+
+        /// <summary>
+        /// ddlCollectionProvince control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCollectionProvince;
+
+        /// <summary>
+        /// lblCollectionAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCollectionAddress;
 
         /// <summary>
         /// txtSelectedAddress control.
@@ -319,6 +328,15 @@ namespace MultiGroupSystemsTester
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblGrandTotal;
+
+        /// <summary>
+        /// lblError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
         /// btnPlaceOrder control.

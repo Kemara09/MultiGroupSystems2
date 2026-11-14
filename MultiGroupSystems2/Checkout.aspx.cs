@@ -13,7 +13,7 @@ namespace MultiGroupSystemsTester
 {
     public partial class Checkout : System.Web.UI.Page
     {
-        
+
         private static readonly Dictionary<string, string> CollectionBranches =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -27,7 +27,7 @@ namespace MultiGroupSystemsTester
             { "North West", "10 Example Avenue, Mahikeng, North West, 2745" },
             { "Northern Cape", "10 Example Avenue, Kimberley, Northern Cape, 8301" }
         };
-        protected global::System.Web.UI.WebControls.HiddenField hfCollectionProvince;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["CustomerID"] == null)
@@ -178,12 +178,12 @@ namespace MultiGroupSystemsTester
 
             return string.Join(", ", new[]
             {
-        (txtStreetNumber.Text.Trim() + " " +
-         txtStreetName.Text.Trim()).Trim(),
-        txtSuburb.Text.Trim(),
-        ddlProvince.SelectedValue,
-        txtPostalCode.Text.Trim()
-    }.Where(part => !string.IsNullOrWhiteSpace(part)));
+                (txtStreetNumber.Text.Trim() + " " +
+                 txtStreetName.Text.Trim()).Trim(),
+                txtSuburb.Text.Trim(),
+                ddlProvince.SelectedValue,
+                txtPostalCode.Text.Trim()
+            }.Where(part => !string.IsNullOrWhiteSpace(part)));
         }
 
 
@@ -198,9 +198,28 @@ namespace MultiGroupSystemsTester
             lblAddressPhone.Text = txtPhone.Text.Trim();
         }
 
+        private void UpdateCollectionDisplay()
+        {
+            string address;
+
+            lblCollectionAddress.Text =
+                CollectionBranches.TryGetValue(ddlCollectionProvince.SelectedValue ?? "", out address)
+                    ? Server.HtmlEncode(address)
+                    : "Select a province to see the collection address.";
+        }
+
+        protected void ddlCollectionProvince_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblError.Text = "";
+            lblError.Visible = false;
+
+            UpdateCollectionDisplay();
+        }
+
         protected void ddlPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            lblError.Text = "";
+            lblError.Visible = false;
 
             UpdateAddressDisplay();
 
@@ -210,6 +229,8 @@ namespace MultiGroupSystemsTester
 
         protected void btnPlaceOrder_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+            lblError.Visible = false;
 
             UpdateAddressDisplay();
 
@@ -262,7 +283,7 @@ namespace MultiGroupSystemsTester
             }
             bool isCollection = method == "Collection";
             string collectionAddress = null;
-            if (isCollection && !CollectionBranches.TryGetValue(hfCollectionProvince.Value ?? "", out collectionAddress))
+            if (isCollection && !CollectionBranches.TryGetValue(ddlCollectionProvince.SelectedValue ?? "", out collectionAddress))
             {
                 lblError.Text = "Please select a valid collection province.";
                 lblError.Visible = true;
@@ -299,7 +320,7 @@ namespace MultiGroupSystemsTester
                         string deliveryAddress = selectedOrderAddress;
                         bool usingGeoapify = !isCollection && !string.IsNullOrWhiteSpace(hdnSelectedAddress.Value);
                         string deliverySuburb = isCollection || usingGeoapify ? "" : txtSuburb.Text.Trim();
-                        string deliveryProvince = isCollection ? hfCollectionProvince.Value : (usingGeoapify ? "" : ddlProvince.SelectedValue);
+                        string deliveryProvince = isCollection ? ddlCollectionProvince.SelectedValue : (usingGeoapify ? "" : ddlProvince.SelectedValue);
                         string deliveryPostalCode = isCollection || usingGeoapify ? "" : txtPostalCode.Text.Trim();
                         string deliveryPhone = txtPhone.Text.Trim();
                         const string insertOrder = @"
@@ -470,6 +491,9 @@ namespace MultiGroupSystemsTester
                             summary.ToString()));
                         pnlSuccess.Visible = true;
                         pnlForm.Visible = false;
+
+                        lblError.Text = "";
+                        lblError.Visible = false;
                     }
                     catch (Exception ex)
                     {

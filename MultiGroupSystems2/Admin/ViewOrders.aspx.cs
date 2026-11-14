@@ -9,8 +9,7 @@ namespace MultiGroupSystemsTester
 {
     public partial class ViewOrders : AdminPage
     {
-        // Use the same connection string name that OrderLogistics.aspx.cs uses
-        // Connection string name from Web.config
+       
         private static readonly string ConnString =
             ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
 
@@ -25,7 +24,6 @@ namespace MultiGroupSystemsTester
 
         private void LoadStatuses()
         {
-            // Fill the filter dropdown with whatever statuses actually exist in the data
             const string sql = "SELECT DISTINCT OrderStatus FROM dbo.[Order] WHERE OrderStatus IS NOT NULL ORDER BY OrderStatus";
 
             using (var conn = new SqlConnection(ConnString))

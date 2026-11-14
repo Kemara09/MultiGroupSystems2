@@ -24,7 +24,8 @@ namespace MultiGroupSystemsTester.Account
                 string firstName;
                 if (PasswordResetService.CreateRequest(email, out token, out firstName))
                 {
-                    string link = GetBaseUrl() + ResolveUrl("~/Account/ResetPassword.aspx") + "?token=" + token;
+                    string link = GetBaseUrl() + ResolveUrl("~/Account/ResetPassword.aspx")
+                        + "?token=" + Uri.EscapeDataString(token);
                     EmailService.SendPasswordResetEmail(email, firstName, link);
                 }
             }
@@ -34,9 +35,10 @@ namespace MultiGroupSystemsTester.Account
                     "Password reset failed: " + ex.ToString()
                 );
 
-                // TEMPORARY DEBUG: shows the real error on the page. Remove before submitting.
+            
                 lblError.Text = "Password reset failed: " + ex.GetType().Name + " - " + ex.Message
                     + (ex.InnerException != null ? " | " + ex.InnerException.Message : "");
+                
 
                 pnlForm.Visible = true;
                 pnlSent.Visible = false;

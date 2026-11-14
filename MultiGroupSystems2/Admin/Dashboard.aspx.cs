@@ -32,25 +32,25 @@ namespace MultiGroupSystemsTester.Admin
             {
                 conn.Open();
 
-                // 1. Total Products
+                
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Inventory", conn))
                 {
                     lblTotalProducts.Text = cmd.ExecuteScalar().ToString();
                 }
 
-                // 2. Total Orders
+                
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM [Order]", conn))
                 {
                     lblTotalOrders.Text = cmd.ExecuteScalar().ToString();
                 }
 
-                // 3. Total Staff
+               
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Staff", conn))
                 {
                     lblTotalStaff.Text = cmd.ExecuteScalar().ToString();
                 }
 
-                // 4. Total Sales
+                
                 using (SqlCommand cmd = new SqlCommand("SELECT ISNULL(SUM(TotalAmount), 0) FROM [Order]", conn))
                 {
                     object result = cmd.ExecuteScalar();
@@ -116,7 +116,7 @@ namespace MultiGroupSystemsTester.Admin
                     monthly = true;
                     subtitle = "Monthly sales – this year";
                     break;
-                default: // 30d
+                default: 
                     start = today.AddDays(-29);
                     monthly = false;
                     subtitle = "Daily sales – last 30 days";
@@ -147,7 +147,7 @@ namespace MultiGroupSystemsTester.Admin
                 }
             }
 
-            // Every day/month in the range gets a bar, with 0 where there were no sales
+            
             var buckets = new List<KeyValuePair<DateTime, decimal>>();
             decimal max = 0;
             for (DateTime d = start; d <= today; d = monthly ? d.AddMonths(1) : d.AddDays(1))
@@ -162,7 +162,7 @@ namespace MultiGroupSystemsTester.Admin
 
             DataTable dt = new DataTable();
             dt.Columns.Add("Label", typeof(string));
-            dt.Columns.Add("BarHeight", typeof(int));   // int, so SA decimal commas can't break the CSS
+            dt.Columns.Add("BarHeight", typeof(int));   
             dt.Columns.Add("Tooltip", typeof(string));
 
             for (int i = 0; i < buckets.Count; i++)
@@ -171,7 +171,7 @@ namespace MultiGroupSystemsTester.Admin
                 decimal total = buckets[i].Value;
 
                 string label = d.ToString(monthly ? "MMM" : "dd MMM", CultureInfo.InvariantCulture);
-                if (period == "30d" && i % 5 != 0) label = "";   // 30 labels would be crowded
+                if (period == "30d" && i % 5 != 0) label = "";   
 
                 int height = total <= 0 ? 0 : Math.Max(2, (int)Math.Round(total / axisMax * 100));
                 string tip = d.ToString(monthly ? "MMMM yyyy" : "dd MMM yyyy", CultureInfo.InvariantCulture)
@@ -190,7 +190,7 @@ namespace MultiGroupSystemsTester.Admin
             lblY5.Text = "R0";
         }
 
-        // Rounds the top of the axis up to a tidy value (1, 2, 4, 8 or 10 x a power of ten)
+        
         private static decimal NiceMax(decimal value)
         {
             if (value <= 0) return 1000m;

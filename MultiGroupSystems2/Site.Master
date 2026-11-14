@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Multigroup Inc.</asp:ContentPlaceHolder></title>
 
-    <!-- Apply saved theme before page rendering -->
     <script>
         (function () {
             try {
@@ -389,7 +388,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Password visibility toggle -->
         <script>
             (function () {
                 document.querySelectorAll('input[type="password"]').forEach(function (input) {
@@ -420,7 +418,6 @@
             })();
         </script>
 
-        <!-- Dark mode toggle -->
         <script>
             (function () {
                 var toggle = document.getElementById("themeToggle");
@@ -463,7 +460,6 @@
             })();
         </script>
 
-        <!-- Cookie consent -->
         <div id="cookieConsentBanner"
             class="alert alert-dark d-none"
             style="position:fixed; bottom:0; left:0; right:0; z-index:1050; border-radius:0; margin-bottom:0;">
@@ -588,7 +584,7 @@
         if (!root) return;
 
         var url = root.getAttribute("data-url");
-        var auth = root.getAttribute("data-auth");   // "1" = logged in, "0" = logged out
+        var auth = root.getAttribute("data-auth");   
 
         var KEY = "mgChat";
         var AUTH_KEY = "mgChatAuth";
@@ -601,8 +597,6 @@
         var sendBtn = document.getElementById("mgChatSend");
         var history = [];
 
-        // If the login state changed since the last page load (logged in or logged out),
-        // wipe the old conversation so nothing carries over between accounts.
         try {
             var lastAuth = sessionStorage.getItem(AUTH_KEY);
             if (lastAuth !== null && lastAuth !== auth) {
@@ -619,7 +613,7 @@
         function render(role, text, links) {
             var div = document.createElement("div");
             div.className = "mgMsg " + role;
-            div.textContent = text;                      // textContent = no HTML injection
+            div.textContent = text;                     
 
             (links || []).forEach(function (l) {
                 var a = document.createElement("a");
@@ -662,7 +656,7 @@
                 })
                 .catch(function (err) {
                     log.removeChild(typing);
-                    // Shown but NOT saved to history, so a fixed server works on the next open
+                   
                     render("bot", "Sorry, I couldn't reach the server. Please try again.");
                 })
                 .then(function () { sendBtn.disabled = false; input.focus(); });
@@ -680,7 +674,6 @@
             toggle.setAttribute("aria-expanded", "true");
             try { sessionStorage.setItem(OPEN_KEY, "1"); } catch (e) { }
 
-            // First time opened: ask the server for a (personalised) greeting
             if (history.length === 0) ask("hi", false);
             input.focus();
         }
@@ -691,7 +684,6 @@
             try { sessionStorage.removeItem(OPEN_KEY); } catch (e) { }
         }
 
-        // Restore history after page navigation
         try {
             history = JSON.parse(sessionStorage.getItem(KEY) || "[]");
             history.forEach(function (m) { render(m.role, m.text, m.links); });

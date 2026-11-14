@@ -5,7 +5,7 @@
 <head runat="server">
     <title>Admin - MultiGroup Inc.</title>
 
-    <!-- Apply the saved theme before the page paints, so there is no light flash -->
+    
     <script>
         (function () {
             try {
@@ -147,7 +147,7 @@
                 return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
             }
 
-            // Background actually showing behind an element (first non-transparent ancestor)
+           
             function effectiveBg(el) {
                 while (el) {
                     var b = parse(getComputedStyle(el).backgroundColor);
@@ -167,9 +167,7 @@
                 });
             }
 
-            // Safety net: any white/near-white panel the stylesheet didn't cover gets a dark
-            // surface, and dark text sitting on a dark surface is lightened.
-            // Pastel badges (status pills etc.) are left alone.
+            
             function darkenSurfaces() {
                 var skip = { SCRIPT: 1, STYLE: 1, CANVAS: 1, IMG: 1, svg: 1, path: 1 };
                 document.querySelectorAll('.main-content *').forEach(function (el) {
@@ -191,7 +189,7 @@
                 });
             }
 
-            // Best effort for Chart.js charts on the Reports page
+         
             function themeCharts() {
                 if (!window.Chart || !Chart.defaults) return;
                 if (!chartLight) chartLight = { color: Chart.defaults.color, border: Chart.defaults.borderColor };
@@ -216,9 +214,9 @@
             });
 
             apply();
-            window.addEventListener('load', apply);   // late content, charts, images
+            window.addEventListener('load', apply);   
 
-            // Re-apply after UpdatePanel partial postbacks, if any page uses them
+        
             try {
                 if (window.Sys && Sys.WebForms) {
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(apply);

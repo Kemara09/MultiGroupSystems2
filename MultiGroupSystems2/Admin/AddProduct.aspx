@@ -18,13 +18,10 @@ Add Product
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="content-area">
 
-            <!-- Left Column -->
             <section class="left-column">
 
-                <!-- Basic Information -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Product Information</h2>
@@ -33,7 +30,6 @@ Add Product
 
                     <div class="card-body">
 
-                        <!-- Product Name -->
                         <div class="form-group">
                             <label for="txtProductName">
                                 Product Name
@@ -47,7 +43,6 @@ Add Product
                             </asp:TextBox>
                         </div>
 
-                        <!-- Category and Price -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="ddlCategory">
@@ -87,7 +82,6 @@ Add Product
                             </div>
                         </div>
 
-                        <!-- Description -->
                         <div class="form-group">
                             <label for="txtDescription">
                                 Product Description
@@ -108,7 +102,6 @@ Add Product
                     </div>
                 </div>
 
-                <!-- Inventory & Supply -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Inventory &amp; Supply</h2>
@@ -117,7 +110,6 @@ Add Product
 
                     <div class="card-body">
 
-                        <!-- Row 1: Stock Quantity & Re-order Level -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="txtStock">
@@ -162,7 +154,6 @@ Add Product
                             </div>
                         </div>
 
-                        <!-- Row 2: Supplier & Product Status -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="ddlSupplier">
@@ -186,10 +177,8 @@ Add Product
 
             </section>
 
-            <!-- Right Column -->
             <aside class="right-column">
 
-                <!-- Product Image -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Product Image</h2>
@@ -209,7 +198,6 @@ Add Product
                     </div>
                 </div>
 
-                <!-- Product Summary -->
                
 <div class="card summary-card">
     <div class="card-header">
@@ -240,7 +228,6 @@ Add Product
 
         </main>
 
-        <!-- Bottom Form Actions Footer -->
         <div class="form-footer-actions" style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px;">
             <asp:Button
     ID="btnCancel"

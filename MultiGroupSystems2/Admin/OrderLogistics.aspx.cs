@@ -16,14 +16,12 @@ namespace MultiGroupSystemsTester.Admin
 
         private static readonly string[] TimelineSteps = { "Order Placed", "Processing", "In Transit", "Delivered" };
 
-        // Known statuses in workflow order. Any other value found in the table is added automatically.
         private static readonly string[] OrderStatusOptions =
             { "Pending", "Processing", "Ready For Shipment", "In Transit", "Delivered", "Completed", "On Hold", "Cancelled" };
 
         private static readonly string[] DeliveryStatusOptions =
             { "Not Dispatched", "Pending", "Processing", "In Transit", "Delayed", "Delivered", "Failed" };
 
-        // The order comes from the query string (?orderId=4038), which also survives postbacks
         private int OrderId
         {
             get
@@ -39,7 +37,6 @@ namespace MultiGroupSystemsTester.Admin
 
             if (OrderId <= 0)
             {
-                // No order chosen: send the admin to the list, which has the search box
                 Response.Redirect("~/Admin/ViewOrders.aspx");
                 return;
             }
@@ -57,7 +54,6 @@ namespace MultiGroupSystemsTester.Admin
             }
         }
 
-        // ---------- STATUS DROPDOWNS ----------
 
         private void LoadStatusOptions()
         {
@@ -65,14 +61,12 @@ namespace MultiGroupSystemsTester.Admin
             FillStatusList(ddlDeliveryStatus, DeliveryStatusOptions, "DeliveryStatus");
         }
 
-        // 'column' is always one of two fixed names from this file, never user input
         private static void FillStatusList(DropDownList ddl, string[] baseOptions, string column)
         {
             ddl.Items.Clear();
             foreach (string option in baseOptions)
                 ddl.Items.Add(option);
 
-            // Add any other value already used in the table, with its exact spelling
             string sql = "SELECT DISTINCT " + column + " FROM dbo.[Order] WHERE " + column + " IS NOT NULL ORDER BY " + column;
 
             using (var conn = new SqlConnection(ConnString))
@@ -101,7 +95,6 @@ namespace MultiGroupSystemsTester.Admin
             }
         }
 
-        // ---------- LOAD ----------
 
         private bool BindOrder()
         {
@@ -134,7 +127,6 @@ namespace MultiGroupSystemsTester.Admin
                         ? "Not set"
                         : "R " + Convert.ToDecimal(r["TotalAmount"]).ToString("N2", CultureInfo.InvariantCulture);
 
-                    // Full address on one block: street, suburb, province, postal code
                     var addressParts = new[]
                     {
                         Str(r, "DeliveryStreetAddress"), Str(r, "DeliverySuburb"),
@@ -142,7 +134,6 @@ namespace MultiGroupSystemsTester.Admin
                     };
                     string address = string.Join(", ", Array.FindAll(addressParts, s => s.Length > 0));
 
-                    // Read-only details
                     txtOrderNumber.Text = FormatOrderNumber(OrderId);
                     txtCustomerName.Text = customer.Length > 0 ? customer : "Unknown customer";
                     txtOrderDate.Text = orderDate.HasValue ? orderDate.Value.ToString("yyyy-MM-dd") : "";
@@ -152,11 +143,9 @@ namespace MultiGroupSystemsTester.Admin
                     txtDeliveryDate.Text = deliveryDate.HasValue ? deliveryDate.Value.ToString("yyyy-MM-dd") : "";
                     txtCustomerInstructions.Text = Str(r, "DeliveryInstructions");
 
-                    // The two editable fields
                     SelectOrAdd(ddlOrderStatus, orderStatus);
                     SelectOrAdd(ddlDeliveryStatus, deliveryStatus);
 
-                    // Header, summary cards and timeline
                     litStatusBadge.Text = orderStatus.Length > 0 ? orderStatus : "Unknown";
                     statusBadge.Attributes["class"] = "status-badge " + StatusClass(orderStatus);
                     litSumOrder.Text = FormatOrderNumber(OrderId);
@@ -172,7 +161,6 @@ namespace MultiGroupSystemsTester.Admin
             return true;
         }
 
-        // ---------- SAVE ----------
 
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
@@ -203,7 +191,7 @@ namespace MultiGroupSystemsTester.Admin
                     }
                 }
 
-                BindOrder(); // refresh the badge, summary cards and timeline
+                BindOrder(); 
                 ShowMessage("Order status set to \"" + ddlOrderStatus.SelectedValue +
                             "\" and delivery status set to \"" + ddlDeliveryStatus.SelectedValue + "\".", false);
             }
@@ -218,7 +206,6 @@ namespace MultiGroupSystemsTester.Admin
             Response.Redirect("~/Admin/Dashboard.aspx");
         }
 
-        // ---------- TIMELINE (follows the DELIVERY status) ----------
 
         private static string BuildTimeline(string deliveryStatus, DateTime? orderDate, DateTime? deliveryDate)
         {
@@ -226,7 +213,6 @@ namespace MultiGroupSystemsTester.Admin
             string placedDate = orderDate.HasValue
                 ? orderDate.Value.ToString("dd MMM yyyy", CultureInfo.InvariantCulture) : "Placed";
 
-            // Delayed / Failed stop the normal flow, so show them as their own step
             bool delayed = s.Contains("delay");
             bool failed = s == "failed";
             if (delayed || failed)
@@ -237,14 +223,13 @@ namespace MultiGroupSystemsTester.Admin
                                 failed ? "✕" : "❚❚", deliveryStatus.Trim(), "Current Status");
             }
 
-            // 0 = only placed, 1 = Processing, 2 = In Transit, 3 = Delivered
             int current;
             switch (s)
             {
                 case "processing": current = 1; break;
                 case "in transit": current = 2; break;
                 case "delivered": current = 3; break;
-                default: current = 0; break; // Not Dispatched, Pending or unknown
+                default: current = 0; break; 
             }
 
             var sb = new StringBuilder();
@@ -283,12 +268,11 @@ namespace MultiGroupSystemsTester.Admin
             return "<div class=\"progress-line" + (completed ? " completed-line" : "") + "\"></div>";
         }
 
-        // ---------- HELPERS ----------
 
         private void ShowMessage(string text, bool isError)
         {
             msgBox.Visible = true;
-            msgBox.InnerText = text; // InnerText HTML-encodes the message
+            msgBox.InnerText = text; 
             msgBox.Attributes["class"] = "lg-message " + (isError ? "lg-error" : "lg-success");
         }
 
@@ -303,7 +287,6 @@ namespace MultiGroupSystemsTester.Admin
             return "ORD-" + id;
         }
 
-        // Picks a colour class for the order status badge
         private static string StatusClass(string status)
         {
             switch ((status ?? "").Trim().ToLowerInvariant())
@@ -333,7 +316,6 @@ namespace MultiGroupSystemsTester.Admin
             return v == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(v);
         }
 
-        // Select the matching item; if the value is not in the list, add it so it is not lost
         private static void SelectOrAdd(DropDownList ddl, string value)
         {
             ddl.ClearSelection();

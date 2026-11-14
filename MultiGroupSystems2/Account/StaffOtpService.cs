@@ -32,7 +32,7 @@ namespace MultiGroupSystemsTester.Account
             {
                 conn.Open();
 
-                // Limit on codes
+                
                 using (var cmd = new SqlCommand(
                     "SELECT COUNT(*) FROM StaffOtp WHERE StaffID = @StaffID AND CreatedAt > DATEADD(HOUR, -1, GETDATE())", conn))
                 {
@@ -41,7 +41,7 @@ namespace MultiGroupSystemsTester.Account
                         return StaffOtpSendResult.TooManyRequests;
                 }
 
-                // Cooldown between resends
+                
                 if (isResend)
                 {
                     using (var cmd = new SqlCommand(
@@ -92,7 +92,7 @@ namespace MultiGroupSystemsTester.Account
 
                 if (!sent)
                 {
-                    // Prevents unused verfication codes from working
+                    
                     using (var cmd = new SqlCommand("UPDATE StaffOtp SET Used = 1 WHERE StaffOtpID = @Id", conn))
                     {
                         cmd.Parameters.Add("@Id", SqlDbType.Int).Value = otpId;
@@ -154,7 +154,7 @@ namespace MultiGroupSystemsTester.Account
                     return StaffOtpVerifyResult.Success;
                 }
 
-                // Wrong code
+                
                 using (var cmd = new SqlCommand(
                     @"UPDATE StaffOtp
                       SET Attempts = Attempts + 1,

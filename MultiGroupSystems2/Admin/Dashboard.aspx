@@ -15,10 +15,10 @@
 
     <div class="dashboard-content">
 
-        <!-- STATISTICS -->
+        
         <section class="statistics-grid">
 
-            <!-- PRODUCTS -->
+            
             <div class="stat-card">
                 <div class="stat-icon products-icon">▣</div>
                 <div class="stat-information">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <!-- ORDERS -->
+            
             <div class="stat-card">
                 <div class="stat-icon orders-icon">□</div>
                 <div class="stat-information">
@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            <!-- STAFF -->
+          
             <div class="stat-card">
                 <div class="stat-icon staff-icon">♙</div>
                 <div class="stat-information">
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <!-- SALES -->
+           
             <div class="stat-card">
                 <div class="stat-icon sales-icon">R</div>
                 <div class="stat-information">
@@ -56,10 +56,10 @@
 
         </section>
 
-        <!-- MAIN DASHBOARD GRID -->
+        
         <section class="dashboard-grid">
 
-            <!-- SALES OVERVIEW -->
+            
             <div class="dashboard-card sales-card">
                 <div class="card-heading">
                     <div>
@@ -75,7 +75,7 @@
                     </asp:DropDownList>
                 </div>
 
-                <!-- DYNAMIC CHART -->
+               
                 <div class="chart-area">
                     <div class="chart-y-axis">
                         <span><asp:Label ID="lblY1" runat="server" /></span>
@@ -108,10 +108,10 @@
 
         </section>
 
-        <!-- LOWER DASHBOARD GRID -->
+        
         <section class="lower-grid">
 
-            <!-- RECENT ORDERS -->
+           
             <div class="dashboard-card orders-card">
                 <div class="card-heading">
                     <div>
@@ -153,7 +153,7 @@
                 </div>
             </div>
 
-            <!-- QUICK ACTIONS -->
+        
             <div class="dashboard-card">
                 <div class="card-heading">
                     <div>

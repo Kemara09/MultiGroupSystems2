@@ -3,12 +3,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
-        /* ================================
-           MULTIGROUP CHECKOUT
-           ================================ */
+       
 
         .checkout-page {
             background: #f3f4f6;
+            color: #172b3a;
             padding: 30px 0 50px;
             min-height: 650px;
         }
@@ -26,7 +25,6 @@
             margin-bottom: 25px;
         }
 
-        /* Main columns */
         .checkout-layout {
             display: grid;
             grid-template-columns: minmax(0, 1fr) 340px;
@@ -45,7 +43,6 @@
             top: 20px;
         }
 
-        /* Cards */
         .checkout-card {
             background: #ffffff;
             border: 1px solid #ddd;
@@ -70,7 +67,6 @@
             text-transform: none;
         }
 
-        /* Delivery method */
         .delivery-methods {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -120,7 +116,6 @@
             font-size: 11px;
         }
 
-        /* Address */
         .address-display {
             background: #fafafa;
             border: 1px solid #e4e4e4;
@@ -138,7 +133,6 @@
             color: #555;
         }
 
-        /* Date selection */
         .delivery-dates {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -187,7 +181,6 @@
             margin-top: 4px;
         }
 
-        /* Time */
         .delivery-time {
             margin-top: 15px;
             padding: 12px;
@@ -200,6 +193,7 @@
             display: block;
             font-size: 13px;
             margin-bottom: 4px;
+            color: #333;
         }
 
         .delivery-time span {
@@ -207,7 +201,6 @@
             color: #666;
         }
 
-        /* Forms */
         .form-label {
             font-size: 13px;
             font-weight: 500;
@@ -220,13 +213,17 @@
             border: 1px solid #ccc;
         }
 
+        .checkout-page .form-select {
+            background-color: #fff;
+            color: #333;
+        }
+
         .form-control:focus,
         .form-select:focus {
             border-color: #087f5b;
             box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
         }
 
-        /* Payment */
         .payment-box {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -245,7 +242,6 @@
             color: #777;
         }
 
-        /* Order summary */
         .summary-card {
             background: white;
             border: 1px solid #ddd;
@@ -298,7 +294,6 @@
             background: #066b4d;
         }
 
-        /* Items */
         .order-items-card {
             margin-top: 15px;
             background: white;
@@ -332,6 +327,7 @@
             font-size: 13px;
             font-weight: 600;
             flex: 1;
+            color: #333;
         }
 
         .order-item-qty {
@@ -343,16 +339,15 @@
         .order-item-price {
             font-size: 13px;
             font-weight: 600;
+            color: #333;
         }
 
-        /* Additional options */
         .additional-option {
             padding: 5px 0;
             font-size: 13px;
             color: #555;
         }
 
-        /* Success */
         .success-box {
             background: #e9f8f0;
             border: 1px solid #b8e5ca;
@@ -361,7 +356,6 @@
             margin-bottom: 25px;
         }
 
-        /* Responsive */
         @media (max-width: 900px) {
             .checkout-layout {
                 grid-template-columns: 1fr;
@@ -393,33 +387,31 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
-        
-/* GEOAPIFY ADDRESS AUTOCOMPLETE */
 
-#addressSuggestions {
-    position: relative;
-    z-index: 1000;
-    max-height: 240px;
-    overflow-y: auto;
-    border-radius: 4px;
-}
 
-#addressSuggestions .list-group-item {
-    cursor: pointer;
-    font-size: 13px;
-    padding: 12px;
-}
+        #addressSuggestions {
+            position: relative;
+            z-index: 1000;
+            max-height: 240px;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
 
-#addressSuggestions .list-group-item:hover {
-    background-color: #f0faf6;
-    color: #087f5b;
-}
+        #addressSuggestions .list-group-item {
+            cursor: pointer;
+            font-size: 13px;
+            padding: 12px;
+        }
 
-#addressSearch:focus {
-    border-color: #087f5b;
-    box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
-}
+        #addressSuggestions .list-group-item:hover {
+            background-color: #f0faf6;
+            color: #087f5b;
+        }
 
+        #addressSearch:focus {
+            border-color: #087f5b;
+            box-shadow: 0 0 0 .15rem rgba(8,127,91,.12);
+        }
     </style>
 
     <script>
@@ -433,7 +425,6 @@
 
             var previousAddress = "";
             var previousHiddenAddress = "";
-
 
 
             if (changeAddressBtn) {
@@ -457,9 +448,6 @@
             }
 
 
-            /* ==============================
-               CLOSE CHANGE ADDRESS
-            ============================== */
 
             if (closeAddressBtn) {
 
@@ -479,7 +467,6 @@
 
 
                     if (selectedAddress) selectedAddress.value = "";
-                    //if (hiddenAddress) hiddenAddress.value = "";
                     if (addressSearch) addressSearch.value = "";
 
                     if (addressSuggestions) {
@@ -499,9 +486,6 @@
             }
 
 
-            /* ==============================
-               DELIVERY DATE SELECTION
-            ============================== */
 
             var dateBoxes = document.querySelectorAll(".date-option");
             var dateField = document.getElementById("<%= hfDeliveryDate.ClientID %>");
@@ -516,7 +500,6 @@
                 box.addEventListener("click", function () { selectDate(box); });
             });
 
-            // Restore the choice after a postback (the payment dropdown reloads the page)
             var savedDate = null;
             dateBoxes.forEach(function (b) {
                 if (dateField.value && b.getAttribute("data-date") === dateField.value) savedDate = b;
@@ -524,9 +507,6 @@
             selectDate(savedDate || dateBoxes[0]);
 
 
-            /* ==============================
-               DELIVERY INSTRUCTIONS TOGGLE
-            ============================== */
 
             var chk = document.getElementById("<%= chkDeliveryInstructions.ClientID %>");
             var instr = document.getElementById("<%= txtDeliveryInstructions.ClientID %>");
@@ -538,17 +518,14 @@
 
             chk.addEventListener("change", toggleInstructions);
 
-            // Restore after postback without stealing focus
             instr.style.display = chk.checked ? "block" : "none";
 
 
-            /* ==============================
-               DELIVERY / COLLECTION
-            ============================== */
 
             var methodBoxes = document.querySelectorAll(".delivery-option");
             var methodField = document.getElementById("<%= hfDeliveryMethod.ClientID %>");
             var addressCard = document.getElementById("address-card");
+            var collectionCard = document.getElementById("collection-card");
 
             function selectMethod(box) {
                 methodBoxes.forEach(function (b) { b.classList.remove("selected"); });
@@ -559,164 +536,151 @@
 
                 var isDelivery = (method === "Delivery");
                 addressCard.style.display = isDelivery ? "block" : "none";
+                collectionCard.style.display = isDelivery ? "none" : "block";
 
                 if (!isDelivery) {
                     customerDetails.style.display = "none";
                 }
             }
 
-            methodBoxes.forEach(function(box) {
-                box.addEventListener("click", function() { selectMethod(box); });
+            methodBoxes.forEach(function (box) {
+                box.addEventListener("click", function () { selectMethod(box); });
             });
 
-            // Restore the choice after a postback (the payment dropdown reloads the page)
             var savedMethod = null;
-            methodBoxes.forEach(function(b) {
+            methodBoxes.forEach(function (b) {
                 if (b.getAttribute("data-method") === methodField.value) savedMethod = b;
             });
             selectMethod(savedMethod || methodBoxes[0]);
 
         });
     </script>
-    
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
 
-        const search = document.getElementById("addressSearch");
-        const suggestions = document.getElementById("addressSuggestions");
-        const selected = document.getElementById("<%= txtSelectedAddress.ClientID %>");
-        const hidden = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-        const apiKey = "eb16ae629b324ef4a7189cd6a2b1e868";
+            const search = document.getElementById("addressSearch");
+            const suggestions = document.getElementById("addressSuggestions");
+            const selected = document.getElementById("<%= txtSelectedAddress.ClientID %>");
+            const hidden = document.getElementById("<%= hdnSelectedAddress.ClientID %>");
 
-        if (!search || !suggestions || !selected || !hidden) return;
+            const apiKey = "eb16ae629b324ef4a7189cd6a2b1e868";
 
-        let debounceTimer;
-        let controller;
+            if (!search || !suggestions || !selected || !hidden) return;
 
-        function clearSuggestions() {
-            suggestions.replaceChildren();
-            suggestions.style.display = "none";
-        }
+            let debounceTimer;
+            let controller;
 
-        search.addEventListener("input", function () {
+            function clearSuggestions() {
+                suggestions.replaceChildren();
+                suggestions.style.display = "none";
+            }
 
-            clearTimeout(debounceTimer);
+            search.addEventListener("input", function () {
 
-            if (controller) controller.abort();
+                clearTimeout(debounceTimer);
 
-            const query = search.value.trim();
+                if (controller) controller.abort();
 
-            // Clear a previous selection when the customer types again
-            selected.value = "";
-            hidden.value = "";
-            clearSuggestions();
+                const query = search.value.trim();
 
-            if (query.length < 3) return;
+                selected.value = "";
+                hidden.value = "";
+                clearSuggestions();
 
-            debounceTimer = setTimeout(async function () {
+                if (query.length < 3) return;
 
-                controller = new AbortController();
+                debounceTimer = setTimeout(async function () {
 
-                try {
-                    const url =
-                        "https://api.geoapify.com/v1/geocode/autocomplete" +
-                        "?text=" + encodeURIComponent(query) +
-                        "&filter=countrycode:za" +
-                        "&format=json" +
-                        "&limit=5" +
-                        "&apiKey=" + encodeURIComponent(apiKey);
+                    controller = new AbortController();
 
-                    const response = await fetch(url, {
-                        signal: controller.signal
-                    });
+                    try {
+                        const url =
+                            "https://api.geoapify.com/v1/geocode/autocomplete" +
+                            "?text=" + encodeURIComponent(query) +
+                            "&filter=countrycode:za" +
+                            "&format=json" +
+                            "&limit=5" +
+                            "&apiKey=" + encodeURIComponent(apiKey);
 
-                    if (!response.ok) {
-                        throw new Error("Geoapify error: " + response.status);
-                    }
-
-                    const data = await response.json();
-
-                    if (search.value.trim() !== query) return;
-
-                    clearSuggestions();
-
-                    (data.results || []).forEach(function (result) {
-
-                        if (!result.formatted ||
-                            result.country_code !== "za") return;
-
-                        const item = document.createElement("button");
-
-                        item.type = "button";
-                        item.className =
-                            "list-group-item list-group-item-action";
-
-                        item.textContent = result.formatted;
-
-                        item.addEventListener("click", function () {
-
-                            search.value = result.formatted;
-                            selected.value = result.formatted;
-                            hidden.value = result.formatted;
-                            const deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
-
-                            if (deliveryCardAddress) {
-                                deliveryCardAddress.textContent = result.formatted;
-                            }
-
-                            clearSuggestions();
+                        const response = await fetch(url, {
+                            signal: controller.signal
                         });
 
-                        suggestions.appendChild(item);
-                    });
+                        if (!response.ok) {
+                            throw new Error("Geoapify error: " + response.status);
+                        }
 
-                    if (suggestions.children.length > 0) {
-                        suggestions.style.display = "block";
+                        const data = await response.json();
+
+                        if (search.value.trim() !== query) return;
+
+                        clearSuggestions();
+
+                        (data.results || []).forEach(function (result) {
+
+                            if (!result.formatted ||
+                                result.country_code !== "za") return;
+
+                            const item = document.createElement("button");
+
+                            item.type = "button";
+                            item.className =
+                                "list-group-item list-group-item-action";
+
+                            item.textContent = result.formatted;
+
+                            item.addEventListener("click", function () {
+
+                                search.value = result.formatted;
+                                selected.value = result.formatted;
+                                hidden.value = result.formatted;
+                                const deliveryCardAddress = document.getElementById("<%= lblAddress.ClientID %>");
+
+                                if (deliveryCardAddress) {
+                                    deliveryCardAddress.textContent = result.formatted;
+                                }
+
+                                clearSuggestions();
+                            });
+
+                            suggestions.appendChild(item);
+                        });
+
+                        if (suggestions.children.length > 0) {
+                            suggestions.style.display = "block";
+                        }
+
+                    } catch (error) {
+                        if (error.name !== "AbortError") {
+                            console.error("Geoapify:", error);
+                        }
                     }
 
-                } catch (error) {
-                    if (error.name !== "AbortError") {
-                        console.error("Geoapify:", error);
-                    }
-                }
+                }, 400);
+            });
 
-            }, 400);
         });
+    </script>
 
-    });
-</script>
-
-     <div class="checkout-page">
+    <div class="checkout-page">
 
         <div class="checkout-container">
 
             <h1 class="checkout-title">Checkout</h1>
 
-            <!-- SUCCESS MESSAGE -->
             <asp:Panel ID="pnlSuccess" runat="server" CssClass="success-box" Visible="false">
             </asp:Panel>
 
-            <!-- ERROR MESSAGE -->
-            <asp:Label ID="lblError"
-                runat="server"
-                CssClass="alert alert-danger d-block"
-                Visible="false">
-            </asp:Label>
 
 
             <asp:Panel ID="pnlForm" runat="server">
 
                 <div class="checkout-layout">
 
-                    <!-- ==========================================
-                         LEFT SIDE
-                         ========================================== -->
-
                     <div class="checkout-left">
 
 
-                        <!-- DELIVERY METHOD -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -760,7 +724,6 @@
                         </div>
 
 
-                        <!-- DELIVERY ADDRESS -->
                         <div id="address-card" class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -794,10 +757,58 @@
                             </div>
 
                         </div>
-                        <!-- END DELIVERY ADDRESS -->
 
 
-                        <!-- CUSTOMER & DELIVERY DETAILS (opens when CHANGE is clicked) -->
+                        <div id="collection-card" class="checkout-card" style="display:none;">
+
+                            <div class="checkout-card-title">
+                                Collection Point
+                            </div>
+
+                            <label class="form-label" for="<%= ddlCollectionProvince.ClientID %>">
+                                Choose a province
+                            </label>
+
+                            <asp:DropDownList
+                                ID="ddlCollectionProvince"
+                                runat="server"
+                                CssClass="form-select"
+                                AutoPostBack="true"
+                                OnSelectedIndexChanged="ddlCollectionProvince_SelectedIndexChanged">
+
+                                <asp:ListItem Text="-- Select province --" Value="" />
+                                <asp:ListItem Text="KwaZulu-Natal" Value="KwaZulu-Natal" />
+                                <asp:ListItem Text="Gauteng" Value="Gauteng" />
+                                <asp:ListItem Text="Western Cape" Value="Western Cape" />
+                                <asp:ListItem Text="Eastern Cape" Value="Eastern Cape" />
+                                <asp:ListItem Text="Free State" Value="Free State" />
+                                <asp:ListItem Text="Limpopo" Value="Limpopo" />
+                                <asp:ListItem Text="Mpumalanga" Value="Mpumalanga" />
+                                <asp:ListItem Text="North West" Value="North West" />
+                                <asp:ListItem Text="Northern Cape" Value="Northern Cape" />
+
+                            </asp:DropDownList>
+
+                            <div class="address-display mt-3">
+
+                                <div class="address-name">
+                                    Multigroup Inc. branch
+                                </div>
+
+                                <div class="address-text">
+                                    <asp:Label
+                                        ID="lblCollectionAddress"
+                                        runat="server"
+                                        Text="Select a province to see the collection address." />
+                                </div>
+
+                                <div style="margin-top:8px;font-size:12px;color:#777;">
+                                    Collection hours: Monday–Friday, 10:00–17:00
+                                </div>
+
+                            </div>
+
+                        </div>
                         <div id="customer-details"
                              class="checkout-card"
                              style="display:none;">
@@ -805,59 +816,53 @@
                             <div class="checkout-card-title">
                                 Customer &amp; Delivery Details
 
-        <span style="float:right;">
-            <a href="javascript:void(0);"
-               id="closeAddressBtn"
-               style="font-size:12px;
-                      color:#087f5b;
-                      text-decoration:none;
-                      cursor:pointer;">
-                CANCEL
-            </a>
-        </span>
-    </div>
-                            
-<!-- GEOAPIFY ADDRESS SEARCH -->
-<div class="mt-3 mb-3">
+                                <span style="float:right;">
+                                    <a href="javascript:void(0);"
+                                       id="closeAddressBtn"
+                                       style="font-size:12px;
+                                              color:#087f5b;
+                                              text-decoration:none;
+                                              cursor:pointer;">
+                                        CANCEL
+                                    </a>
+                                </span>
+                            </div>
 
-    <label class="form-label">
-        Search for a new delivery address
-    </label>
+                            <div class="mt-3 mb-3">
 
-    <input type="text"
-           id="addressSearch"
-           class="form-control"
-           placeholder="Start typing your address..."
-           autocomplete="off" />
+                                <label class="form-label">
+                                    Search for a new delivery address
+                                </label>
 
-    <div id="addressSuggestions"
-         class="list-group mt-1"
-         style="display:none;">
-    </div>
+                                <input type="text"
+                                       id="addressSearch"
+                                       class="form-control"
+                                       placeholder="Start typing your address..."
+                                       autocomplete="off" />
 
-    <label class="form-label mt-3">
-        Selected delivery address
-    </label>
+                                <div id="addressSuggestions"
+                                     class="list-group mt-1"
+                                     style="display:none;">
+                                </div>
 
-    <asp:TextBox
-        ID="txtSelectedAddress"
-        runat="server"
-        CssClass="form-control"
-        ReadOnly="true"
-        placeholder="Your selected address will appear here..." />
+                                <label class="form-label mt-3">
+                                    Selected delivery address
+                                </label>
 
-    <asp:HiddenField
-        ID="hdnSelectedAddress"
-        runat="server" />
+                                <asp:TextBox
+                                    ID="txtSelectedAddress"
+                                    runat="server"
+                                    CssClass="form-control"
+                                    ReadOnly="true"
+                                    placeholder="Your selected address will appear here..." />
 
-</div>
+                                <asp:HiddenField
+                                    ID="hdnSelectedAddress"
+                                    runat="server" />
+
+                            </div>
 
 
-                            <!--
-                                Hidden fields: not shown to the user, but the code-behind reads them.
-                                They are filled in Page_Load from the logged-in customer's record.
-                                txtStreetNumber / txtStreetName are split from txtStreetAddress.
-                            -->
                             <div style="display:none;">
 
                                 <asp:TextBox ID="txtFirstName" runat="server" />
@@ -873,7 +878,6 @@
                             </div>
 
 
-                            <!-- PHONE NUMBER -->
                             <div class="row g-3">
 
                                 <div class="col-md-6">
@@ -907,7 +911,6 @@
                             </div>
 
 
-                           
                             <div class="row g-3 mt-1" style="display:none;">
 
                                 <div class="col-md-12">
@@ -935,10 +938,8 @@
                             </div>
 
 
-                         
-                           <div class="row g-3 mt-1" style="display:none;">
+                            <div class="row g-3 mt-1" style="display:none;">
 
-                                <!-- SUBURB -->
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -953,7 +954,6 @@
                                 </div>
 
 
-                                <!-- CITY -->
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -968,7 +968,6 @@
                                 </div>
 
 
-                                <!-- PROVINCE -->
                                 <div class="col-md-4">
 
                                     <label class="form-label">
@@ -1006,7 +1005,6 @@
                             </div>
 
 
-                            
                             <div class="row g-3 mt-1" style="display:none;">
 
                                 <div class="col-md-4">
@@ -1042,10 +1040,8 @@
                             </div>
 
                         </div>
-                        <!-- END CUSTOMER & DELIVERY DETAILS -->
 
 
-                        <!-- DELIVERY DATE -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1059,49 +1055,29 @@
                                 <div class="date-option selected"
                                      data-date="<%= DateTime.Now.ToString("yyyy-MM-dd") %>">
                                     <span class="date-day">Today</span>
-                                    <span class="date-number">
-                                        <%= DateTime.Now.Day %>
-                                    </span>
-                                    <span class="date-label">
-                                        Next Day
-                                    </span>
+                                    <span class="date-number"><%= DateTime.Now.Day %></span>
+                                    <span class="date-label"><%= DateTime.Now.ToString("MMM") %></span>
                                 </div>
 
                                 <div class="date-option"
                                      data-date="<%= DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") %>">
                                     <span class="date-day">Tomorrow</span>
-                                    <span class="date-number">
-                                        <%= DateTime.Now.AddDays(1).Day %>
-                                    </span>
-                                    <span class="date-label">
-                                        Available
-                                    </span>
+                                    <span class="date-number"><%= DateTime.Now.AddDays(1).Day %></span>
+                                    <span class="date-label"><%= DateTime.Now.AddDays(1).ToString("MMM") %></span>
                                 </div>
 
                                 <div class="date-option"
                                      data-date="<%= DateTime.Now.AddDays(2).ToString("yyyy-MM-dd") %>">
-                                    <span class="date-day">
-                                        <%= DateTime.Now.AddDays(2).ToString("ddd") %>
-                                    </span>
-                                    <span class="date-number">
-                                        <%= DateTime.Now.AddDays(2).Day %>
-                                    </span>
-                                    <span class="date-label">
-                                        Available
-                                    </span>
+                                    <span class="date-day"><%= DateTime.Now.AddDays(2).ToString("ddd") %></span>
+                                    <span class="date-number"><%= DateTime.Now.AddDays(2).Day %></span>
+                                    <span class="date-label"><%= DateTime.Now.AddDays(2).ToString("MMM") %></span>
                                 </div>
 
                                 <div class="date-option"
                                      data-date="<%= DateTime.Now.AddDays(3).ToString("yyyy-MM-dd") %>">
-                                    <span class="date-day">
-                                        <%= DateTime.Now.AddDays(3).ToString("ddd") %>
-                                    </span>
-                                    <span class="date-number">
-                                        <%= DateTime.Now.AddDays(3).Day %>
-                                    </span>
-                                    <span class="date-label">
-                                        Available
-                                    </span>
+                                    <span class="date-day"><%= DateTime.Now.AddDays(3).ToString("ddd") %></span>
+                                    <span class="date-number"><%= DateTime.Now.AddDays(3).Day %></span>
+                                    <span class="date-label"><%= DateTime.Now.AddDays(3).ToString("MMM") %></span>
                                 </div>
 
                             </div>
@@ -1121,7 +1097,6 @@
                         </div>
 
 
-                        <!-- PAYMENT METHOD -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1166,7 +1141,6 @@
                             </div>
 
 
-                            <!-- CARD DETAILS -->
                             <asp:Panel
                                 ID="pnlCardDetails"
                                 runat="server"
@@ -1242,7 +1216,6 @@
                             </asp:Panel>
 
 
-                            <!-- EFT -->
                             <asp:Panel
                                 ID="pnlEFTDetails"
                                 runat="server"
@@ -1269,7 +1242,6 @@
                         </div>
 
 
-                        <!-- ADDITIONAL INFORMATION -->
                         <div class="checkout-card">
 
                             <div class="checkout-card-title">
@@ -1304,14 +1276,10 @@
                     </div>
 
 
-                    <!-- ==========================================
-                         RIGHT SIDE
-                         ========================================== -->
 
                     <div class="checkout-right">
 
 
-                        <!-- ORDER SUMMARY -->
                         <div class="summary-card">
 
                             <div class="summary-title">
@@ -1396,6 +1364,14 @@
                             </div>
 
 
+                            <asp:Label
+                                ID="lblError"
+                                runat="server"
+                                CssClass="alert alert-danger d-block mt-3 mb-0"
+                                style="font-size:13px;"
+                                Visible="false">
+                            </asp:Label>
+
                             <asp:Button
                                 ID="btnPlaceOrder"
                                 runat="server"
@@ -1406,7 +1382,6 @@
                         </div>
 
 
-                        <!-- ITEMS -->
                         <div class="order-items-card">
 
                             <div class="summary-title"

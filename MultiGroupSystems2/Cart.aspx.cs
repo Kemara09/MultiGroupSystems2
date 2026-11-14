@@ -40,7 +40,6 @@ namespace MultiGroupSystemsTester
             lblVat.Text = "R " + vat.ToString("N2");
             lblTotal.Text = "R " + (subtotal + vat).ToString("N2");
 
-            // Checkout  based on login state
             if (Session["CustomerID"] == null)
             {
                 lnkCheckout.NavigateUrl = "~/Account/CustomerLogin.aspx?ReturnUrl=" + Server.UrlEncode("~/Checkout.aspx");

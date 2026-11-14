@@ -265,7 +265,7 @@ namespace MultiGroupSystemsTester.Account
             {
                 conn.Open();
 
-                // Only activate customers whose password exsisits 
+             
                 
                 const string query = @"
                     UPDATE Customer

@@ -44,7 +44,7 @@ namespace MultiGroupSystemsTester.Services
 
         private static string BuildInvoiceHtml(List<InvoiceReportRow> rows)
         {
-            var header = rows[0]; // company/customer/totals info is repeated on every row
+            var header = rows[0]; 
 
             var itemsHtml = new StringBuilder();
             foreach (var row in rows)
