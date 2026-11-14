@@ -68,7 +68,6 @@ namespace MultiGroupSystemsTester.Account
 
                         object passwordObj = reader["Password"];
 
-                        // NULL, empty or whitespace = not activated
                         bool alreadyActivated =
                             passwordObj != DBNull.Value &&
                             !string.IsNullOrWhiteSpace(passwordObj.ToString());
@@ -266,8 +265,8 @@ namespace MultiGroupSystemsTester.Account
             {
                 conn.Open();
 
-                // Only activate customers whose password
-                // is NULL, empty, or contains only spaces.
+                // Only activate customers whose password exsisits 
+                
                 const string query = @"
                     UPDATE Customer
                     SET Password = @Password

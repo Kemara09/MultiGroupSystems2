@@ -26,9 +26,7 @@ namespace MultiGroupSystemsTester.Account
             }
         }
 
-        // ------------------------------------------------------------
-        // Step 1: find the staff account by username and SMS a code
-        // ------------------------------------------------------------
+       
         protected void btnFindAccount_Click(object sender, EventArgs e)
         {
             lblFindError.Text = "";
@@ -67,7 +65,7 @@ namespace MultiGroupSystemsTester.Account
                         bool alreadyActivated = passwordObj != DBNull.Value && !string.IsNullOrEmpty(passwordObj.ToString());
                         phone = reader["PhoneNumber"] == DBNull.Value ? null : reader["PhoneNumber"].ToString();
 
-                        // Two staff sharing one username would make activation ambiguous
+                       
                         if (reader.Read())
                         {
                             lblFindError.Text = "There is a problem with this account. Please contact your manager.";
@@ -76,7 +74,7 @@ namespace MultiGroupSystemsTester.Account
 
                         if (alreadyActivated)
                         {
-                            // Same wording as "not found" so this page can't be used to discover which usernames exist
+                           
                             lblFindError.Text = GenericNotFound;
                             return;
                         }
@@ -106,9 +104,7 @@ namespace MultiGroupSystemsTester.Account
             }
         }
 
-        // ------------------------------------------------------------
-        // Step 2: check the code
-        // ------------------------------------------------------------
+       
         protected void btnVerifyCode_Click(object sender, EventArgs e)
         {
             lblCodeError.Text = "";
@@ -194,9 +190,7 @@ namespace MultiGroupSystemsTester.Account
             }
         }
 
-        // ------------------------------------------------------------
-        // Step 3: set the password
-        // ------------------------------------------------------------
+        
         protected void btnSetPassword_Click(object sender, EventArgs e)
         {
             lblPasswordError.Text = "";
@@ -233,7 +227,7 @@ namespace MultiGroupSystemsTester.Account
             {
                 conn.Open();
 
-                // Only works while the password is still empty, so an activated account can't be overwritten
+                
                 const string query = @"UPDATE Staff
                                         SET Password = @Password
                                         WHERE StaffID = @StaffID

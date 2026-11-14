@@ -27,7 +27,7 @@ namespace MultiGroupSystemsTester
 
             try
             {
-                // Simple throttle: at most 30 checks a minute per IP address
+                // Simple throttle
                 string ip = context.Request.UserHostAddress ?? "unknown";
                 string key = "staffstatus:" + ip;
                 int count = (HttpRuntime.Cache[key] as int?) ?? 0;
@@ -51,8 +51,7 @@ namespace MultiGroupSystemsTester
 
                             using (var reader = cmd.ExecuteReader())
                             {
-                                // Only an existing account with an empty password "needs activation".
-                                // A missing username gets the same answer as an activated one (false).
+                                
                                 if (reader.Read())
                                 {
                                     object pw = reader["Password"];

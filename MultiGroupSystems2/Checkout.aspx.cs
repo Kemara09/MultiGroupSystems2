@@ -1,4 +1,5 @@
-﻿using MultiGroupSystemsTester.Models;
+﻿using MultiGroupSystemsTester.Services;
+using MultiGroupSystemsTester.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,7 +13,7 @@ namespace MultiGroupSystemsTester
 {
     public partial class Checkout : System.Web.UI.Page
     {
-        // University demo locations only; replace with verified real branches before deployment.
+        
         private static readonly Dictionary<string, string> CollectionBranches =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -150,7 +151,7 @@ namespace MultiGroupSystemsTester
             }
 
             decimal subtotal = cart.Sum(c => c.Subtotal);
-            decimal vat = subtotal * 0.15m;
+            decimal vat = VatHelper.VatOf(subtotal);
             decimal grandTotal = subtotal + vat;
 
             int itemCount = cart.Sum(c => c.Quantity);
@@ -362,13 +363,13 @@ namespace MultiGroupSystemsTester
 
                         var invoiceRows = new List<MultiGroupSystemsTester.Models.InvoiceReportRow>();
                         decimal subtotalSum = cart.Sum(c => c.Subtotal);
-                        decimal vatSum = subtotalSum * 0.15m;
+                        decimal vatSum = VatHelper.VatOf(subtotalSum);
                         decimal grandTotal = subtotalSum + vatSum;
                         int lineNum = 1;
 
                         foreach (CartItem item in cart)
                         {
-                            decimal lineVat = item.Subtotal * 0.15m;
+                            decimal lineVat = VatHelper.VatOf(item.Subtotal);
                             decimal lineTotal = item.Subtotal + lineVat;
 
                             invoiceRows.Add(new MultiGroupSystemsTester.Models.InvoiceReportRow

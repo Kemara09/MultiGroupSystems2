@@ -22,9 +22,7 @@ namespace MultiGroupSystemsTester.Account
         private static string ConnStr =>
             ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
 
-        // ------------------------------------------------------------
-        // Create a code and SMS it
-        // ------------------------------------------------------------
+      
         public static StaffOtpSendResult CreateAndSend(int staffId, string phone, bool isResend)
         {
             if (string.IsNullOrWhiteSpace(phone))
@@ -34,7 +32,7 @@ namespace MultiGroupSystemsTester.Account
             {
                 conn.Open();
 
-                // Limit: max codes per hour
+                // Limit on codes
                 using (var cmd = new SqlCommand(
                     "SELECT COUNT(*) FROM StaffOtp WHERE StaffID = @StaffID AND CreatedAt > DATEADD(HOUR, -1, GETDATE())", conn))
                 {
@@ -43,7 +41,7 @@ namespace MultiGroupSystemsTester.Account
                         return StaffOtpSendResult.TooManyRequests;
                 }
 
-                // Limit: cooldown between resends
+                // Cooldown between resends
                 if (isResend)
                 {
                     using (var cmd = new SqlCommand(
@@ -56,7 +54,7 @@ namespace MultiGroupSystemsTester.Account
                     }
                 }
 
-                // Any earlier unused code stops working
+               
                 using (var cmd = new SqlCommand(
                     "UPDATE StaffOtp SET Used = 1 WHERE StaffID = @StaffID AND Used = 0", conn))
                 {
@@ -94,7 +92,7 @@ namespace MultiGroupSystemsTester.Account
 
                 if (!sent)
                 {
-                    // A code the person never received should not stay valid
+                    // Prevents unused verfication codes from working
                     using (var cmd = new SqlCommand("UPDATE StaffOtp SET Used = 1 WHERE StaffOtpID = @Id", conn))
                     {
                         cmd.Parameters.Add("@Id", SqlDbType.Int).Value = otpId;
@@ -107,9 +105,7 @@ namespace MultiGroupSystemsTester.Account
             }
         }
 
-        // ------------------------------------------------------------
-        // Check a code the person typed in
-        // ------------------------------------------------------------
+       
         public static StaffOtpVerifyResult Verify(int staffId, string code)
         {
             using (var conn = new SqlConnection(ConnStr))
@@ -158,7 +154,7 @@ namespace MultiGroupSystemsTester.Account
                     return StaffOtpVerifyResult.Success;
                 }
 
-                // Wrong code: count it, and kill the code after too many tries
+                // Wrong code
                 using (var cmd = new SqlCommand(
                     @"UPDATE StaffOtp
                       SET Attempts = Attempts + 1,
@@ -176,9 +172,7 @@ namespace MultiGroupSystemsTester.Account
             }
         }
 
-        // ------------------------------------------------------------
-        // Helpers
-        // ------------------------------------------------------------
+       
         public static string GetPhoneNumber(int staffId)
         {
             using (var conn = new SqlConnection(ConnStr))
@@ -203,7 +197,7 @@ namespace MultiGroupSystemsTester.Account
             string trimmed = phone.Trim();
             bool hasPlus = trimmed.StartsWith("+");
 
-            // Keep digits only, so "(079) 345-2633" and "+27 31 345 6789" both work
+            
             string digits = new string(trimmed.Where(char.IsDigit).ToArray());
 
             if (hasPlus) return "+" + digits;

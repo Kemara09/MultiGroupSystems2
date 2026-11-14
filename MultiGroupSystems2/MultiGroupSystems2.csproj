@@ -612,6 +612,8 @@
     <Compile Include="Services\PasswordResetService.cs" />
     <Compile Include="Services\RegistrationOtpService.cs" />
     <Compile Include="Services\SmsService.cs" />
+    <Compile Include="Services\StaffOtpService.cs" />
+    <Compile Include="Services\VatHelper.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

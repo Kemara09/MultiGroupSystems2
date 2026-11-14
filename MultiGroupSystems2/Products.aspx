@@ -194,6 +194,14 @@
         margin-bottom: 10px;
     }
 
+    .product-price .vat-note {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #6b7280;
+        margin-top: 2px;
+    }
+
     .product-stock {
         font-size: 12px;
         font-weight: 600;
@@ -426,9 +434,8 @@
                                     </div>
 
                                     <div class="product-price">
-                                        <%# String.Format(
-                                            System.Globalization.CultureInfo.GetCultureInfo("en-ZA"),
-                                            "R {0:N2}", Eval("Price")) %>
+                                        <%# PriceInclVat(Eval("Price")) %>
+                                        <span class="vat-note"><%# PriceExclVat(Eval("Price")) %></span>
                                     </div>
 
                                     <div class='product-stock <%# Convert.ToInt32(Eval("QuantityInStock")) > 0 ? "available" : "unavailable" %>'>

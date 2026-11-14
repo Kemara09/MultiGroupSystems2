@@ -64,7 +64,7 @@ namespace MultiGroupSystemsTester
                 }
                 catch (Exception)
                 {
-                    // malformed/tampered cookie — treat as not logged in
+                    // malformed/tampered cookie
                 }
             }
 

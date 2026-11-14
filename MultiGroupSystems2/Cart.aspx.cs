@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using MultiGroupSystemsTester.Models;
+using MultiGroupSystemsTester.Services;
 
 namespace MultiGroupSystemsTester
 {
@@ -23,7 +24,9 @@ namespace MultiGroupSystemsTester
                 lblEmpty.Visible = true;
                 rptCart.DataSource = null;
                 rptCart.DataBind();
-                lblTotal.Text = (0m).ToString("C");
+                lblSubtotal.Text = "R 0.00";
+                lblVat.Text = "R 0.00";
+                lblTotal.Text = "R 0.00";
                 return;
             }
 
@@ -31,9 +34,13 @@ namespace MultiGroupSystemsTester
             cartRow.Visible = true;
             rptCart.DataSource = cart;
             rptCart.DataBind();
-            lblTotal.Text = "R " + cart.Sum(c => c.Subtotal).ToString("N2");
+            decimal subtotal = cart.Sum(c => c.Subtotal);
+            decimal vat = VatHelper.VatOf(subtotal);
+            lblSubtotal.Text = "R " + subtotal.ToString("N2");
+            lblVat.Text = "R " + vat.ToString("N2");
+            lblTotal.Text = "R " + (subtotal + vat).ToString("N2");
 
-            // Route checkout link based on login state
+            // Checkout  based on login state
             if (Session["CustomerID"] == null)
             {
                 lnkCheckout.NavigateUrl = "~/Account/CustomerLogin.aspx?ReturnUrl=" + Server.UrlEncode("~/Checkout.aspx");

@@ -34,7 +34,7 @@ namespace MultiGroupSystemsTester.Admin
                         cmd.Parameters.AddWithValue("@EmailAddress", txtEmailAddress.Text.Trim());
                         cmd.Parameters.AddWithValue("@PhoneNumber", txtPhoneNumber.Text.Trim());
                        
-                        // add supplier type field to db later stage
+                        // add supplier type field to db
                         
                         cmd.Parameters.AddWithValue("@StreetNo", string.IsNullOrEmpty(txtStreetNo.Text) ? (object)DBNull.Value : txtStreetNo.Text.Trim());
                         cmd.Parameters.AddWithValue("@StreetName", txtStreetName.Text.Trim());

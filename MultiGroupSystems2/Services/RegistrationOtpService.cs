@@ -8,9 +8,7 @@ using MultiGroupSystemsTester.Services;
 namespace MultiGroupSystemsTester
 {
     /// <summary>
-    /// SMS codes that prove a new customer owns the phone number they typed in, before the account is created.
-    /// Same idea as OtpService, but keyed on a per-visit token instead of a CustomerID because no customer exists yet.
-    /// Reuses the OtpSendResult / OtpVerifyResult enums defined in OtpService.cs.
+    /// SMS codes that prove a new customer owns the phone number they typed in, before account created.
     /// </summary>
     public static class RegistrationOtpService
     {

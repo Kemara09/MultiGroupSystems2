@@ -38,9 +38,7 @@ namespace MultiGroupSystemsTester
             "find","show","search","there","some","about","with","buy","available","availability"
         };
 
-        // ===================================================================
-        // Main entry point
-        // ===================================================================
+      
         public static ChatReply GetReply(string message, int? customerId, List<CartItem> cart)
         {
             string text = (message ?? "").Trim();
@@ -54,7 +52,7 @@ namespace MultiGroupSystemsTester
             string lower = text.ToLowerInvariant();
             bool loggedIn = customerId.HasValue;
 
-            // 1. Greetings (short messages only, so "hi, where is my order" isn't swallowed)
+            
             if (WordCount(lower) <= 3 && Has(lower, "hi", "hello", "hey", "howzit", "good morning", "good afternoon", "good evening"))
                 return Greeting(customerId);
 
@@ -77,7 +75,7 @@ namespace MultiGroupSystemsTester
             if (Has(lower, "my account", "my details", "my profile", "my email", "log in", "login", "sign in", "register", "sign up"))
                 return AccountReply(customerId);
 
-            // 3. General FAQs (edit these to match your real policies)
+            // 3. General FAQs 
             if (Has(lower, "delivery", "deliver", "shipping", "collect", "collection"))
             {
                 return Say(
@@ -113,13 +111,11 @@ namespace MultiGroupSystemsTester
             if (Has(lower, "help", "what can you do", "options", "menu"))
                 return HelpReply(loggedIn);
 
-            // 4. Product questions, and the fallback for anything unrecognised
+            // 4. Product questions
             return ProductReply(text);
         }
 
-        // ===================================================================
-        // Intent handlers
-        // ===================================================================
+    
         private static ChatReply Greeting(int? customerId)
         {
             string name = customerId.HasValue ? GetFirstName(customerId.Value) : null;
@@ -169,8 +165,8 @@ namespace MultiGroupSystemsTester
                                  "Please log in and ask me again.");
             }
 
-            // If they mention a specific order number, look up only that one,
-            // and ONLY if it belongs to this customer.
+            // Look up only specific order number
+           
             int? orderId = null;
             Match m = Regex.Match(lower, @"\b(\d{1,9})\b");
             if (m.Success && lower.Contains("order"))
@@ -295,7 +291,7 @@ namespace MultiGroupSystemsTester
             if (words.Count == 0)
                 return HelpReply(false);
 
-            // Every keyword must match the product name or category
+     
             var conditions = new List<string>();
             for (int i = 0; i < words.Count; i++)
                 conditions.Add($"(ProductName LIKE @w{i} OR Category LIKE @w{i})");
@@ -339,9 +335,7 @@ namespace MultiGroupSystemsTester
                 new ChatLink { Text = "See in catalogue", Url = Url("~/Products.aspx") });
         }
 
-        // ===================================================================
-        // Helpers
-        // ===================================================================
+        
         private static string GetFirstName(int customerId)
         {
             try
@@ -358,7 +352,7 @@ namespace MultiGroupSystemsTester
             }
             catch
             {
-                // If the lookup fails, the bot still works, just without the name.
+                
                 return null;
             }
         }

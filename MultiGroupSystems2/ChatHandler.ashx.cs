@@ -30,7 +30,7 @@ namespace MultiGroupSystemsTester
             {
                 string message = context.Request.Form["message"];
 
-                // The customer ID ALWAYS comes from the server-side session,
+                
                 // never from anything the browser sends.
                 int? customerId = null;
                 if (context.Session != null && context.Session["CustomerID"] != null)

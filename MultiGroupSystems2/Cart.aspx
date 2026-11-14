@@ -16,7 +16,7 @@
                             </div>
                             <div class="col">
                                 <div class="fw-semibold"><%# Eval("ProductName") %></div>
-                                <div class="text-muted small">Unit Price: R <%# Eval("UnitPrice", "{0:N2}") %></div>
+                                <div class="text-muted small">Unit Price: R <%# Eval("UnitPrice", "{0:N2}") %> excl. VAT</div>
                             </div>
                             <div class="col-auto">
                                 <div class="d-flex align-items-center gap-2">
@@ -45,8 +45,16 @@
         <div class="col-lg-4">
             <div class="cart-summary-card p-4">
                 <h5 class="mb-3">Cart Summary</h5>
-                <div class="d-flex justify-content-between mb-3">
-                    <span>Total</span>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal (excl. VAT)</span>
+                    <span><asp:Label ID="lblSubtotal" runat="server" /></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>VAT (15%)</span>
+                    <span><asp:Label ID="lblVat" runat="server" /></span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 pt-2 border-top">
+                    <span>Total (incl. VAT)</span>
                     <strong><asp:Label ID="lblTotal" runat="server" /></strong>
                 </div>
                 <asp:HyperLink ID="lnkCheckout" runat="server" NavigateUrl="~/Checkout.aspx" CssClass="btn btn-teal w-100">Proceed to Checkout</asp:HyperLink>

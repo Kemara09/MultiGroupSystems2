@@ -157,7 +157,7 @@ namespace MultiGroupSystemsTester
         {
             int customerId = Convert.ToInt32(Session["CustomerID"]);
 
-            // Fetch the latest product details from SQL Server
+            
             string query = @"
                 SELECT i.ProductID, i.ProductName,
                        i.UnitPrice, i.QuantityInStock

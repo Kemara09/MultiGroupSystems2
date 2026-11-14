@@ -1,5 +1,6 @@
 ﻿
 using MultiGroupSystemsTester.Models;
+using MultiGroupSystemsTester.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -428,6 +429,24 @@ namespace MultiGroupSystemsTester
                 lblMessage.Visible = true;
                 lblCartMsg.Visible = false;
             }
+        }
+
+        
+       
+        private static readonly System.Globalization.CultureInfo ZA =
+            System.Globalization.CultureInfo.GetCultureInfo("en-ZA");
+
+        protected string PriceInclVat(object price)
+        {
+            if (price == null || price == DBNull.Value) return "N/A";
+            decimal excl = Convert.ToDecimal(price);
+            return string.Format(ZA, "R {0:N2} incl. VAT", VatHelper.Round(VatHelper.InclusiveOf(excl)));
+        }
+
+        protected string PriceExclVat(object price)
+        {
+            if (price == null || price == DBNull.Value) return "";
+            return string.Format(ZA, "R {0:N2} excl. VAT", Convert.ToDecimal(price));
         }
 
         protected string SafeText(object value)
