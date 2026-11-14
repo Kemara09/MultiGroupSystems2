@@ -10,7 +10,16 @@ namespace MultiGroupSystemsTester.Admin
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
-            EnsureStaffLoggedIn();
+
+            string role = Session["AdminRole"] as string;
+            string page = System.IO.Path.GetFileNameWithoutExtension(Request.Path);
+
+            if (!AdminAccess.CanAccess(role, page))
+            {
+                // 'true' stops the request right here. With 'false', a Manager could still
+                // POST to StaffDataCapture and trigger the save button before the redirect lands.
+                Response.Redirect("~/Admin/AccessDenied.aspx", true);
+            }
         }
 
         private void EnsureStaffLoggedIn()

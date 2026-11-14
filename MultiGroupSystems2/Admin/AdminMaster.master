@@ -4,7 +4,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Admin - MultiGroup Inc.</title>
+
+    <!-- Apply the saved theme before the page paints, so there is no light flash -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('adminTheme') || 'light';
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { }
+        })();
+    </script>
+
     <link href="AdminShell.css" rel="stylesheet" type="text/css" />
+    <link href="AdminDarkMode.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
@@ -33,6 +45,9 @@
                 <a href="~/Admin/OrderLogistics.aspx" runat="server" id="navOrders" class="nav-item">
                     <span class="nav-icon">🚚</span><span>Order Logistics</span>
                 </a>
+                <a href="~/Admin/ViewOrders.aspx" runat="server" id="navViewOrders" class="nav-item">
+                    <span class="nav-icon">□</span><span>View Orders</span>
+                </a>
                 <a href="~/Admin/AddSupplier.aspx" runat="server" id="navSuppliers" class="nav-item">
                     <span class="nav-icon">▤</span><span>Suppliers</span>
                 </a>
@@ -51,29 +66,26 @@
             </nav>
 
             <div class="sidebar-bottom">
-               
-    <div class="user-small">
 
+                <div class="user-small">
 
-    <div class="user-avatar">
-        <asp:Label ID="lblSidebarInitials" runat="server"></asp:Label>
-    </div>
+                    <div class="user-avatar">
+                        <asp:Label ID="lblSidebarInitials" runat="server"></asp:Label>
+                    </div>
 
-    <div>
-        <strong>
-            <asp:Label ID="lblSidebarFullName" runat="server"></asp:Label>
-        </strong>
+                    <div>
+                        <strong>
+                            <asp:Label ID="lblSidebarFullName" runat="server"></asp:Label>
+                        </strong>
 
-        <small>
-            <asp:Label ID="lblSidebarRole" runat="server"></asp:Label>
-        </small>
-    </div>
+                        <small>
+                            <asp:Label ID="lblSidebarRole" runat="server"></asp:Label>
+                        </small>
+                    </div>
 
-</div>
+                </div>
 
-
-</div>
-
+            </div>
 
         </aside>
 
@@ -87,21 +99,24 @@
                 </div>
 
                 <div class="header-right">
+                    <!-- type="button" so it never submits the ASP.NET form -->
+                    <button type="button" id="themeToggle" class="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+
                     <div class="notification">
                         🔔
                         <span class="notification-dot"></span>
                     </div>
-                        <div class="profile">
-    <div class="profile-avatar">
-        <asp:Label ID="lblProfileInitials" runat="server" />
-    </div>
-    <div class="profile-info">
-        <strong><asp:Label ID="lblAdminFullName" runat="server" /></strong>
-        <span><asp:Label ID="lblAdminRole" runat="server" /></span>
-    </div>
-    <span class="profile-arrow"></span>
-</div>
-
+                    <div class="profile">
+                        <div class="profile-avatar">
+                            <asp:Label ID="lblProfileInitials" runat="server" />
+                        </div>
+                        <div class="profile-info">
+                            <strong><asp:Label ID="lblAdminFullName" runat="server" /></strong>
+                            <span><asp:Label ID="lblAdminRole" runat="server" /></span>
+                        </div>
+                        <span class="profile-arrow"></span>
+                    </div>
+                </div>
 
             </header>
 
@@ -117,5 +132,99 @@
         </main>
 
     </form>
+    <script>
+        (function () {
+            var root = document.documentElement;
+            var btn = document.getElementById('themeToggle');
+            var chartLight = null;
+
+            function isDark() { return root.getAttribute('data-theme') === 'dark'; }
+
+            function parse(c) {
+                var m = c && c.match(/rgba?\(([^)]+)\)/);
+                if (!m) return null;
+                var p = m[1].split(',').map(parseFloat);
+                return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+            }
+
+            // Background actually showing behind an element (first non-transparent ancestor)
+            function effectiveBg(el) {
+                while (el) {
+                    var b = parse(getComputedStyle(el).backgroundColor);
+                    if (b && b.a > 0.5) return b;
+                    el = el.parentElement;
+                }
+                return { r: 11, g: 18, b: 32 };
+            }
+
+            function luminance(c) { return 0.299 * c.r + 0.587 * c.g + 0.114 * c.b; }
+
+            function clearOverrides() {
+                document.querySelectorAll('[data-dk]').forEach(function (el) {
+                    el.style.removeProperty('background-color');
+                    el.style.removeProperty('color');
+                    el.removeAttribute('data-dk');
+                });
+            }
+
+            // Safety net: any white/near-white panel the stylesheet didn't cover gets a dark
+            // surface, and dark text sitting on a dark surface is lightened.
+            // Pastel badges (status pills etc.) are left alone.
+            function darkenSurfaces() {
+                var skip = { SCRIPT: 1, STYLE: 1, CANVAS: 1, IMG: 1, svg: 1, path: 1 };
+                document.querySelectorAll('.main-content *').forEach(function (el) {
+                    if (skip[el.tagName]) return;
+                    var cs = getComputedStyle(el);
+
+                    var bg = parse(cs.backgroundColor);
+                    if (bg && bg.a > 0.9 && bg.r > 235 && bg.g > 235 && bg.b > 235) {
+                        var pure = bg.r === 255 && bg.g === 255 && bg.b === 255;
+                        el.style.setProperty('background-color', pure ? '#111a2e' : '#16213a', 'important');
+                        el.setAttribute('data-dk', '1');
+                    }
+
+                    var fg = parse(cs.color);
+                    if (fg && luminance(fg) < 110 && luminance(effectiveBg(el)) < 90) {
+                        el.style.setProperty('color', '#e2e8f0', 'important');
+                        el.setAttribute('data-dk', '1');
+                    }
+                });
+            }
+
+            // Best effort for Chart.js charts on the Reports page
+            function themeCharts() {
+                if (!window.Chart || !Chart.defaults) return;
+                if (!chartLight) chartLight = { color: Chart.defaults.color, border: Chart.defaults.borderColor };
+                Chart.defaults.color = isDark() ? '#94a3b8' : chartLight.color;
+                Chart.defaults.borderColor = isDark() ? 'rgba(148,163,184,0.18)' : chartLight.border;
+                var inst = Chart.instances || {};
+                Object.keys(inst).forEach(function (k) { try { inst[k].update(); } catch (e) { } });
+            }
+
+            function apply() {
+                clearOverrides();
+                if (isDark()) darkenSurfaces();
+                themeCharts();
+                btn.textContent = isDark() ? '☀️' : '🌙';
+            }
+
+            btn.addEventListener('click', function () {
+                var next = isDark() ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('adminTheme', next); } catch (e) { }
+                apply();
+            });
+
+            apply();
+            window.addEventListener('load', apply);   // late content, charts, images
+
+            // Re-apply after UpdatePanel partial postbacks, if any page uses them
+            try {
+                if (window.Sys && Sys.WebForms) {
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(apply);
+                }
+            } catch (e) { }
+        })();
+    </script>
 </body>
 </html>

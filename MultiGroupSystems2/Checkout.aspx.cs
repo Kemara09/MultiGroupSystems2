@@ -7,10 +7,26 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 
+
 namespace MultiGroupSystemsTester
 {
     public partial class Checkout : System.Web.UI.Page
     {
+        // University demo locations only; replace with verified real branches before deployment.
+        private static readonly Dictionary<string, string> CollectionBranches =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "KwaZulu-Natal", "10 Example Avenue, Durban, KwaZulu-Natal, 4001" },
+            { "Gauteng", "10 Example Avenue, Johannesburg, Gauteng, 2000" },
+            { "Western Cape", "10 Example Avenue, Cape Town, Western Cape, 8001" },
+            { "Eastern Cape", "10 Example Avenue, Gqeberha, Eastern Cape, 6001" },
+            { "Free State", "10 Example Avenue, Bloemfontein, Free State, 9301" },
+            { "Limpopo", "10 Example Avenue, Polokwane, Limpopo, 0700" },
+            { "Mpumalanga", "10 Example Avenue, Mbombela, Mpumalanga, 1200" },
+            { "North West", "10 Example Avenue, Mahikeng, North West, 2745" },
+            { "Northern Cape", "10 Example Avenue, Kimberley, Northern Cape, 8301" }
+        };
+        protected global::System.Web.UI.WebControls.HiddenField hfCollectionProvince;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["CustomerID"] == null)
@@ -48,24 +64,24 @@ namespace MultiGroupSystemsTester
                     {
                         if (reader.Read())
                         {
-                           
+
                             txtFirstName.Text = reader["FirstName"].ToString();
                             txtLastName.Text = reader["LastName"].ToString();
                             txtEmail.Text = reader["EmailAddress"].ToString();
                             txtStreetNumber.Text = reader["StreetNumber"].ToString();
                             txtStreetName.Text = reader["StreetName"].ToString();
 
-                           
+
                             txtPhone.Text = reader["PhoneNumber"].ToString();
                             txtSuburb.Text = reader["Suburb"].ToString();
                             txtCity.Text = reader["City"].ToString();
                             txtPostalCode.Text = reader["PostalCode"].ToString();
 
-                           
+
                             txtStreetAddress.Text =
                                 (txtStreetNumber.Text.Trim() + " " + txtStreetName.Text.Trim()).Trim();
 
-                            
+
                             var province = ddlProvince.Items.FindByValue(reader["Province"].ToString().Trim());
                             if (province != null)
                             {
@@ -82,7 +98,7 @@ namespace MultiGroupSystemsTester
             }
         }
 
-     
+
         private void SyncStreetFields()
         {
             string streetAddress = txtStreetAddress.Text.Trim();
@@ -110,7 +126,7 @@ namespace MultiGroupSystemsTester
             txtStreetName.Text = streetName;
         }
 
-        
+
         private static object DbText(string value)
         {
             return string.IsNullOrWhiteSpace(value) ? (object)DBNull.Value : value.Trim();
@@ -184,7 +200,7 @@ namespace MultiGroupSystemsTester
         protected void ddlPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-        
+
             UpdateAddressDisplay();
 
             pnlCardDetails.Visible = ddlPaymentMethod.SelectedValue == "Card";
@@ -193,7 +209,7 @@ namespace MultiGroupSystemsTester
 
         protected void btnPlaceOrder_Click(object sender, EventArgs e)
         {
-       
+
             UpdateAddressDisplay();
 
             if (!Page.IsValid) return;
@@ -213,7 +229,7 @@ namespace MultiGroupSystemsTester
                 return;
             }
 
-            
+
             DateTime deliveryDate;
             if (!DateTime.TryParseExact(hfDeliveryDate.Value, "yyyy-MM-dd",
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out deliveryDate)
@@ -225,7 +241,7 @@ namespace MultiGroupSystemsTester
                 return;
             }
 
-            
+
             string deliveryInstructions = "";
             if (chkDeliveryInstructions.Checked && !string.IsNullOrWhiteSpace(txtDeliveryInstructions.Text))
             {
@@ -234,6 +250,35 @@ namespace MultiGroupSystemsTester
                 {
                     deliveryInstructions = deliveryInstructions.Substring(0, 250);
                 }
+            }
+
+            string method = hfDeliveryMethod.Value;
+            if (method != "Delivery" && method != "Collection")
+            {
+                lblError.Text = "Please select a valid delivery method.";
+                lblError.Visible = true;
+                return;
+            }
+            bool isCollection = method == "Collection";
+            string collectionAddress = null;
+            if (isCollection && !CollectionBranches.TryGetValue(hfCollectionProvince.Value ?? "", out collectionAddress))
+            {
+                lblError.Text = "Please select a valid collection province.";
+                lblError.Visible = true;
+                return;
+            }
+            string selectedOrderAddress = isCollection ? collectionAddress : GetDeliveryAddress();
+            if (string.IsNullOrWhiteSpace(selectedOrderAddress) || selectedOrderAddress.Length > 150)
+            {
+                lblError.Text = "Please select a valid address (maximum 150 characters).";
+                lblError.Visible = true;
+                return;
+            }
+            if (isCollection && (deliveryDate.DayOfWeek == DayOfWeek.Saturday || deliveryDate.DayOfWeek == DayOfWeek.Sunday))
+            {
+                lblError.Text = "Collection is available Monday to Friday only. Please select a weekday.";
+                lblError.Visible = true;
+                return;
             }
 
             string connStr = ConfigurationManager.ConnectionStrings["GroupWst14ConnectionString"].ConnectionString;
@@ -250,30 +295,21 @@ namespace MultiGroupSystemsTester
 
                         decimal totalAmount = cart.Sum(c => c.Subtotal);
                         int orderId;
-                        string deliveryAddress = GetDeliveryAddress();
-                        if (string.IsNullOrWhiteSpace(deliveryAddress) || deliveryAddress.Length > 150)
-                        {
-                            lblError.Text = "Please select a valid delivery address (maximum 150 characters).";
-                            lblError.Visible = true;
-                            return;
-                        }
-                        bool usingGeoapify = !string.IsNullOrWhiteSpace(
-                            hdnSelectedAddress.Value
-                        );
-
-                        string deliverySuburb = usingGeoapify ? "" : txtSuburb.Text.Trim();
-                        string deliveryProvince = usingGeoapify ? "" : ddlProvince.SelectedValue;
-                        string deliveryPostalCode = usingGeoapify ? "" : txtPostalCode.Text.Trim();
+                        string deliveryAddress = selectedOrderAddress;
+                        bool usingGeoapify = !isCollection && !string.IsNullOrWhiteSpace(hdnSelectedAddress.Value);
+                        string deliverySuburb = isCollection || usingGeoapify ? "" : txtSuburb.Text.Trim();
+                        string deliveryProvince = isCollection ? hfCollectionProvince.Value : (usingGeoapify ? "" : ddlProvince.SelectedValue);
+                        string deliveryPostalCode = isCollection || usingGeoapify ? "" : txtPostalCode.Text.Trim();
                         string deliveryPhone = txtPhone.Text.Trim();
                         const string insertOrder = @"
                             INSERT INTO [Order]
                                 (CustomerID, StaffID, TotalAmount, OrderDate, OrderStatus,
-                                 DeliveryStatus, DeliveryDate, PaymentMethod,
+                                 DeliveryStatus, DeliveryDate, PaymentMethod, DeliveryMethod,
                                  DeliveryStreetAddress, DeliverySuburb, DeliveryProvince,
                                  DeliveryPostalCode, DeliveryPhone, DeliveryInstructions)
                             VALUES
                                 (@CustomerID, NULL, @TotalAmount, @OrderDate, @OrderStatus,
-                                 @DeliveryStatus, @DeliveryDate, @PaymentMethod,
+                                 @DeliveryStatus, @DeliveryDate, @PaymentMethod, @DeliveryMethod,
                                  @DeliveryStreetAddress, @DeliverySuburb, @DeliveryProvince,
                                  @DeliveryPostalCode, @DeliveryPhone, @DeliveryInstructions);
                             SELECT SCOPE_IDENTITY();";
@@ -286,6 +322,7 @@ namespace MultiGroupSystemsTester
                             cmdOrder.Parameters.AddWithValue("@DeliveryStatus", "Not Dispatched");
                             cmdOrder.Parameters.AddWithValue("@DeliveryDate", deliveryDate.Date);
                             cmdOrder.Parameters.AddWithValue("@PaymentMethod", ddlPaymentMethod.SelectedValue);
+                            cmdOrder.Parameters.AddWithValue("@DeliveryMethod", method);
                             cmdOrder.Parameters.AddWithValue("@DeliveryStreetAddress", deliveryAddress);
                             cmdOrder.Parameters.AddWithValue("@DeliverySuburb", DbText(deliverySuburb));
                             cmdOrder.Parameters.AddWithValue("@DeliveryProvince", DbText(deliveryProvince));
@@ -347,7 +384,7 @@ namespace MultiGroupSystemsTester
                                 CustomerName = $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}",
                                 CustomerEmail = txtEmail.Text.Trim(),
                                 CustomerPhone = txtPhone.Text.Trim(),
-                                CustomerAddress = GetDeliveryAddress(),
+                                CustomerAddress = deliveryAddress,
                                 StaffName = "Online Order",
                                 LineNumber = lineNum++,
                                 ProductName = item.ProductName,
@@ -379,7 +416,9 @@ namespace MultiGroupSystemsTester
                         try
                         {
                             string smsNumber = "+27" + txtPhone.Text.Trim().TrimStart('0');
-                            string smsMessage = $"Multigroup Inc.\nOrder #{orderId} confirmed\nTotal: {invoiceRows[0].GrandTotalStr}\nThank you, {txtFirstName.Text.Trim()}!";
+                            string smsMessage = $"Multigroup Inc.\nOrder #{orderId} confirmed\n{method}: {deliveryDate:dd MMM yyyy}\n" +
+                                (isCollection ? $"Collect at: {deliveryAddress} (Mon-Fri 10:00-17:00)\n" : "") +
+                                $"Total: {invoiceRows[0].GrandTotalStr}\nThank you, {txtFirstName.Text.Trim()}!";
                             smsSent = MultiGroupSystemsTester.Services.SmsService.SendSms(smsNumber, smsMessage);
                         }
                         catch (Exception smsEx)
@@ -391,14 +430,15 @@ namespace MultiGroupSystemsTester
                         string emailNote = emailSent ? " We've also emailed a copy to you" : "";
                         string smsNote = smsSent ? " and texted you a confirmation." : (emailSent ? "." : "");
 
-                        
-                        string method = "Delivery"; 
-                        string deliveryNote = $" {method} date: {deliveryDate:dddd, dd MMMM yyyy}.";
+
+                        string deliveryNote = $" {method} date: {deliveryDate:dddd, dd MMMM yyyy}." +
+                            (isCollection ? " Collection at: " + HttpUtility.HtmlEncode(deliveryAddress) +
+                             " (Monday–Friday, 10:00–17:00; demo location)." : "");
 
                         string instructionsNote = "";
                         if (deliveryInstructions.Length > 0)
                         {
-                            instructionsNote = "<p>Delivery instructions: " +
+                            instructionsNote = "<p>Instructions: " +
                                 System.Web.HttpUtility.HtmlEncode(deliveryInstructions) +
                                 "</p>";
                         }
@@ -434,7 +474,7 @@ namespace MultiGroupSystemsTester
                     {
                         tx.Rollback();
 
-                        
+
                         System.Diagnostics.Debug.WriteLine("ORDER ERROR: " + ex);
 
                         lblError.Text = "Something went wrong placing your order. Please try again.";

@@ -1,0 +1,84 @@
+﻿.vo-wrapper {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.vo-title {
+    margin-bottom: 16px;
+}
+
+.vo-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.vo-input {
+    padding: 8px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    min-width: 220px;
+}
+
+.vo-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #0d6efd;
+    color: #fff;
+    cursor: pointer;
+}
+
+.vo-btn-secondary {
+    background: #6c757d;
+}
+
+.vo-message {
+    display: block;
+    margin-bottom: 12px;
+    color: #b02a37;
+}
+
+.vo-table-wrap {
+    overflow-x: auto;
+}
+
+.vo-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .vo-grid th {
+        background: #f1f3f5;
+        text-align: left;
+        padding: 10px 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .vo-grid td {
+        padding: 10px 12px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .vo-grid tr:hover td {
+        background: #f8f9fa;
+    }
+
+.vo-link {
+    color: #0d6efd;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.vo-pager td {
+    padding: 12px;
+    text-align: center;
+}
+
+.vo-pager a,
+.vo-pager span {
+    margin: 0 4px;
+}

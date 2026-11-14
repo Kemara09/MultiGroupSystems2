@@ -294,15 +294,15 @@ textarea {
 
 .status-label {
     color: #64748b;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .status-badge {
-    padding: 7px 13px;
+    padding: 7px 14px;
     background: #dcfce7;
     color: #15803d;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
 }
 
@@ -324,13 +324,13 @@ textarea {
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 9px;
-    padding: 17px;
+    padding: 18px;
     box-shadow: 0 2px 5px rgba(15,23,42,0.03);
 }
 
 .summary-icon {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -338,6 +338,7 @@ textarea {
     font-size: 17px;
     font-weight: 700;
     margin-right: 12px;
+    flex-shrink: 0;
 }
 
     .summary-icon.blue {
@@ -363,14 +364,14 @@ textarea {
 .summary-label {
     display: block;
     color: #94a3b8;
-    font-size: 9px;
+    font-size: 11px;
     margin-bottom: 4px;
 }
 
 .summary-card strong {
     display: block;
     color: #0f172a;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 
@@ -425,7 +426,7 @@ textarea {
 
 .form-header p {
     margin: 4px 0 0;
-    font-size: 11px;
+    font-size: 12px;
     color: #94a3b8;
 }
 
@@ -444,7 +445,7 @@ textarea {
     gap: 9px;
     margin-bottom: 18px;
     color: #334155;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
 }
 
@@ -457,7 +458,7 @@ textarea {
     background: #eff6ff;
     color: #2563eb;
     border-radius: 50%;
-    font-size: 10px;
+    font-size: 11px;
 }
 
 .section-spacing {
@@ -487,7 +488,7 @@ textarea {
     display: block;
     margin-bottom: 7px;
     color: #334155;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
 }
 
@@ -500,14 +501,14 @@ textarea {
     border-radius: 6px;
     padding: 10px 12px;
     color: #334155;
-    font-size: 11px;
+    font-size: 13px;
     outline: none;
     transition: 0.2s;
 }
 
 .form-group input,
 .form-group select {
-    height: 40px;
+    height: 42px;
 }
 
 .form-group textarea {
@@ -543,9 +544,9 @@ textarea {
 
 .cancel-button,
 .update-button {
-    padding: 10px 18px;
+    padding: 10px 20px;
     border-radius: 6px;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
 }
@@ -607,12 +608,12 @@ textarea {
     .card-title h3 {
         margin: 0;
         color: #0f172a;
-        font-size: 14px;
+        font-size: 15px;
     }
 
 .live-dot {
     color: #16a34a;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 600;
 }
 
@@ -633,8 +634,8 @@ textarea {
 }
 
 .progress-icon {
-    width: 31px;
-    height: 31px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -642,7 +643,7 @@ textarea {
     color: #94a3b8;
     border: 2px solid #e2e8f0;
     border-radius: 50%;
-    font-size: 11px;
+    font-size: 13px;
     margin-right: 12px;
     flex-shrink: 0;
 }
@@ -662,21 +663,21 @@ textarea {
 .progress-step strong {
     display: block;
     color: #334155;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .progress-step small {
     display: block;
     margin-top: 3px;
     color: #94a3b8;
-    font-size: 9px;
+    font-size: 11px;
 }
 
 .progress-line {
     width: 2px;
     height: 28px;
     background: #e2e8f0;
-    margin-left: 14px;
+    margin-left: 15px;
 }
 
 .completed-line {
@@ -685,7 +686,7 @@ textarea {
 
 
 /* =========================================
-   TRACKING CARD
+   TRACKING CARD (not used by the status-only page)
    ========================================= */
 
 .tracking-card {
@@ -782,13 +783,13 @@ textarea {
 .info-card strong {
     display: block;
     color: #1e40af;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .info-card p {
     margin: 5px 0 0;
     color: #3b82f6;
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.5;
 }
 
@@ -802,7 +803,7 @@ textarea {
     justify-content: space-between;
     padding: 22px 5px;
     color: #94a3b8;
-    font-size: 9px;
+    font-size: 11px;
 }
 
 
@@ -893,4 +894,112 @@ textarea {
         flex-direction: column;
         gap: 8px;
     }
+}
+
+
+/* =========================================
+   ORDER LOGISTICS PAGE ADDITIONS
+   ========================================= */
+
+/* Back link */
+.lg-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 20px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+    .lg-back:hover {
+        text-decoration: underline;
+    }
+
+/* Success / error banner */
+.lg-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    margin: 14px 0 0;
+    border-radius: 10px;
+    border-left: 4px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+    .lg-message::before {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        flex-shrink: 0;
+    }
+
+.lg-success {
+    background: #e8f7ef;
+    color: #146c43;
+    border-left-color: #22a06b;
+}
+
+    .lg-success::before {
+        content: "✓";
+        background: #22a06b;
+    }
+
+.lg-error {
+    background: #fdecea;
+    color: #b02a37;
+    border-left-color: #dc3545;
+}
+
+    .lg-error::before {
+        content: "!";
+        background: #dc3545;
+    }
+
+/* Coloured status badge */
+.status-badge.st-pending {
+    background: #fff4e0;
+    color: #b26a00;
+}
+
+.status-badge.st-processing {
+    background: #e7f0ff;
+    color: #1d4ed8;
+}
+
+.status-badge.st-transit {
+    background: #f1e9ff;
+    color: #6d28d9;
+}
+
+.status-badge.st-delivered {
+    background: #e8f7ef;
+    color: #146c43;
+}
+
+.status-badge.st-cancelled {
+    background: #fdecea;
+    color: #b02a37;
+}
+
+.status-badge.st-other {
+    background: #eef0f3;
+    color: #495057;
+}
+
+/* Read-only fields look clearly non-editable */
+.form-group input[readonly],
+.form-group textarea[readonly] {
+    background: #f4f6f8;
+    color: #6c757d;
+    cursor: not-allowed;
 }

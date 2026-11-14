@@ -60,6 +60,15 @@ namespace MultiGroupSystemsTester.Admin
         protected global::System.Web.UI.HtmlControls.HtmlAnchor navOrders;
 
         /// <summary>
+        /// navViewOrders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor navViewOrders;
+
+        /// <summary>
         /// navSuppliers control.
         /// </summary>
         /// <remarks>

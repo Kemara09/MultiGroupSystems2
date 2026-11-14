@@ -391,7 +391,20 @@
                     setTimeout(function () { map.invalidateSize(); }, 300);
 
                     currentMarker = L.marker([lat, lng]).addTo(map)
-                        .bindPopup("<b>Delivery Address:</b><br>" + addressQuery)
+                    const popupContent = document.createElement('div');
+                    const heading = document.createElement('strong');
+                    heading.textContent = 'Delivery Address:';
+
+                    const addressText = document.createElement('div');
+                    addressText.textContent = addressQuery;
+
+                    popupContent.appendChild(heading);
+                    popupContent.appendChild(addressText);
+
+                    currentMarker = L.marker([lat, lng])
+                        .addTo(map)
+                        .bindPopup(popupContent)
+                        .openPopup();
                         .openPopup();
                 })
                 .catch(err => {

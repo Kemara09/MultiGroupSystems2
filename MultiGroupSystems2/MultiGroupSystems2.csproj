@@ -222,10 +222,12 @@
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\ResetPassword.aspx" />
     <Content Include="Account\StaffActivate.aspx" />
+    <Content Include="Admin\AccessDenied.aspx" />
     <Content Include="Admin\AddProduct.aspx" />
     <Content Include="Admin\AddProduct.css" />
     <Content Include="Admin\AddSupplier.aspx" />
     <Content Include="Admin\AddSupplier.css" />
+    <Content Include="Admin\AdminDarkMode.css" />
     <Content Include="Admin\AdminShell.css" />
     <Content Include="Admin\Dashboard.aspx" />
     <Content Include="Admin\Dashboard.css" />
@@ -234,6 +236,8 @@
     <Content Include="Admin\StaffDataCapture.aspx" />
     <Content Include="Admin\StaffDataCapture.css" />
     <Content Include="Account\Forgotpassword.aspx" />
+    <Content Include="Admin\ViewOrders.aspx" />
+    <Content Include="Admin\ViewOrders.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\Products\27inch dell monitor.jpg" />
     <Content Include="Images\Products\2tb Storage.jpg" />
@@ -426,6 +430,7 @@
     <Compile Include="Account\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Account\PasswordMigration.cs" />
     <Compile Include="Account\ResetPassword.aspx.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -444,6 +449,13 @@
     <Compile Include="Account\StaffStatus.ashx.cs">
       <DependentUpon>StaffStatus.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Admin\AccessDenied.aspx.cs">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AccessDenied.aspx.designer.cs">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Admin\AddProduct.aspx.cs">
       <DependentUpon>AddProduct.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -458,6 +470,7 @@
     <Compile Include="Admin\AddSupplier.aspx.designer.cs">
       <DependentUpon>AddSupplier.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Admin\AdminAccess.cs" />
     <Compile Include="Admin\AdminMaster.master.cs">
       <DependentUpon>AdminMaster.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -495,6 +508,13 @@
     </Compile>
     <Compile Include="Account\Forgotpassword.aspx.designer.cs">
       <DependentUpon>Forgotpassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ViewOrders.aspx.cs">
+      <DependentUpon>ViewOrders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ViewOrders.aspx.designer.cs">
+      <DependentUpon>ViewOrders.aspx</DependentUpon>
     </Compile>
     <Compile Include="Services\ChatbotService.cs" />
     <Compile Include="ChatHandler.ashx.cs">

@@ -24,7 +24,6 @@
                 <div class="stat-information">
                     <span>Total Products</span>
                     <strong><asp:Label ID="lblTotalProducts" runat="server" Text="0" /></strong>
-                    
                 </div>
             </div>
 
@@ -34,7 +33,6 @@
                 <div class="stat-information">
                     <span>Total Orders</span>
                     <strong><asp:Label ID="lblTotalOrders" runat="server" Text="0" /></strong>
-                 
                 </div>
             </div>
 
@@ -44,7 +42,6 @@
                 <div class="stat-information">
                     <span>Total Staff</span>
                     <strong><asp:Label ID="lblTotalStaff" runat="server" Text="0" /></strong>
-                 
                 </div>
             </div>
 
@@ -54,7 +51,6 @@
                 <div class="stat-information">
                     <span>Total Sales</span>
                     <strong><asp:Label ID="lblTotalSales" runat="server" Text="R 0" /></strong>
-                  
                 </div>
             </div>
 
@@ -68,24 +64,25 @@
                 <div class="card-heading">
                     <div>
                         <h2>Sales Overview</h2>
-                        <p>Monthly sales performance</p>
+                        <p><asp:Label ID="lblChartSub" runat="server" /></p>
                     </div>
-                    <select class="period-select">
-                        <option>Last 7 days</option>
-                        <option selected="selected">Last 30 days</option>
-                        <option>Last 6 months</option>
-                        <option>This year</option>
-                    </select>
+                    <asp:DropDownList ID="ddlPeriod" runat="server" CssClass="period-select"
+                        AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
+                        <asp:ListItem Value="7d">Last 7 days</asp:ListItem>
+                        <asp:ListItem Value="30d" Selected="True">Last 30 days</asp:ListItem>
+                        <asp:ListItem Value="6m">Last 6 months</asp:ListItem>
+                        <asp:ListItem Value="ytd">This year</asp:ListItem>
+                    </asp:DropDownList>
                 </div>
 
                 <!-- DYNAMIC CHART -->
                 <div class="chart-area">
                     <div class="chart-y-axis">
-                        <span>R20k</span>
-                        <span>R15k</span>
-                        <span>R10k</span>
-                        <span>R5k</span>
-                        <span>R0</span>
+                        <span><asp:Label ID="lblY1" runat="server" /></span>
+                        <span><asp:Label ID="lblY2" runat="server" /></span>
+                        <span><asp:Label ID="lblY3" runat="server" /></span>
+                        <span><asp:Label ID="lblY4" runat="server" /></span>
+                        <span><asp:Label ID="lblY5" runat="server" /></span>
                     </div>
                     <div class="chart">
                         <div class="grid-line line-1"></div>
@@ -98,8 +95,9 @@
                             <asp:Repeater ID="rptSalesChart" runat="server">
                                 <ItemTemplate>
                                     <div class="bar-group">
-                                        <div class="bar" style='<%# "height: " + Eval("BarHeight") + "%;" %>'></div>
-                                        <span><%# Eval("MonthName") %></span>
+                                        <div class="bar" style='<%# "height: " + Eval("BarHeight") + "%;" %>'
+                                             title='<%# Eval("Tooltip") %>'></div>
+                                        <span><%# Eval("Label") %></span>
                                     </div>
                                 </ItemTemplate>
                             </asp:Repeater>

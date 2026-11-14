@@ -74,12 +74,11 @@
             </section>
 
 
-            <!-- EMPLOYMENT INFORMATION -->
+            <!-- ACCOUNT & ROLE DETAILS -->
             <section class="card">
-           <section class="card">
                 <div class="card-header">
                     <h2>Account & Role Details</h2>
-                    <p>Assign a role and system credentials for the staff member.</p>
+                    <p>Assign a role and username for the staff member.</p>
                 </div>
                 <div class="card-body">
                     <div class="form-group mb-3">
@@ -102,25 +101,23 @@
                             <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername"
                                 ErrorMessage="Username is required." ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
                         </div>
-                        <div class="form-group">
-                            <label for="txtPassword">Password <span class="required">*</span></label>
-                            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" placeholder="Enter password"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword"
-                                  ErrorMessage="Password is required." ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                        </div>
                     </div>
+
+                    <p class="form-hint" style="margin: 14px 0 0; font-size: 12px; color: #64748b;">
+                        No password is set here. The staff member activates their account with this username,
+                        confirms a code sent by SMS to the phone number above, and then chooses their own password.
+                    </p>
                 </div>
             </section>
-         </section>
 
 
-            <!-- FORM FOOTER -->
-            <div class="form-footer">
-                <asp:Button ID="BtnCancel" runat="server" Text="Cancel" />
-                <asp:Button ID="BtnSave" runat="server" Text="Save Staff Member" OnClick="BtnSave_Click" />
-
-
-            </div>
+           <!-- FORM FOOTER -->
+<div class="form-footer">
+    <asp:Button ID="BtnCancel" runat="server" Text="Cancel" CssClass="btn btn-secondary"
+        CausesValidation="false" OnClick="BtnCancel_Click" />
+    <asp:Button ID="BtnSave" runat="server" Text="Save Staff Member" CssClass="btn btn-primary"
+        OnClick="BtnSave_Click" />
+</div>
 
         </main>
 

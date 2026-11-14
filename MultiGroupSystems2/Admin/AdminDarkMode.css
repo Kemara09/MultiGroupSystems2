@@ -1,0 +1,223 @@
+﻿/* ===== THEME TOGGLE BUTTON (both themes) ===== */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+    .theme-toggle:hover {
+        background: rgba(148, 163, 184, 0.15);
+    }
+
+/* ===== DARK THEME =====
+   Everything below only applies when <html data-theme="dark"> */
+
+html[data-theme="dark"] {
+    color-scheme: dark; /* dark scrollbars, native dropdowns, date pickers */
+    background-color: #0b1220;
+}
+
+    /* Sidebar: slightly deeper than the light theme's navy */
+    html[data-theme="dark"] .sidebar {
+        background: #0f172a;
+    }
+
+    html[data-theme="dark"] .profile-avatar {
+        background: #1e3a8a;
+        color: #bfdbfe;
+    }
+
+    html[data-theme="dark"] .arrow,
+    html[data-theme="dark"] .profile-arrow {
+        color: #475569;
+    }
+
+    html[data-theme="dark"] body,
+    html[data-theme="dark"] .main-content,
+    html[data-theme="dark"] .admin-page-body {
+        background: #0b1220;
+        color: #e5e7eb;
+    }
+
+    html[data-theme="dark"] .theme-toggle {
+        border-color: #2a3756;
+    }
+
+    /* Header + footer */
+    html[data-theme="dark"] .top-header {
+        background: #111a2e;
+        border-bottom-color: #1f2a44;
+    }
+
+    html[data-theme="dark"] .breadcrumb,
+    html[data-theme="dark"] .breadcrumb a {
+        color: #94a3b8;
+    }
+
+        html[data-theme="dark"] .breadcrumb strong,
+        html[data-theme="dark"] .profile-info strong {
+            color: #e5e7eb;
+        }
+
+    html[data-theme="dark"] .profile-info span,
+    html[data-theme="dark"] .footer,
+    html[data-theme="dark"] .footer span {
+        color: #94a3b8;
+    }
+
+    /* Cards, panels, stat boxes */
+    html[data-theme="dark"] .dashboard-card,
+    html[data-theme="dark"] .stat-card,
+    html[data-theme="dark"] .card,
+    html[data-theme="dark"] .quick-action {
+        background: #111a2e;
+        border-color: #1f2a44;
+        box-shadow: none;
+    }
+
+    html[data-theme="dark"] .card-heading,
+    html[data-theme="dark"] .card-header {
+        border-bottom-color: #1f2a44;
+    }
+
+    html[data-theme="dark"] .quick-action:hover {
+        background: #16213a;
+    }
+
+    html[data-theme="dark"] .stat-icon,
+    html[data-theme="dark"] .quick-icon {
+        background: #1a2540;
+    }
+
+    /* Page title banners (Add Product, Staff Data Capture, ...) */
+    html[data-theme="dark"] .page-header {
+        background: #111a2e;
+        border-color: #1f2a44;
+        box-shadow: none;
+    }
+
+    /* Text */
+    html[data-theme="dark"] .main-content h1,
+    html[data-theme="dark"] .main-content h2,
+    html[data-theme="dark"] .main-content h3,
+    html[data-theme="dark"] .main-content strong,
+    html[data-theme="dark"] .main-content label,
+    html[data-theme="dark"] .stat-information strong {
+        color: #f1f5f9;
+    }
+
+    html[data-theme="dark"] .main-content p,
+    html[data-theme="dark"] .main-content small,
+    html[data-theme="dark"] .stat-information span,
+    html[data-theme="dark"] .quick-action span {
+        color: #94a3b8;
+    }
+
+    html[data-theme="dark"] .view-link {
+        color: #60a5fa;
+    }
+
+    /* Form controls */
+    html[data-theme="dark"] .form-control,
+    html[data-theme="dark"] .period-select,
+    html[data-theme="dark"] .main-content input[type="text"],
+    html[data-theme="dark"] .main-content input[type="email"],
+    html[data-theme="dark"] .main-content input[type="password"],
+    html[data-theme="dark"] .main-content input[type="number"],
+    html[data-theme="dark"] .main-content input[type="date"],
+    html[data-theme="dark"] .main-content select,
+    html[data-theme="dark"] .main-content textarea {
+        background-color: #0b1220;
+        border-color: #2a3756;
+        color: #e5e7eb;
+    }
+
+    html[data-theme="dark"] ::placeholder {
+        color: #64748b;
+    }
+
+    /* Tables */
+    html[data-theme="dark"] .table-container {
+        background: transparent;
+    }
+
+    html[data-theme="dark"] .main-content table {
+        background: transparent;
+    }
+
+    html[data-theme="dark"] .main-content th {
+        background: #0f172a;
+        color: #94a3b8;
+        border-color: #1f2a44;
+    }
+
+    html[data-theme="dark"] .main-content td {
+        color: #e5e7eb;
+        border-color: #1f2a44;
+    }
+
+    html[data-theme="dark"] .main-content tbody tr:hover td {
+        background: #16213a;
+    }
+
+    /* Sales chart */
+    html[data-theme="dark"] .grid-line {
+        border-color: #26324f;
+    }
+
+    html[data-theme="dark"] .chart-y-axis span,
+    html[data-theme="dark"] .bar-group span {
+        color: #94a3b8;
+    }
+
+    /* Secondary buttons (Cancel etc.) */
+    html[data-theme="dark"] .btn-secondary {
+        background: #111a2e;
+        border-color: #2a3756;
+        color: #e5e7eb;
+    }
+
+        html[data-theme="dark"] .btn-secondary:hover {
+            background: #16213a;
+            border-color: #475569;
+        }
+
+/* ===== FILE INPUT BUTTON ("Choose File") — both themes ===== */
+.main-content input[type="file"] {
+    font-family: inherit;
+    font-size: 13px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+    .main-content input[type="file"]::file-selector-button {
+        margin-right: 12px;
+        padding: 8px 16px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffffff;
+        background-color: #2563eb;
+        border: 1px solid #2563eb;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+        .main-content input[type="file"]::file-selector-button:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+html[data-theme="dark"] .main-content input[type="file"] {
+    color: #94a3b8;
+}

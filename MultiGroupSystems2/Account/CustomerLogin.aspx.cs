@@ -54,7 +54,7 @@ namespace MultiGroupSystemsTester.Account
                         object storedPasswordObj = reader["Password"];
                         string storedHash = storedPasswordObj == DBNull.Value ? null : storedPasswordObj.ToString();
 
-                        if (string.IsNullOrEmpty(storedHash))
+                        if (string.IsNullOrWhiteSpace(storedHash))
                         {
                             lblError.Text = "This account hasn't been activated yet. Please activate your account first.";
                             lblError.Visible = true;
