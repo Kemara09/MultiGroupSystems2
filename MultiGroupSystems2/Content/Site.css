@@ -113,6 +113,17 @@ textarea {
     border-radius: 12px;
     height: 100%;
 }
+    .contact-page .info-card p {
+        color: #334155;
+    }
+
+    .contact-page .info-card strong {
+        color: #0f172a;
+    }
+
+.contact-page .text-secondary {
+    color: #475569 !important;
+}
 
 .contact-page .popup-trigger {
     color: #0284c7;

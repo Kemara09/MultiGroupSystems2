@@ -79,12 +79,16 @@
         padding-right: 20px;
     }
 
-    .shop-section-title {
-        font-size: 24px;
-        font-weight: 750;
-        color: #10263e;
-        margin: 25px 0 20px;
-    }
+.shop-section-title {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 750;
+    color: #ffffff;
+    background: #10263e;   
+    padding: 8px 20px;
+    border-radius: 10px;
+    margin: 25px 0 20px;
+}
 
     .product-grid {
         display: block;
