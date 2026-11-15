@@ -6,19 +6,11 @@
     padding-right: 15px;
 }
 
-/* Inputs fill the screen on phones; keep the 280px cap on tablets and up */
+/* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
 textarea {
-    max-width: 100%;
-}
-
-@media screen and (min-width: 768px) {
-    input,
-    select,
-    textarea {
-        max-width: 280px;
-    }
+    max-width: 280px;
 }
 
 /* Responsive: Portrait tablets and up */
@@ -42,9 +34,9 @@ textarea {
     width: 100%;
 }
 
-    .about-section p {
-        color: #0f172a !important;
-    }
+        .about-section p {
+            color: #0f172a !important; 
+        }
 
 
 
@@ -63,8 +55,8 @@ textarea {
 }
 
 .contact-page .hero-circle-frame {
-    width: min(280px, 70vw);
-    height: min(280px, 70vw);
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
     border: 8px solid rgba(255, 255, 255, 0.9);
     overflow: hidden;
